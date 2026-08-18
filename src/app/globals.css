@@ -1,0 +1,136 @@
+@import 'tailwindcss';
+
+/* ---------------------------------------------------------------------------
+   Chef Arturo · La Vitrina — tokens
+   Fuente: project/Especificacion.dc.html § 1 "Tokens visuales".
+   Ningún valor visual se inventa fuera de esta lista.
+--------------------------------------------------------------------------- */
+@theme {
+  /* Color */
+  --color-verde: #1e4b40; /* tinta dominante, CTAs primarios, hero */
+  --color-verde-profundo: #142e28; /* bandas de cierre y "modos" */
+  --color-papel: #f7f3ea; /* fondo base */
+  --color-papel-alt: #fbf8f1; /* superficie de card sobre papel */
+  --color-crema: #ede4d2; /* placeholders, matte de arcos */
+  --color-crema-apagado: #f1ebdd; /* campañas finalizadas */
+  --color-caramelo: #c1762f; /* acento controlado: badges, subrayados, foco */
+  --color-caramelo-claro: #c98b45; /* acento sobre verde oscuro */
+  --color-caramelo-texto: #8a5320; /* acento legible en texto chico sobre papel */
+  --color-tinta: #1a211e;
+  --color-tinta-media: #4a443b;
+  --color-tinta-suave: #6e675a;
+  --color-tinta-tenue: #9a937f;
+  --color-linea: #d9d2c2; /* hairlines */
+  --color-linea-fuerte: #b9b2a0;
+  --color-linea-marco: #c4beaf;
+  --color-alerta: #b04a28; /* agotado, errores recuperables */
+  --color-alerta-fondo: #f7ede6;
+
+  /* Tipografía */
+  --font-display: var(--fuente-serif), 'Instrument Serif', Georgia, serif;
+  --font-sans: var(--fuente-sans), Archivo, system-ui, sans-serif;
+
+  /* Escala: mobile 34/26/20/15/12 · desktop 64/40/24/16/12.5 */
+  --text-display: clamp(36px, 5vw, 64px);
+  --text-display--line-height: 1.02;
+  --text-titulo: clamp(30px, 3.4vw, 44px);
+  --text-titulo--line-height: 1.05;
+  --text-seccion: clamp(28px, 3.2vw, 42px);
+  --text-seccion--line-height: 1.05;
+  --text-subtitulo: clamp(22px, 1.8vw, 26px);
+  --text-subtitulo--line-height: 1.1;
+  --text-cuerpo: clamp(14.5px, 1.2vw, 16px);
+  --text-cuerpo--line-height: 1.6;
+
+  /* Espaciado base 4 → 8 · 12 · 16 · 24 · 32 · 48 · 72 · 96 */
+  --spacing: 4px;
+
+  /* Geometría: radios 2–3px salvo el arco */
+  --radius-borde: 3px;
+  --radius-arco: 999px;
+
+  /* Movimiento */
+  --ease-editorial: cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-papel);
+    color: var(--color-tinta);
+    font-family: var(--font-sans);
+    /* Ningún ancho fijo debe provocar scroll horizontal accidental. */
+    overflow-x: clip;
+  }
+
+  a {
+    color: var(--color-caramelo-texto);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  a:hover {
+    color: var(--color-tinta);
+  }
+
+  button {
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  ::selection {
+    background: rgb(193 118 47 / 0.25);
+  }
+
+  /* Foco visible en todos los controles (nunca el anillo azul del navegador). */
+  :focus-visible {
+    outline: 2px solid var(--color-caramelo);
+    outline-offset: 2px;
+  }
+
+  /* Números tabulares donde son cifras y no prosa. */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer components {
+  /* Rieles y carruseles: scroll nativo sin barra visible. */
+  .riel {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .riel::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Acordeón nativo: sin marcador propio del navegador. */
+  .acordeon > summary {
+    list-style: none;
+  }
+
+  .acordeon > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .acordeon[open] .acordeon-signo {
+    transform: rotate(45deg);
+  }
+}
+
+/* La versión reducida nunca esconde información: sólo detiene el movimiento. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
