@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>body{margin:0;background:#E4E1D9;font-family:Archivo,system-ui,sans-serif;color:#1A211E}a{color:#8A5320;text-decoration:underline}a:hover{color:#1A211E}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:44px;align-items:flex-start">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6E675A;font-weight:600">Chef Arturo · Dirección A</div>
+    <h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px">La Vitrina</h1>
+    <p style="margin:0;font-size:13.5px;color:#4A443B;max-width:560px;line-height:1.5">El verde del logo como tinta dominante; fotos en ventanas-arco de mostrador. <a href="Direcciones.dc.html">← Volver a las direcciones</a></p>
+  </header>
+
+  <!-- ============ MOBILE ROW ============ -->
+  <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- MOBILE HOME -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E675A">Mobile 390 · Home (página completa, fold marcado)</div>
+      <div style="width:390px;background:#F7F3EA;border:1px solid #C4BEAF;box-shadow:0 2px 10px rgba(26,33,30,.08);position:relative;overflow:hidden">
+
+        <!-- header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid #D9D2C2;background:#F7F3EA">
+          <button style="display:flex;align-items:center;gap:8px;background:none;border:none;font:600 13px Archivo;color:#1A211E;padding:10px 0;min-height:44px">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
+            Catálogo
+          </button>
+          <div style="text-align:center;line-height:1">
+            <div style="font:600 10px Archivo;letter-spacing:.3em;color:#1E4B40">CHEF</div>
+            <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;color:#1E4B40;margin-top:1px">Arturo</div>
+          </div>
+          <button style="position:relative;background:none;border:none;color:#1A211E;padding:10px;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center">
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+            <span style="position:absolute;top:4px;right:2px;background:#C1762F;color:#F7F3EA;font:700 10px Archivo;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span>
+          </button>
+        </div>
+        <div style="text-align:center;font:400 10.5px Archivo;letter-spacing:.08em;color:#6E675A;padding:5px 0;border-bottom:1px solid #D9D2C2">by Julia y Montserrat · Florida, Uruguay</div>
+
+        <!-- hero -->
+        <div style="background:#1E4B40;color:#F7F3EA;padding:28px 20px 32px;display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center">
+          <div style="width:250px;height:300px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid rgba(247,243,234,.35);padding:7px;background:rgba(247,243,234,.06)">
+            <div style="width:100%;height:100%;border-radius:999px 999px 2px 2px;overflow:hidden">
+              <image-slot id="a-m-hero" shape="rect" placeholder="Imagen temporal — torta o pieza hero"></image-slot>
+            </div>
+          </div>
+          <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:34px;line-height:1.05">Pastelería, merienda y <em>lunch</em> para fiestas</h2>
+          <p style="margin:0;font-size:15px;line-height:1.55;color:#EDE4D2;max-width:300px">Comprá del día, encargá para una fecha o consultá por tu evento. Retiro en Florida o entrega a tu puerta.</p>
+          <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px">
+            <button style="min-height:48px;background:#F7F3EA;color:#1E4B40;border:1px solid #F7F3EA;font:600 14px Archivo;letter-spacing:.04em">Ver catálogo</button>
+            <button style="min-height:48px;background:none;color:#F7F3EA;border:1px solid rgba(247,243,234,.5);font:500 14px Archivo">Pedir por WhatsApp</button>
+          </div>
+        </div>
+
+        <!-- category nav -->
+        <div style="display:flex;gap:8px;padding:16px;border-bottom:1px solid #D9D2C2">
+          <button style="flex:1;min-height:44px;background:#1E4B40;color:#F7F3EA;border:1px solid #1E4B40;font:600 13px Archivo">Pastelería</button>
+          <button style="flex:1;min-height:44px;background:none;color:#1A211E;border:1px solid #B9B2A0;font:500 13px Archivo">Merienda</button>
+          <button style="flex:1;min-height:44px;background:none;color:#1A211E;border:1px solid #B9B2A0;font:500 13px Archivo;line-height:1.2">Lunch para eventos</button>
+        </div>
+
+        <!-- selección editorial -->
+        <div style="padding:28px 16px 8px;display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:baseline;justify-content:space-between">
+            <h3 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:26px">Selección de la casa</h3>
+            <span style="font:600 12px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver todo</span>
+          </div>
+          <!-- large card -->
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="height:280px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2">
+              <image-slot id="a-m-p1" shape="rect" placeholder="Imagen temporal — producto destacado"></image-slot>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+              <div>
+                <div style="font-family:'Instrument Serif',serif;font-size:20px;line-height:1.15">Producto de pastelería</div>
+                <div style="font:500 12px Archivo;color:#6E675A;margin-top:3px">Precio pendiente</div>
+              </div>
+              <span style="font:600 10.5px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#1E4B40;border:1px solid #1E4B40;padding:5px 8px;white-space:nowrap">Compra directa</span>
+            </div>
+          </div>
+          <!-- two mediums -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="height:170px;border-radius:3px;overflow:hidden;border:1px solid #D9D2C2">
+                <image-slot id="a-m-p2" shape="rect" placeholder="Imagen temporal"></image-slot>
+              </div>
+              <div style="font-family:'Instrument Serif',serif;font-size:17px;line-height:1.15">Producto de merienda</div>
+              <div style="font:500 12px Archivo;color:#6E675A">Precio pendiente</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="height:170px;border-radius:3px;overflow:hidden;border:1px solid #D9D2C2">
+                <image-slot id="a-m-p3" shape="rect" placeholder="Imagen temporal"></image-slot>
+              </div>
+              <div style="font-family:'Instrument Serif',serif;font-size:17px;line-height:1.15">Producto de lunch</div>
+              <div style="font:600 10.5px Archivo;letter-spacing:.06em;text-transform:uppercase;color:#8A5320">Por encargo</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- modos -->
+        <div style="margin-top:24px;background:#142E28;color:#F7F3EA;padding:28px 20px;display:flex;flex-direction:column">
+          <h3 style="margin:0 0 6px;font-family:'Instrument Serif',serif;font-weight:400;font-size:24px">Tres maneras de pedir</h3>
+          <div style="display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(247,243,234,.2)">
+            <span style="font-family:'Instrument Serif',serif;font-size:22px;color:#C98B45">01</span>
+            <div><div style="font:600 14px Archivo">Comprá ahora</div><div style="font:400 12.5px Archivo;color:#D8CFBC;margin-top:3px;line-height:1.5">Stock del día · pago online con Mercado Pago.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:16px 0;border-bottom:1px solid rgba(247,243,234,.2)">
+            <span style="font-family:'Instrument Serif',serif;font-size:22px;color:#C98B45">02</span>
+            <div><div style="font:600 14px Archivo">Encargá para una fecha</div><div style="font:400 12.5px Archivo;color:#D8CFBC;margin-top:3px;line-height:1.5">Anticipación por confirmar · puede requerir seña.</div></div>
+          </div>
+          <div style="display:flex;gap:14px;padding:16px 0 4px">
+            <span style="font-family:'Instrument Serif',serif;font-size:22px;color:#C98B45">03</span>
+            <div><div style="font:600 14px Archivo">Consultá por tu evento</div><div style="font:400 12.5px Archivo;color:#D8CFBC;margin-top:3px;line-height:1.5">Lunch para fiestas · cotización por WhatsApp.</div></div>
+          </div>
+        </div>
+
+        <!-- CTA principal -->
+        <div style="padding:28px 20px;display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center">
+          <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.2">¿Listo para tu pedido?</div>
+          <button style="width:100%;max-width:300px;min-height:50px;background:#1E4B40;color:#F7F3EA;border:none;font:600 15px Archivo;letter-spacing:.04em">Hacer un pedido</button>
+        </div>
+
+        <!-- footer mini -->
+        <div style="border-top:1px solid #D9D2C2;padding:18px 20px 76px;display:flex;flex-direction:column;gap:4px;font:400 11.5px Archivo;color:#6E675A">
+          <div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:16px;color:#1E4B40">Chef Arturo</div>
+          <div>by Julia y Montserrat · Florida, Uruguay</div>
+          <div>Retiro y entrega · WhatsApp · Contenido pendiente de validación</div>
+        </div>
+
+        <!-- cart bar (fija) -->
+        <div style="position:absolute;left:0;right:0;top:788px;background:#1E4B40;color:#F7F3EA;display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;box-shadow:0 -4px 12px rgba(20,46,40,.25)">
+          <span style="font:500 13px Archivo">Carrito · 2 productos</span>
+          <span style="font:700 13px Archivo;letter-spacing:.04em;border-bottom:1px solid #C98B45;padding-bottom:2px">Ver carrito</span>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:844px;border-top:2px dashed #C1762F;pointer-events:none"></div>
+        <div style="position:absolute;right:8px;top:848px;font:600 10px Archivo;color:#C1762F;letter-spacing:.08em">FOLD 844</div>
+      </div>
+    </div>
+
+    <!-- MOBILE QUICK VIEW -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E675A">Mobile 390×844 · Vista rápida de producto</div>
+      <div style="width:390px;height:844px;background:#F7F3EA;border:1px solid #C4BEAF;box-shadow:0 2px 10px rgba(26,33,30,.08);position:relative;overflow:hidden">
+        <!-- dimmed home behind -->
+        <div style="opacity:.45;filter:saturate(.7)">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid #D9D2C2">
+            <span style="font:600 13px Archivo">Catálogo</span>
+            <div style="text-align:center;line-height:1"><div style="font:600 10px Archivo;letter-spacing:.3em;color:#1E4B40">CHEF</div><div style="font-family:'Instrument Serif',serif;font-style:italic;font-size:21px;color:#1E4B40">Arturo</div></div>
+            <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#1A211E" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          </div>
+          <div style="background:#1E4B40;height:400px"></div>
+        </div>
+        <div style="position:absolute;inset:0;background:rgba(20,46,40,.35)"></div>
+        <!-- bottom sheet -->
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#F7F3EA;border-top:1px solid #D9D2C2;padding:10px 20px 24px;display:flex;flex-direction:column;gap:16px;height:640px;box-sizing:border-box">
+          <div style="width:44px;height:4px;background:#B9B2A0;border-radius:2px;align-self:center"></div>
+          <div style="display:flex;gap:16px;align-items:flex-start">
+            <div style="width:120px;height:148px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2;flex:none">
+              <image-slot id="a-m-qv" shape="rect" placeholder="Imagen temporal"></image-slot>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;padding-top:6px">
+              <div style="font:600 10.5px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">Pastelería</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.1">Producto de pastelería</div>
+              <div style="font:600 14px Archivo;color:#1E4B40">Precio pendiente</div>
+              <div style="font:400 12px Archivo;color:#6E675A;line-height:1.5">Contenido pendiente de validación.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="font:600 12px Archivo;letter-spacing:.06em;text-transform:uppercase;color:#6E675A">¿Cómo lo querés?</div>
+            <label style="display:flex;gap:12px;align-items:center;border:1px solid #1E4B40;background:rgba(30,75,64,.07);padding:12px 14px;min-height:44px;box-sizing:border-box">
+              <span style="width:16px;height:16px;border:1.5px solid #1E4B40;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;background:#1E4B40;border-radius:50%"></span></span>
+              <span><b style="font:600 13.5px Archivo">Comprá ahora</b><span style="display:block;font:400 12px Archivo;color:#6E675A;margin-top:1px">Stock del día · Mercado Pago</span></span>
+            </label>
+            <label style="display:flex;gap:12px;align-items:center;border:1px solid #B9B2A0;padding:12px 14px;min-height:44px;box-sizing:border-box">
+              <span style="width:16px;height:16px;border:1.5px solid #B9B2A0;border-radius:50%;flex:none"></span>
+              <span><b style="font:600 13.5px Archivo">Encargá para una fecha</b><span style="display:block;font:400 12px Archivo;color:#6E675A;margin-top:1px">Anticipación por confirmar · puede requerir seña</span></span>
+            </label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+            <div style="display:flex;align-items:center;border:1px solid #B9B2A0">
+              <button style="width:44px;height:44px;background:none;border:none;font:600 18px Archivo;color:#1A211E">−</button>
+              <span style="width:36px;text-align:center;font:600 15px Archivo">1</span>
+              <button style="width:44px;height:44px;background:none;border:none;font:600 18px Archivo;color:#1A211E">+</button>
+            </div>
+            <span style="font:400 12px Archivo;color:#6E675A">Retiro o entrega — se elige al pagar</span>
+          </div>
+          <button style="min-height:50px;background:#1E4B40;color:#F7F3EA;border:none;font:600 15px Archivo;letter-spacing:.04em">Agregar al carrito</button>
+          <button style="min-height:46px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 14px Archivo">Consultar por WhatsApp</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADOS BOARD -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E675A">Estados esenciales</div>
+      <div style="width:420px;background:#F7F3EA;border:1px solid #C4BEAF;padding:24px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 10px rgba(26,33,30,.08)">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">Header · carrito</div>
+          <div style="display:flex;gap:24px;align-items:center">
+            <div style="display:flex;flex-direction:column;gap:5px;align-items:center"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A211E" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span style="font:400 10.5px Archivo;color:#6E675A">vacío</span></div>
+            <div style="display:flex;flex-direction:column;gap:5px;align-items:center"><span style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A211E" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span style="position:absolute;top:-6px;right:-8px;background:#C1762F;color:#F7F3EA;font:700 10px Archivo;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span></span><span style="font:400 10.5px Archivo;color:#6E675A">con productos</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">Navegación por categorías</div>
+          <div style="display:flex;gap:8px">
+            <button style="flex:1;min-height:42px;background:none;color:#1A211E;border:1px solid #B9B2A0;font:500 12.5px Archivo">reposo</button>
+            <button style="flex:1;min-height:42px;background:rgba(30,75,64,.08);color:#1E4B40;border:1px solid #1E4B40;font:500 12.5px Archivo">hover</button>
+            <button style="flex:1;min-height:42px;background:#1E4B40;color:#F7F3EA;border:1px solid #1E4B40;font:600 12.5px Archivo">activa</button>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">Card de producto</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:96px;background:#EDE4D2;border:1px solid #D9D2C2;border-radius:3px;display:flex;align-items:center;justify-content:center;font:400 10px Archivo;color:#9A937F">Imagen temporal</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:13.5px;line-height:1.15">Producto de pastelería</div>
+              <span style="font:400 10.5px Archivo;color:#6E675A">reposo</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:96px;background:#E5D9BF;border:1px solid #D9D2C2;border-radius:3px;display:flex;align-items:center;justify-content:center;font:400 10px Archivo;color:#8F866E;transform:scale(1.02)">foto 1.04×</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:13.5px;line-height:1.15;text-decoration:underline;text-decoration-color:#C1762F;text-underline-offset:3px">Producto de pastelería</div>
+              <span style="font:400 10.5px Archivo;color:#6E675A">hover</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="height:96px;background:#EDE4D2;border:2px solid #C1762F;border-radius:3px;display:flex;align-items:center;justify-content:center;font:400 10px Archivo;color:#9A937F">Imagen temporal</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:13.5px;line-height:1.15">Producto de pastelería</div>
+              <span style="font:400 10.5px Archivo;color:#6E675A">seleccionada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP HOME ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E675A">Desktop 1440 · Home (página con scroll, fold en 900)</div>
+    <div style="width:1440px;background:#F7F3EA;border:1px solid #C4BEAF;box-shadow:0 2px 14px rgba(26,33,30,.1);position:relative;overflow:hidden">
+
+      <!-- header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:76px;border-bottom:1px solid #D9D2C2">
+        <div style="display:flex;align-items:baseline;gap:10px">
+          <div style="line-height:1"><span style="font:600 10px Archivo;letter-spacing:.3em;color:#1E4B40;display:block">CHEF</span><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#1E4B40">Arturo</span></div>
+          <span style="font:400 11px Archivo;color:#6E675A">by Julia y Montserrat</span>
+        </div>
+        <nav style="display:flex;gap:36px;font:500 14px Archivo">
+          <span style="color:#1E4B40;border-bottom:2px solid #C1762F;padding-bottom:4px;font-weight:600">Pastelería</span>
+          <span>Merienda</span>
+          <span>Lunch para eventos</span>
+          <span>Catálogo completo</span>
+        </nav>
+        <div style="display:flex;align-items:center;gap:24px">
+          <span style="font:500 13.5px Archivo;color:#1E4B40;text-decoration:underline;text-underline-offset:3px">WhatsApp</span>
+          <span style="position:relative"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A211E" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span style="position:absolute;top:-6px;right:-8px;background:#C1762F;color:#F7F3EA;font:700 10px Archivo;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span></span>
+        </div>
+      </div>
+
+      <!-- hero -->
+      <div style="display:grid;grid-template-columns:1fr 620px;background:#1E4B40;color:#F7F3EA">
+        <div style="padding:88px 72px;display:flex;flex-direction:column;gap:24px;justify-content:center">
+          <div style="font:600 12px Archivo;letter-spacing:.16em;text-transform:uppercase;color:#C98B45">Florida, Uruguay · retiro y entrega</div>
+          <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:64px;line-height:1.02;max-width:560px">Pastelería, merienda y <em>lunch</em> para fiestas</h2>
+          <p style="margin:0;font-size:16px;line-height:1.6;color:#EDE4D2;max-width:440px">Comprá del día con Mercado Pago, encargá para una fecha o consultá por tu evento. Retiro en Florida o entrega a tu puerta.</p>
+          <div style="display:flex;gap:14px">
+            <button style="min-height:50px;padding:0 30px;background:#F7F3EA;color:#1E4B40;border:1px solid #F7F3EA;font:600 14px Archivo;letter-spacing:.04em">Ver catálogo</button>
+            <button style="min-height:50px;padding:0 26px;background:none;color:#F7F3EA;border:1px solid rgba(247,243,234,.5);font:500 14px Archivo">Pedir por WhatsApp</button>
+          </div>
+        </div>
+        <div style="padding:56px 64px 56px 0;display:flex;align-items:center;justify-content:center">
+          <div style="width:440px;height:540px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid rgba(247,243,234,.35);padding:9px;background:rgba(247,243,234,.06);box-sizing:border-box">
+            <div style="width:100%;height:100%;border-radius:999px 999px 2px 2px;overflow:hidden">
+              <image-slot id="a-d-hero" shape="rect" placeholder="Imagen temporal — pieza hero vertical"></image-slot>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- categorías -->
+      <div style="padding:72px 48px;display:flex;flex-direction:column;gap:32px">
+        <h3 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px">Elegí por ocasión</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:28px">
+          <div style="display:flex;flex-direction:column;gap:14px;border:1px solid #D9D2C2;padding:22px 22px 24px;background:#FBF8F1">
+            <div style="height:220px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-cat1" shape="rect" placeholder="Imagen temporal — pastelería"></image-slot></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:24px">Pastelería</div>
+            <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55">Tortas y piezas dulces. Compra directa o por encargo.</div>
+            <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver pastelería</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;border:1px solid #D9D2C2;padding:22px 22px 24px;background:#FBF8F1">
+            <div style="height:220px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-cat2" shape="rect" placeholder="Imagen temporal — merienda"></image-slot></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:24px">Merienda</div>
+            <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55">Para la tarde, del día. Retiro o entrega.</div>
+            <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver merienda</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;border:1px solid #D9D2C2;padding:22px 22px 24px;background:#FBF8F1">
+            <div style="height:220px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-cat3" shape="rect" placeholder="Imagen temporal — lunch"></image-slot></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:24px">Lunch para eventos</div>
+            <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55">Fiestas y reuniones. Con cotización previa.</div>
+            <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Consultar</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- selección editorial -->
+      <div style="padding:0 48px 80px;display:flex;flex-direction:column;gap:32px">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;border-top:1px solid #D9D2C2;padding-top:40px">
+          <h3 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:40px">Selección de la casa</h3>
+          <span style="font:600 14px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver todo el catálogo</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1.5fr 1fr 1fr;grid-template-rows:auto auto;gap:28px">
+          <div style="grid-row:span 2;display:flex;flex-direction:column;gap:12px">
+            <div style="flex:1;min-height:520px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-p1" shape="rect" placeholder="Imagen temporal — destacado"></image-slot></div>
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+              <div><div style="font-family:'Instrument Serif',serif;font-size:24px">Producto de pastelería</div><div style="font:500 13px Archivo;color:#6E675A;margin-top:3px">Precio pendiente</div></div>
+              <span style="font:600 11px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#1E4B40;border:1px solid #1E4B40;padding:6px 10px;white-space:nowrap">Compra directa</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="height:230px;border-radius:3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-p2" shape="rect" placeholder="Imagen temporal"></image-slot></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:19px">Producto de merienda</div>
+            <div style="font:500 12.5px Archivo;color:#6E675A">Precio pendiente</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="height:230px;border-radius:3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-p3" shape="rect" placeholder="Imagen temporal"></image-slot></div>
+            <div style="font-family:'Instrument Serif',serif;font-size:19px">Producto de pastelería</div>
+            <div style="font:600 11px Archivo;letter-spacing:.06em;text-transform:uppercase;color:#8A5320">Por encargo · anticipación por confirmar</div>
+          </div>
+          <div style="grid-column:span 2;display:grid;grid-template-columns:280px 1fr;gap:24px;border:1px solid #D9D2C2;background:#FBF8F1;padding:20px">
+            <div style="height:200px;border-radius:3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="a-d-p4" shape="rect" placeholder="Imagen temporal"></image-slot></div>
+            <div style="display:flex;flex-direction:column;gap:8px;justify-content:center">
+              <div style="font:600 11px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">Lunch para eventos</div>
+              <div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.1">Producto de lunch</div>
+              <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55">Propuesta para fiestas. Contenido pendiente de validación.</div>
+              <span style="font:600 13px Archivo;color:#1E4B40;text-decoration:underline;text-underline-offset:3px">Consultar por tu evento</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- modos -->
+      <div style="background:#142E28;color:#F7F3EA;padding:72px 48px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px">
+        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(247,243,234,.25);padding-top:20px">
+          <span style="font-family:'Instrument Serif',serif;font-size:34px;color:#C98B45">01</span>
+          <div style="font:600 17px Archivo">Comprá ahora</div>
+          <div style="font:400 13.5px Archivo;color:#D8CFBC;line-height:1.6">Stock del día. Pago online con Mercado Pago, retiro o entrega.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(247,243,234,.25);padding-top:20px">
+          <span style="font-family:'Instrument Serif',serif;font-size:34px;color:#C98B45">02</span>
+          <div style="font:600 17px Archivo">Encargá para una fecha</div>
+          <div style="font:400 13.5px Archivo;color:#D8CFBC;line-height:1.6">Elegís día de retiro o entrega. Anticipación por confirmar; puede requerir seña.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;border-top:1px solid rgba(247,243,234,.25);padding-top:20px">
+          <span style="font-family:'Instrument Serif',serif;font-size:34px;color:#C98B45">03</span>
+          <div style="font:600 17px Archivo">Consultá por tu evento</div>
+          <div style="font:400 13.5px Archivo;color:#D8CFBC;line-height:1.6">Lunch para fiestas con cotización previa por WhatsApp.</div>
+        </div>
+      </div>
+
+      <!-- CTA + footer -->
+      <div style="padding:72px 48px;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center">
+        <div style="font-family:'Instrument Serif',serif;font-size:34px;line-height:1.15">¿Listo para tu pedido?</div>
+        <div style="display:flex;gap:14px">
+          <button style="min-height:52px;padding:0 36px;background:#1E4B40;color:#F7F3EA;border:none;font:600 15px Archivo;letter-spacing:.04em">Hacer un pedido</button>
+          <button style="min-height:52px;padding:0 28px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 14px Archivo">Consultar por WhatsApp</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid #D9D2C2;padding:20px 48px;display:flex;justify-content:space-between;font:400 12px Archivo;color:#6E675A">
+        <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:16px;color:#1E4B40">Chef Arturo</span>
+        <span>by Julia y Montserrat · Florida, Uruguay · retiro y entrega · WhatsApp</span>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;top:900px;border-top:2px dashed #C1762F;pointer-events:none"></div>
+      <div style="position:absolute;right:10px;top:904px;font:600 10px Archivo;color:#C1762F;letter-spacing:.08em">FOLD 900</div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP QUICK VIEW ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E675A">Desktop 1440×900 · Vista rápida (panel lateral)</div>
+    <div style="width:1440px;height:900px;background:#F7F3EA;border:1px solid #C4BEAF;box-shadow:0 2px 14px rgba(26,33,30,.1);position:relative;overflow:hidden">
+      <div style="opacity:.4;filter:saturate(.7)">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:76px;border-bottom:1px solid #D9D2C2">
+          <div style="line-height:1"><span style="font:600 10px Archivo;letter-spacing:.3em;color:#1E4B40;display:block">CHEF</span><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:26px;color:#1E4B40">Arturo</span></div>
+          <nav style="display:flex;gap:36px;font:500 14px Archivo"><span>Pastelería</span><span>Merienda</span><span>Lunch para eventos</span></nav>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1A211E" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+        </div>
+        <div style="background:#1E4B40;height:824px"></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(20,46,40,.4)"></div>
+      <aside style="position:absolute;top:0;right:0;bottom:0;width:480px;background:#F7F3EA;border-left:1px solid #D9D2C2;box-shadow:-12px 0 30px rgba(20,46,40,.25);padding:28px 32px;display:flex;flex-direction:column;gap:18px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font:600 11px Archivo;letter-spacing:.12em;text-transform:uppercase;color:#8A5320">Vista rápida · Pastelería</span>
+          <span style="font:400 20px Archivo;color:#6E675A;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid #D9D2C2">✕</span>
+        </div>
+        <div style="height:260px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2">
+          <image-slot id="a-d-qv" shape="rect" placeholder="Imagen temporal — producto"></image-slot>
+        </div>
+        <div>
+          <div style="font-family:'Instrument Serif',serif;font-size:30px;line-height:1.1">Producto de pastelería</div>
+          <div style="font:600 15px Archivo;color:#1E4B40;margin-top:6px">Precio pendiente</div>
+          <div style="font:400 13px Archivo;color:#6E675A;margin-top:6px;line-height:1.55">Contenido pendiente de validación.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;gap:12px;align-items:center;border:1px solid #1E4B40;background:rgba(30,75,64,.07);padding:12px 14px">
+            <span style="width:16px;height:16px;border:1.5px solid #1E4B40;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;background:#1E4B40;border-radius:50%"></span></span>
+            <span><b style="font:600 13.5px Archivo">Comprá ahora</b><span style="display:block;font:400 12px Archivo;color:#6E675A">Stock del día · Mercado Pago</span></span>
+          </label>
+          <label style="display:flex;gap:12px;align-items:center;border:1px solid #B9B2A0;padding:12px 14px">
+            <span style="width:16px;height:16px;border:1.5px solid #B9B2A0;border-radius:50%;flex:none"></span>
+            <span><b style="font:600 13.5px Archivo">Encargá para una fecha</b><span style="display:block;font:400 12px Archivo;color:#6E675A">Anticipación por confirmar · puede requerir seña</span></span>
+          </label>
+        </div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:10px">
+          <button style="min-height:50px;background:#1E4B40;color:#F7F3EA;border:none;font:600 15px Archivo;letter-spacing:.04em">Agregar al carrito</button>
+          <button style="min-height:46px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 14px Archivo">Consultar por WhatsApp</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

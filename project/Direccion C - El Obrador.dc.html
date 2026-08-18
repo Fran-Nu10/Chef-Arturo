@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>body{margin:0;background:#E2DFD8;font-family:'Familjen Grotesk',system-ui,sans-serif;color:#26241F}a{color:#AF6626;text-decoration:underline}a:hover{color:#26241F}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:44px;align-items:flex-start">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.14em;text-transform:uppercase;color:#8B857A">Chef Arturo · Dirección C</div>
+    <h1 style="margin:0;font-weight:600;font-size:38px">El Obrador</h1>
+    <p style="margin:0;font-size:13.5px;color:#57534A;max-width:560px;line-height:1.5">Retícula precisa, datos en monoespaciada, cada producto como ficha de taller. <a href="Direcciones.dc.html">← Volver a las direcciones</a></p>
+  </header>
+
+  <!-- ============ MOBILE ROW ============ -->
+  <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- MOBILE HOME -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.12em;text-transform:uppercase;color:#8B857A">Mobile 390 · Home (página completa, fold marcado)</div>
+      <div style="width:390px;background:#F1EFEA;border:1px solid #C6C1B6;box-shadow:0 2px 10px rgba(38,36,31,.08);position:relative;overflow:hidden">
+
+        <!-- header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid #26241F">
+          <div style="display:flex;align-items:baseline;gap:8px">
+            <span style="font-weight:700;font-size:17px">Chef Arturo</span>
+            <span style="font:400 9.5px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em">FLORIDA, UY</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:2px">
+            <button style="min-height:44px;padding:0 10px;background:none;border:none;font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em;color:#26241F">CATÁLOGO</button>
+            <button style="min-height:44px;padding:0 10px;background:none;border:none;font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em;color:#26241F">CARRITO <span style="color:#AF6626">/02</span></button>
+          </div>
+        </div>
+
+        <!-- hero -->
+        <div style="padding:24px 16px 28px;display:flex;flex-direction:column;gap:16px;border-bottom:1px solid #DBD6CC">
+          <div style="font:400 10.5px 'Spline Sans Mono';letter-spacing:.1em;color:#8B857A">PASTELERÍA — MERIENDA — LUNCH PARA FIESTAS</div>
+          <h2 style="margin:0;font-weight:600;font-size:30px;line-height:1.08;letter-spacing:-.01em">Hecho en el obrador, para tu mesa o tu fiesta.</h2>
+          <div style="border:1px solid #26241F;padding:8px;background:#FBFAF7">
+            <div style="height:290px"><image-slot id="c-m-hero" shape="rect" radius="0" placeholder="Imagen temporal — producto sobre fondo neutro 1:1"></image-slot></div>
+            <div style="display:flex;justify-content:space-between;padding:8px 2px 0;font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em"><span>FIG. 01 — IMAGEN TEMPORAL</span><span>BY JULIA Y MONTSERRAT</span></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #DBD6CC;font:400 10.5px 'Spline Sans Mono';letter-spacing:.04em">
+            <div style="padding:9px 10px;border-right:1px solid #DBD6CC;border-bottom:1px solid #DBD6CC"><span style="color:#8B857A">MODO</span><br>RETIRO · ENTREGA</div>
+            <div style="padding:9px 10px;border-bottom:1px solid #DBD6CC"><span style="color:#8B857A">PAGO</span><br>MERCADO PAGO</div>
+            <div style="padding:9px 10px;border-right:1px solid #DBD6CC"><span style="color:#8B857A">ENCARGOS</span><br>ANTICIPACIÓN POR CONFIRMAR</div>
+            <div style="padding:9px 10px"><span style="color:#8B857A">EVENTOS</span><br>COTIZACIÓN WHATSAPP</div>
+          </div>
+          <button style="min-height:50px;background:#26241F;color:#F1EFEA;border:none;font:600 14px 'Familjen Grotesk';letter-spacing:.02em">Ver catálogo</button>
+        </div>
+
+        <!-- category nav -->
+        <div style="border-bottom:1px solid #DBD6CC">
+          <div style="display:flex;align-items:center;gap:14px;padding:0 16px;min-height:52px;border-bottom:1px solid #DBD6CC;background:#FBFAF7;border-left:3px solid #AF6626">
+            <span style="font:500 11px 'Spline Sans Mono';color:#AF6626">01</span><span style="font-weight:600;font-size:15px">Pastelería</span><span style="margin-left:auto;font:400 10px 'Spline Sans Mono';color:#8B857A">ACTIVA</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:0 16px;min-height:52px;border-bottom:1px solid #DBD6CC;border-left:3px solid transparent">
+            <span style="font:500 11px 'Spline Sans Mono';color:#8B857A">02</span><span style="font-weight:500;font-size:15px;color:#57534A">Merienda</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:0 16px;min-height:52px;border-left:3px solid transparent">
+            <span style="font:500 11px 'Spline Sans Mono';color:#8B857A">03</span><span style="font-weight:500;font-size:15px;color:#57534A">Lunch para eventos</span>
+          </div>
+        </div>
+
+        <!-- fichas de producto -->
+        <div style="padding:24px 16px 8px;display:flex;flex-direction:column;gap:0">
+          <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px">
+            <h3 style="margin:0;font-weight:600;font-size:22px">Selección</h3>
+            <span style="font:500 10.5px 'Spline Sans Mono';color:#AF6626;letter-spacing:.06em">VER TODO →</span>
+          </div>
+          <div style="display:grid;grid-template-columns:112px 1fr;gap:14px;padding:14px 0;border-top:1px solid #DBD6CC">
+            <div style="border:1px solid #DBD6CC;padding:6px;background:#FBFAF7"><div style="height:100px"><image-slot id="c-m-p1" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+            <div style="display:flex;flex-direction:column;gap:4px;justify-content:center">
+              <span style="font:400 9.5px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em">N°01 — PASTELERÍA</span>
+              <span style="font-weight:600;font-size:16px;line-height:1.15">Producto de pastelería</span>
+              <span style="font:500 11px 'Spline Sans Mono';color:#26241F">PRECIO PENDIENTE</span>
+              <span style="font:400 10px 'Spline Sans Mono';color:#AF6626;letter-spacing:.04em">COMPRA DIRECTA</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:112px 1fr;gap:14px;padding:14px 0;border-top:1px solid #DBD6CC">
+            <div style="border:1px solid #DBD6CC;padding:6px;background:#FBFAF7"><div style="height:100px"><image-slot id="c-m-p2" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+            <div style="display:flex;flex-direction:column;gap:4px;justify-content:center">
+              <span style="font:400 9.5px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em">N°02 — MERIENDA</span>
+              <span style="font-weight:600;font-size:16px;line-height:1.15">Producto de merienda</span>
+              <span style="font:500 11px 'Spline Sans Mono';color:#26241F">PRECIO PENDIENTE</span>
+              <span style="font:400 10px 'Spline Sans Mono';color:#AF6626;letter-spacing:.04em">COMPRA DIRECTA</span>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:112px 1fr;gap:14px;padding:14px 0;border-top:1px solid #DBD6CC;border-bottom:1px solid #DBD6CC">
+            <div style="border:1px solid #DBD6CC;padding:6px;background:#FBFAF7"><div style="height:100px"><image-slot id="c-m-p3" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+            <div style="display:flex;flex-direction:column;gap:4px;justify-content:center">
+              <span style="font:400 9.5px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em">N°03 — LUNCH</span>
+              <span style="font-weight:600;font-size:16px;line-height:1.15">Producto de lunch</span>
+              <span style="font:500 11px 'Spline Sans Mono';color:#26241F">PRECIO PENDIENTE</span>
+              <span style="font:400 10px 'Spline Sans Mono';color:#AF6626;letter-spacing:.04em">POR ENCARGO — ANTICIPACIÓN POR CONFIRMAR</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- modos -->
+        <div style="margin:24px 16px 0;border:1px solid #26241F;background:#FBFAF7">
+          <div style="padding:12px 14px;border-bottom:1px solid #26241F;font:500 10.5px 'Spline Sans Mono';letter-spacing:.1em;color:#8B857A">MANERAS DE PEDIR</div>
+          <div style="padding:14px;border-bottom:1px solid #DBD6CC;display:flex;gap:12px">
+            <span style="font:500 11px 'Spline Sans Mono';color:#AF6626">01</span>
+            <div><div style="font-weight:600;font-size:14.5px">Comprá ahora</div><div style="font:400 12px 'Familjen Grotesk';color:#57534A;margin-top:2px;line-height:1.5">Stock del día · Mercado Pago.</div></div>
+          </div>
+          <div style="padding:14px;border-bottom:1px solid #DBD6CC;display:flex;gap:12px">
+            <span style="font:500 11px 'Spline Sans Mono';color:#AF6626">02</span>
+            <div><div style="font-weight:600;font-size:14.5px">Encargá para una fecha</div><div style="font:400 12px 'Familjen Grotesk';color:#57534A;margin-top:2px;line-height:1.5">Anticipación por confirmar · puede requerir seña.</div></div>
+          </div>
+          <div style="padding:14px;display:flex;gap:12px">
+            <span style="font:500 11px 'Spline Sans Mono';color:#AF6626">03</span>
+            <div><div style="font-weight:600;font-size:14.5px">Consultá por tu evento</div><div style="font:400 12px 'Familjen Grotesk';color:#57534A;margin-top:2px;line-height:1.5">Lunch para fiestas · cotización por WhatsApp.</div></div>
+          </div>
+        </div>
+
+        <!-- CTA + footer -->
+        <div style="padding:24px 16px;display:flex;flex-direction:column;gap:8px">
+          <button style="min-height:50px;background:#26241F;color:#F1EFEA;border:none;font:600 14px 'Familjen Grotesk'">Hacer un pedido</button>
+          <button style="min-height:46px;background:none;color:#26241F;border:1px solid #26241F;font:500 13px 'Familjen Grotesk'">Consultar por WhatsApp</button>
+        </div>
+        <div style="border-top:1px solid #26241F;padding:16px 16px 78px;font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em;line-height:1.8">
+          CHEF ARTURO — BY JULIA Y MONTSERRAT<br>FLORIDA, URUGUAY · RETIRO · ENTREGA · WHATSAPP<br>CONTENIDO PENDIENTE DE VALIDACIÓN
+        </div>
+
+        <!-- cart bar -->
+        <div style="position:absolute;left:0;right:0;top:792px;background:#FBFAF7;border-top:1px solid #26241F;display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:48px">
+          <span style="font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em">CARRITO <span style="color:#AF6626">/02</span></span>
+          <span style="font:600 11.5px 'Spline Sans Mono';letter-spacing:.06em;border-bottom:1px solid #AF6626;padding-bottom:2px">VER →</span>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:844px;border-top:2px dashed #AF6626;pointer-events:none"></div>
+        <div style="position:absolute;right:8px;top:848px;font:600 10px 'Spline Sans Mono';color:#AF6626;letter-spacing:.08em">FOLD 844</div>
+      </div>
+    </div>
+
+    <!-- MOBILE QUICK VIEW -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.12em;text-transform:uppercase;color:#8B857A">Mobile 390×844 · Ficha de producto</div>
+      <div style="width:390px;height:844px;background:#F1EFEA;border:1px solid #C6C1B6;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(38,36,31,.08);display:flex;flex-direction:column">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid #26241F">
+          <span style="font:500 11px 'Spline Sans Mono';letter-spacing:.08em;color:#8B857A">FICHA N°01 — PASTELERÍA</span>
+          <button style="min-height:44px;min-width:44px;background:none;border:none;font:400 18px 'Familjen Grotesk';color:#26241F">✕</button>
+        </div>
+        <div style="padding:20px 16px;display:flex;flex-direction:column;gap:16px;flex:1;overflow:hidden">
+          <div style="border:1px solid #26241F;padding:8px;background:#FBFAF7">
+            <div style="height:250px"><image-slot id="c-m-qv" shape="rect" radius="0" placeholder="Imagen temporal — producto"></image-slot></div>
+            <div style="padding:8px 2px 0;font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em">FIG. 02 — IMAGEN TEMPORAL</div>
+          </div>
+          <h3 style="margin:0;font-weight:600;font-size:24px;line-height:1.1">Producto de pastelería</h3>
+          <div style="border:1px solid #DBD6CC;font:400 10.5px 'Spline Sans Mono';letter-spacing:.04em">
+            <div style="display:grid;grid-template-columns:110px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">PRECIO</span><span style="padding:9px 10px">PENDIENTE</span></div>
+            <div style="display:grid;grid-template-columns:110px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">DISPONIBILIDAD</span><span style="padding:9px 10px">COMPRA DIRECTA · POR ENCARGO</span></div>
+            <div style="display:grid;grid-template-columns:110px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">ANTICIPACIÓN</span><span style="padding:9px 10px">POR CONFIRMAR</span></div>
+            <div style="display:grid;grid-template-columns:110px 1fr"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">SEÑA</span><span style="padding:9px 10px">PUEDE REQUERIRSE</span></div>
+          </div>
+          <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+            <button style="min-height:50px;background:#26241F;color:#F1EFEA;border:none;font:600 14px 'Familjen Grotesk'">Agregar al carrito</button>
+            <button style="min-height:46px;background:none;color:#26241F;border:1px solid #26241F;font:500 13px 'Familjen Grotesk'">Consultar por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADOS -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.12em;text-transform:uppercase;color:#8B857A">Estados esenciales</div>
+      <div style="width:420px;background:#F1EFEA;border:1px solid #C6C1B6;padding:24px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 10px rgba(38,36,31,.08)">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 10.5px 'Spline Sans Mono';letter-spacing:.1em;color:#AF6626">HEADER · CARRITO</div>
+          <div style="display:flex;gap:24px;font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em">
+            <div style="display:flex;flex-direction:column;gap:5px"><span>CARRITO <span style="color:#8B857A">/00</span></span><span style="font:400 10px 'Spline Sans Mono';color:#8B857A">vacío</span></div>
+            <div style="display:flex;flex-direction:column;gap:5px"><span>CARRITO <span style="color:#AF6626">/02</span></span><span style="font:400 10px 'Spline Sans Mono';color:#8B857A">con productos — cifra caramelo</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 10.5px 'Spline Sans Mono';letter-spacing:.1em;color:#AF6626">NAVEGACIÓN POR CATEGORÍAS</div>
+          <div style="border:1px solid #DBD6CC">
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #DBD6CC;border-left:3px solid transparent"><span style="font:500 10.5px 'Spline Sans Mono';color:#8B857A">02</span><span style="font-weight:500;font-size:14px;color:#57534A">Merienda</span><span style="margin-left:auto;font:400 10px 'Spline Sans Mono';color:#8B857A">reposo</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #DBD6CC;border-left:3px solid #DBD6CC;background:#FBFAF7"><span style="font:500 10.5px 'Spline Sans Mono';color:#57534A">02</span><span style="font-weight:600;font-size:14px">Merienda</span><span style="margin-left:auto;font:400 10px 'Spline Sans Mono';color:#8B857A">hover</span></div>
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-left:3px solid #AF6626;background:#FBFAF7"><span style="font:500 10.5px 'Spline Sans Mono';color:#AF6626">02</span><span style="font-weight:600;font-size:14px">Merienda</span><span style="margin-left:auto;font:400 10px 'Spline Sans Mono';color:#8B857A">activa</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:500 10.5px 'Spline Sans Mono';letter-spacing:.1em;color:#AF6626">FICHA DE PRODUCTO</div>
+          <div style="border:1px solid #DBD6CC">
+            <div style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid #DBD6CC">
+              <span style="width:52px;height:44px;background:#E7E3DA;border:1px solid #DBD6CC;flex:none"></span>
+              <div style="flex:1"><div style="font-weight:600;font-size:13px">Producto de pastelería</div><div style="font:400 9.5px 'Spline Sans Mono';color:#8B857A">PRECIO PENDIENTE</div></div>
+              <span style="font:400 10px 'Spline Sans Mono';color:#8B857A">reposo</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;padding:10px 12px;border-bottom:1px solid #DBD6CC;background:#FBFAF7">
+              <span style="width:52px;height:44px;background:#E7E3DA;border:1px solid #26241F;flex:none"></span>
+              <div style="flex:1"><div style="font-weight:600;font-size:13px;text-decoration:underline;text-decoration-color:#AF6626;text-underline-offset:3px">Producto de pastelería</div><div style="font:400 9.5px 'Spline Sans Mono';color:#8B857A">PRECIO PENDIENTE</div></div>
+              <span style="font:400 10px 'Spline Sans Mono';color:#8B857A">hover</span>
+            </div>
+            <div style="display:flex;gap:12px;align-items:center;padding:10px 12px;background:#26241F;color:#F1EFEA">
+              <span style="width:52px;height:44px;background:#3A372F;border:1px solid #57534A;flex:none"></span>
+              <div style="flex:1"><div style="font-weight:600;font-size:13px">Producto de pastelería</div><div style="font:400 9.5px 'Spline Sans Mono';color:#B3ADA0">PRECIO PENDIENTE</div></div>
+              <span style="font:400 10px 'Spline Sans Mono';color:#B3ADA0">seleccionada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP HOME ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.12em;text-transform:uppercase;color:#8B857A">Desktop 1440 · Home (página con scroll, fold en 900)</div>
+    <div style="width:1440px;background:#F1EFEA;border:1px solid #C6C1B6;box-shadow:0 2px 14px rgba(38,36,31,.1);position:relative;overflow:hidden">
+
+      <!-- header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;border-bottom:1px solid #26241F">
+        <div style="display:flex;align-items:baseline;gap:12px">
+          <span style="font-weight:700;font-size:19px">Chef Arturo</span>
+          <span style="font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em">BY JULIA Y MONTSERRAT — FLORIDA, UY</span>
+        </div>
+        <nav style="display:flex;gap:28px;font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em">
+          <span style="color:#AF6626;border-bottom:1px solid #AF6626;padding-bottom:3px">01 PASTELERÍA</span>
+          <span style="color:#57534A">02 MERIENDA</span>
+          <span style="color:#57534A">03 LUNCH PARA EVENTOS</span>
+        </nav>
+        <div style="display:flex;gap:22px;font:500 11.5px 'Spline Sans Mono';letter-spacing:.06em">
+          <span>WHATSAPP</span>
+          <span>CARRITO <span style="color:#AF6626">/02</span></span>
+        </div>
+      </div>
+
+      <!-- hero -->
+      <div style="display:grid;grid-template-columns:1fr 1px 640px;gap:0">
+        <div style="padding:72px 56px;display:flex;flex-direction:column;gap:24px;justify-content:center">
+          <div style="font:400 11px 'Spline Sans Mono';letter-spacing:.12em;color:#8B857A">PASTELERÍA — MERIENDA — LUNCH PARA FIESTAS</div>
+          <h2 style="margin:0;font-weight:600;font-size:54px;line-height:1.04;letter-spacing:-.015em;max-width:520px">Hecho en el obrador, para tu mesa o tu fiesta.</h2>
+          <div style="display:grid;grid-template-columns:1fr 1fr;border:1px solid #DBD6CC;font:400 11px 'Spline Sans Mono';letter-spacing:.04em;max-width:480px">
+            <div style="padding:10px 12px;border-right:1px solid #DBD6CC;border-bottom:1px solid #DBD6CC"><span style="color:#8B857A">MODO</span><br>RETIRO · ENTREGA</div>
+            <div style="padding:10px 12px;border-bottom:1px solid #DBD6CC"><span style="color:#8B857A">PAGO</span><br>MERCADO PAGO</div>
+            <div style="padding:10px 12px;border-right:1px solid #DBD6CC"><span style="color:#8B857A">ENCARGOS</span><br>ANTICIPACIÓN POR CONFIRMAR</div>
+            <div style="padding:10px 12px"><span style="color:#8B857A">EVENTOS</span><br>COTIZACIÓN WHATSAPP</div>
+          </div>
+          <div style="display:flex;gap:12px">
+            <button style="min-height:50px;padding:0 30px;background:#26241F;color:#F1EFEA;border:none;font:600 14px 'Familjen Grotesk'">Ver catálogo</button>
+            <button style="min-height:50px;padding:0 24px;background:none;color:#26241F;border:1px solid #26241F;font:500 13.5px 'Familjen Grotesk'">Consultar por WhatsApp</button>
+          </div>
+        </div>
+        <div style="background:#DBD6CC"></div>
+        <div style="padding:48px;display:flex;align-items:center">
+          <div style="border:1px solid #26241F;padding:10px;background:#FBFAF7;width:100%;box-sizing:border-box">
+            <div style="height:420px"><image-slot id="c-d-hero" shape="rect" radius="0" placeholder="Imagen temporal — producto sobre fondo neutro 4:3"></image-slot></div>
+            <div style="display:flex;justify-content:space-between;padding:10px 2px 0;font:400 10.5px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em"><span>FIG. 01 — IMAGEN TEMPORAL</span><span>OBRADOR · FLORIDA, UY</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- fichas / tabla -->
+      <div style="border-top:1px solid #26241F;padding:56px 48px 64px;display:flex;flex-direction:column;gap:0">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px">
+          <h3 style="margin:0;font-weight:600;font-size:32px">Selección del obrador</h3>
+          <span style="font:500 11px 'Spline Sans Mono';color:#AF6626;letter-spacing:.06em">VER TODO EL CATÁLOGO →</span>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 200px 1fr 220px 200px 160px;gap:16px;padding:10px 0;border-bottom:1px solid #26241F;font:500 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.08em;align-items:center">
+          <span>N°</span><span>IMAGEN</span><span>PRODUCTO</span><span>CATEGORÍA</span><span>DISPONIBILIDAD</span><span>PRECIO</span>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 200px 1fr 220px 200px 160px;gap:16px;padding:16px 0;border-bottom:1px solid #DBD6CC;align-items:center">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">01</span>
+          <div style="border:1px solid #DBD6CC;padding:5px;background:#FBFAF7"><div style="height:110px"><image-slot id="c-d-p1" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+          <span style="font-weight:600;font-size:19px">Producto de pastelería</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">PASTELERÍA</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">COMPRA DIRECTA</span>
+          <span style="font:500 11px 'Spline Sans Mono'">PENDIENTE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 200px 1fr 220px 200px 160px;gap:16px;padding:16px 0;border-bottom:1px solid #DBD6CC;align-items:center">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">02</span>
+          <div style="border:1px solid #DBD6CC;padding:5px;background:#FBFAF7"><div style="height:110px"><image-slot id="c-d-p2" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+          <span style="font-weight:600;font-size:19px">Producto de merienda</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">MERIENDA</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">COMPRA DIRECTA</span>
+          <span style="font:500 11px 'Spline Sans Mono'">PENDIENTE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 200px 1fr 220px 200px 160px;gap:16px;padding:16px 0;border-bottom:1px solid #DBD6CC;align-items:center">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">03</span>
+          <div style="border:1px solid #DBD6CC;padding:5px;background:#FBFAF7"><div style="height:110px"><image-slot id="c-d-p3" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+          <span style="font-weight:600;font-size:19px">Producto de pastelería</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">PASTELERÍA</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#AF6626">POR ENCARGO — ANTICIPACIÓN POR CONFIRMAR</span>
+          <span style="font:500 11px 'Spline Sans Mono'">PENDIENTE</span>
+        </div>
+        <div style="display:grid;grid-template-columns:80px 200px 1fr 220px 200px 160px;gap:16px;padding:16px 0;border-bottom:1px solid #26241F;align-items:center">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">04</span>
+          <div style="border:1px solid #DBD6CC;padding:5px;background:#FBFAF7"><div style="height:110px"><image-slot id="c-d-p4" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot></div></div>
+          <span style="font-weight:600;font-size:19px">Producto de lunch</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">LUNCH PARA EVENTOS</span>
+          <span style="font:400 11px 'Spline Sans Mono';color:#57534A">CON COTIZACIÓN</span>
+          <span style="font:500 11px 'Spline Sans Mono'">A COTIZAR</span>
+        </div>
+      </div>
+
+      <!-- modos -->
+      <div style="border-top:1px solid #26241F;display:grid;grid-template-columns:1fr 1px 1fr 1px 1fr;background:#FBFAF7">
+        <div style="padding:44px 40px;display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">01</span>
+          <div style="font-weight:600;font-size:20px">Comprá ahora</div>
+          <div style="font-size:13.5px;color:#57534A;line-height:1.55">Stock del día. Pago online con Mercado Pago, retiro o entrega.</div>
+        </div>
+        <div style="background:#DBD6CC"></div>
+        <div style="padding:44px 40px;display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">02</span>
+          <div style="font-weight:600;font-size:20px">Encargá para una fecha</div>
+          <div style="font-size:13.5px;color:#57534A;line-height:1.55">Elegís el día. Anticipación por confirmar; puede requerir seña.</div>
+        </div>
+        <div style="background:#DBD6CC"></div>
+        <div style="padding:44px 40px;display:flex;flex-direction:column;gap:10px">
+          <span style="font:500 12px 'Spline Sans Mono';color:#AF6626">03</span>
+          <div style="font-weight:600;font-size:20px">Consultá por tu evento</div>
+          <div style="font-size:13.5px;color:#57534A;line-height:1.55">Lunch para fiestas con cotización previa por WhatsApp.</div>
+        </div>
+      </div>
+
+      <!-- CTA + footer -->
+      <div style="border-top:1px solid #26241F;padding:56px 48px;display:flex;align-items:center;justify-content:space-between;gap:32px">
+        <div style="font-weight:600;font-size:28px;line-height:1.15">¿Listo para tu pedido?</div>
+        <div style="display:flex;gap:12px">
+          <button style="min-height:52px;padding:0 34px;background:#26241F;color:#F1EFEA;border:none;font:600 14.5px 'Familjen Grotesk'">Hacer un pedido</button>
+          <button style="min-height:52px;padding:0 26px;background:none;color:#26241F;border:1px solid #26241F;font:500 13.5px 'Familjen Grotesk'">Consultar por WhatsApp</button>
+        </div>
+      </div>
+      <div style="border-top:1px solid #DBD6CC;padding:16px 48px;display:flex;justify-content:space-between;font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em">
+        <span>CHEF ARTURO — BY JULIA Y MONTSERRAT</span>
+        <span>FLORIDA, URUGUAY · RETIRO · ENTREGA · WHATSAPP</span>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;top:900px;border-top:2px dashed #AF6626;pointer-events:none"></div>
+      <div style="position:absolute;right:10px;top:904px;font:600 10px 'Spline Sans Mono';color:#AF6626;letter-spacing:.08em">FOLD 900</div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP QUICK VIEW ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font:600 11px 'Spline Sans Mono';letter-spacing:.12em;text-transform:uppercase;color:#8B857A">Desktop 1440×900 · Ficha lateral</div>
+    <div style="width:1440px;height:900px;background:#F1EFEA;border:1px solid #C6C1B6;position:relative;overflow:hidden;box-shadow:0 2px 14px rgba(38,36,31,.1)">
+      <div style="opacity:.45">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:64px;border-bottom:1px solid #26241F">
+          <span style="font-weight:700;font-size:19px">Chef Arturo</span>
+          <nav style="display:flex;gap:28px;font:500 11.5px 'Spline Sans Mono'"><span>01 PASTELERÍA</span><span>02 MERIENDA</span><span>03 LUNCH PARA EVENTOS</span></nav>
+          <span style="font:500 11.5px 'Spline Sans Mono'">CARRITO /02</span>
+        </div>
+        <div style="height:836px;background:#EAE7E0"></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(38,36,31,.35)"></div>
+      <aside style="position:absolute;top:0;right:0;bottom:0;width:470px;background:#F1EFEA;border-left:1px solid #26241F;padding:24px 32px;display:flex;flex-direction:column;gap:16px;box-sizing:border-box;box-shadow:-16px 0 40px rgba(38,36,31,.25)">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font:500 11px 'Spline Sans Mono';letter-spacing:.08em;color:#8B857A">FICHA N°01 — PASTELERÍA</span>
+          <button style="min-height:44px;min-width:44px;background:none;border:1px solid #DBD6CC;font:400 17px 'Familjen Grotesk';color:#26241F">✕</button>
+        </div>
+        <div style="border:1px solid #26241F;padding:8px;background:#FBFAF7">
+          <div style="height:230px"><image-slot id="c-d-qv" shape="rect" radius="0" placeholder="Imagen temporal — producto"></image-slot></div>
+          <div style="padding:8px 2px 0;font:400 10px 'Spline Sans Mono';color:#8B857A;letter-spacing:.06em">FIG. 02 — IMAGEN TEMPORAL</div>
+        </div>
+        <h3 style="margin:0;font-weight:600;font-size:26px;line-height:1.1">Producto de pastelería</h3>
+        <div style="border:1px solid #DBD6CC;font:400 10.5px 'Spline Sans Mono';letter-spacing:.04em">
+          <div style="display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">PRECIO</span><span style="padding:9px 10px">PENDIENTE</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">DISPONIBILIDAD</span><span style="padding:9px 10px">COMPRA DIRECTA · POR ENCARGO</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr;border-bottom:1px solid #DBD6CC"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">ANTICIPACIÓN</span><span style="padding:9px 10px">POR CONFIRMAR</span></div>
+          <div style="display:grid;grid-template-columns:120px 1fr"><span style="padding:9px 10px;color:#8B857A;border-right:1px solid #DBD6CC">SEÑA</span><span style="padding:9px 10px">PUEDE REQUERIRSE</span></div>
+        </div>
+        <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+          <button style="min-height:50px;background:#26241F;color:#F1EFEA;border:none;font:600 14px 'Familjen Grotesk'">Agregar al carrito</button>
+          <button style="min-height:46px;background:none;color:#26241F;border:1px solid #26241F;font:500 13px 'Familjen Grotesk'">Consultar por WhatsApp</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

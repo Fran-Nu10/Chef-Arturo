@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>body{margin:0;background:#E9E4D8;font-family:'Hanken Grotesk',system-ui,sans-serif;color:#211A12}a{color:#77893B;text-decoration:underline}a:hover{color:#211A12}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:44px;align-items:flex-start">
+
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#6E6553;font-weight:600">Chef Arturo · Dirección B</div>
+    <h1 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px">Mediodía</h1>
+    <p style="margin:0;font-size:13.5px;color:#4A4335;max-width:560px;line-height:1.5">Manteca y pistacho, grotesca robusta, foto full-bleed y venta directa sin ceremonia. <a href="Direcciones.dc.html">← Volver a las direcciones</a></p>
+  </header>
+
+  <!-- ============ MOBILE ROW ============ -->
+  <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
+
+    <!-- MOBILE HOME -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E6553">Mobile 390 · Home (página completa, fold marcado)</div>
+      <div style="width:390px;background:#FFFBF2;border:1px solid #C9C1AC;box-shadow:0 2px 10px rgba(33,26,18,.08);position:relative;overflow:hidden">
+
+        <!-- header -->
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 14px 0 16px;height:58px;background:#FFFBF2;border-bottom:1px solid #E8DFC9">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;letter-spacing:-.01em">CHEF ARTURO</div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button style="min-height:44px;padding:0 12px;background:none;border:1px solid #211A12;border-radius:6px;font:600 13px 'Hanken Grotesk'">Catálogo</button>
+            <button style="position:relative;width:44px;height:44px;background:#F2BE45;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211A12" stroke-width="1.8"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+              <span style="position:absolute;top:-6px;right:-6px;background:#33261B;color:#FFFBF2;font:700 10px 'Hanken Grotesk';width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- ticker -->
+        <div style="background:#F2BE45;color:#211A12;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;padding:8px 0;white-space:nowrap;overflow:hidden">PASTELERÍA · MERIENDA · LUNCH PARA FIESTAS · RETIRO O ENTREGA · PASTELERÍA · MERIENDA · LUNCH</div>
+
+        <!-- hero -->
+        <div style="position:relative">
+          <div style="height:400px"><image-slot id="b-m-hero" shape="rect" radius="0" placeholder="Imagen temporal — mesa de merienda, cenital"></image-slot></div>
+          <div style="background:#FFFBF2;padding:20px 16px 24px;display:flex;flex-direction:column;gap:12px">
+            <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:38px;line-height:.98;letter-spacing:-.02em">Rico hoy,<br>en tu puerta.</h2>
+            <p style="margin:0;font-size:15px;line-height:1.5;color:#5A5040">Pastelería, merienda y lunch para fiestas en Florida. Comprá ahora o encargá para tu fecha.</p>
+            <div style="display:flex;gap:10px">
+              <button style="flex:1;min-height:50px;background:#33261B;color:#FFFBF2;border:none;border-radius:6px;font:700 14.5px 'Hanken Grotesk'">Comprar ahora</button>
+              <button style="min-height:50px;padding:0 16px;background:none;color:#211A12;border:1px solid #211A12;border-radius:6px;font:600 13.5px 'Hanken Grotesk'">WhatsApp</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- category nav: bloques -->
+        <div style="display:flex;flex-direction:column;gap:12px;padding:8px 16px 0">
+          <div style="position:relative;height:130px;border-radius:10px;overflow:hidden">
+            <image-slot id="b-m-cat1" shape="rect" radius="0" placeholder="Imagen temporal — pastelería"></image-slot>
+            <div style="position:absolute;left:12px;bottom:12px;background:#F2BE45;padding:8px 14px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;pointer-events:none">Pastelería →</div>
+          </div>
+          <div style="position:relative;height:130px;border-radius:10px;overflow:hidden">
+            <image-slot id="b-m-cat2" shape="rect" radius="0" placeholder="Imagen temporal — merienda"></image-slot>
+            <div style="position:absolute;left:12px;bottom:12px;background:#FFFBF2;padding:8px 14px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;pointer-events:none">Merienda →</div>
+          </div>
+          <div style="position:relative;height:130px;border-radius:10px;overflow:hidden">
+            <image-slot id="b-m-cat3" shape="rect" radius="0" placeholder="Imagen temporal — lunch"></image-slot>
+            <div style="position:absolute;left:12px;bottom:12px;background:#77893B;color:#FFFBF2;padding:8px 14px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:18px;pointer-events:none">Lunch para eventos →</div>
+          </div>
+        </div>
+
+        <!-- selección -->
+        <div style="padding:28px 16px 4px;display:flex;flex-direction:column;gap:14px">
+          <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;letter-spacing:-.01em">Lo de hoy</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="position:relative;height:180px;border-radius:10px;overflow:hidden">
+                <image-slot id="b-m-p1" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+                <span style="position:absolute;top:8px;left:8px;background:#FFFBF2;font:700 10.5px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+              </div>
+              <div style="font:600 14px 'Hanken Grotesk';line-height:1.25">Producto de pastelería</div>
+              <span style="font:600 11px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Compra directa</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="position:relative;height:180px;border-radius:10px;overflow:hidden">
+                <image-slot id="b-m-p2" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+                <span style="position:absolute;top:8px;left:8px;background:#FFFBF2;font:700 10.5px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+              </div>
+              <div style="font:600 14px 'Hanken Grotesk';line-height:1.25">Producto de merienda</div>
+              <span style="font:600 11px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Compra directa</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="position:relative;height:180px;border-radius:10px;overflow:hidden">
+                <image-slot id="b-m-p3" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+                <span style="position:absolute;top:8px;left:8px;background:#F2BE45;font:700 10.5px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">POR ENCARGO</span>
+              </div>
+              <div style="font:600 14px 'Hanken Grotesk';line-height:1.25">Producto de pastelería</div>
+              <span style="font:600 11px 'Hanken Grotesk';color:#A4501F;text-transform:uppercase;letter-spacing:.05em">Anticipación por confirmar</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <div style="position:relative;height:180px;border-radius:10px;overflow:hidden">
+                <image-slot id="b-m-p4" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+                <span style="position:absolute;top:8px;left:8px;background:#FFFBF2;font:700 10.5px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+              </div>
+              <div style="font:600 14px 'Hanken Grotesk';line-height:1.25">Producto de lunch</div>
+              <span style="font:600 11px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Para eventos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- modos -->
+        <div style="margin:28px 0 0;background:#F2BE45;padding:26px 16px 28px;display:flex;flex-direction:column;gap:0">
+          <h3 style="margin:0 0 8px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:26px;letter-spacing:-.01em">¿Cómo pedís?</h3>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1.5px solid #211A12">
+            <div style="flex:1"><div style="font:700 15px 'Hanken Grotesk'">Comprá ahora</div><div style="font:500 12.5px 'Hanken Grotesk';color:#5A4A28">Stock del día · Mercado Pago</div></div>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1.5px solid #211A12">
+            <div style="flex:1"><div style="font:700 15px 'Hanken Grotesk'">Encargá para una fecha</div><div style="font:500 12.5px 'Hanken Grotesk';color:#5A4A28">Anticipación por confirmar · puede requerir seña</div></div>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px">→</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;padding:14px 0">
+            <div style="flex:1"><div style="font:700 15px 'Hanken Grotesk'">Consultá por tu evento</div><div style="font:500 12.5px 'Hanken Grotesk';color:#5A4A28">Lunch para fiestas · cotización por WhatsApp</div></div>
+            <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:20px">→</span>
+          </div>
+        </div>
+
+        <!-- CTA + footer -->
+        <div style="padding:26px 16px 20px;display:flex;flex-direction:column;gap:10px">
+          <button style="min-height:52px;background:#33261B;color:#FFFBF2;border:none;border-radius:6px;font:700 15px 'Hanken Grotesk'">Hacer un pedido</button>
+        </div>
+        <div style="border-top:1px solid #E8DFC9;padding:16px 16px 90px;font:500 11.5px 'Hanken Grotesk';color:#6E6553;line-height:1.6">
+          <b style="font-family:'Bricolage Grotesque',sans-serif;font-size:13px;color:#211A12">CHEF ARTURO</b> · by Julia y Montserrat<br>Florida, Uruguay · retiro y entrega · WhatsApp
+        </div>
+
+        <!-- floating cart -->
+        <div style="position:absolute;right:14px;top:772px;width:56px;height:56px;background:#33261B;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(33,26,18,.35)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFBF2" stroke-width="1.8"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          <span style="position:absolute;top:-7px;right:-7px;background:#F2BE45;color:#211A12;font:700 11px 'Hanken Grotesk';width:20px;height:20px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span>
+        </div>
+        <div style="position:absolute;left:0;right:0;top:844px;border-top:2px dashed #A4501F;pointer-events:none"></div>
+        <div style="position:absolute;right:8px;top:848px;font:700 10px 'Hanken Grotesk';color:#A4501F;letter-spacing:.08em">FOLD 844</div>
+      </div>
+    </div>
+
+    <!-- MOBILE QUICK VIEW -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E6553">Mobile 390×844 · Vista rápida (overlay completo)</div>
+      <div style="width:390px;height:844px;background:#33261B;border:1px solid #C9C1AC;position:relative;overflow:hidden;box-shadow:0 2px 10px rgba(33,26,18,.08)">
+        <div style="position:absolute;inset:12px;background:#FFFBF2;border-radius:12px;display:flex;flex-direction:column;overflow:hidden">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px 0">
+            <span style="font:700 11px 'Hanken Grotesk';letter-spacing:.1em;color:#77893B">PASTELERÍA</span>
+            <button style="width:44px;height:44px;background:none;border:1px solid #E8DFC9;border-radius:6px;font:400 18px 'Hanken Grotesk';color:#211A12">✕</button>
+          </div>
+          <div style="height:300px;margin:10px 16px 0;border-radius:10px;overflow:hidden;position:relative">
+            <image-slot id="b-m-qv" shape="rect" radius="0" placeholder="Imagen temporal — producto"></image-slot>
+            <span style="position:absolute;top:10px;left:10px;background:#FFFBF2;font:700 11px 'Hanken Grotesk';padding:6px 9px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+          </div>
+          <div style="padding:16px;display:flex;flex-direction:column;gap:12px;flex:1">
+            <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:28px;line-height:1;letter-spacing:-.01em">Producto de pastelería</h3>
+            <p style="margin:0;font:400 13px 'Hanken Grotesk';color:#5A5040;line-height:1.5">Contenido pendiente de validación.</p>
+            <div style="display:flex;gap:8px">
+              <button style="flex:1;min-height:46px;background:#F2BE45;border:1.5px solid #211A12;border-radius:6px;font:700 13px 'Hanken Grotesk'">Comprá ahora</button>
+              <button style="flex:1;min-height:46px;background:none;border:1px solid #C9C1AC;border-radius:6px;font:600 12.5px 'Hanken Grotesk';color:#5A5040;line-height:1.2">Encargá para una fecha</button>
+            </div>
+            <div style="font:500 11.5px 'Hanken Grotesk';color:#A4501F">Anticipación por confirmar · puede requerir seña</div>
+            <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+              <button style="min-height:52px;background:#33261B;color:#FFFBF2;border:none;border-radius:6px;font:700 15px 'Hanken Grotesk'">Agregar al carrito</button>
+              <button style="min-height:44px;background:none;color:#211A12;border:1px solid #211A12;border-radius:6px;font:600 13.5px 'Hanken Grotesk'">Consultar por WhatsApp</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ESTADOS -->
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E6553">Estados esenciales</div>
+      <div style="width:420px;background:#FFFBF2;border:1px solid #C9C1AC;padding:24px;display:flex;flex-direction:column;gap:26px;box-shadow:0 2px 10px rgba(33,26,18,.08)">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#A4501F">Header · carrito</div>
+          <div style="display:flex;gap:20px;align-items:center">
+            <div style="display:flex;flex-direction:column;gap:5px;align-items:center"><span style="width:44px;height:44px;background:#F2BE45;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211A12" stroke-width="1.8"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></span><span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">vacío</span></div>
+            <div style="display:flex;flex-direction:column;gap:5px;align-items:center"><span style="position:relative;width:44px;height:44px;background:#F2BE45;border-radius:6px;display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211A12" stroke-width="1.8"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg><span style="position:absolute;top:-6px;right:-6px;background:#33261B;color:#FFFBF2;font:700 10px 'Hanken Grotesk';width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span></span><span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">con productos</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#A4501F">Navegación por categorías</div>
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#EFE7D2;border-radius:8px;padding:10px 14px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Pastelería</span><span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">reposo</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#F2BE45;border-radius:8px;padding:10px 14px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Pastelería →</span><span style="font:500 10.5px 'Hanken Grotesk';color:#5A4A28">hover — flecha entra 4px</span></div>
+            <div style="display:flex;align-items:center;justify-content:space-between;background:#77893B;color:#FFFBF2;border-radius:8px;padding:10px 14px"><span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px">Pastelería</span><span style="font:500 10.5px 'Hanken Grotesk';opacity:.8">activa</span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:700 11px 'Hanken Grotesk';letter-spacing:.1em;text-transform:uppercase;color:#A4501F">Card de producto</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="position:relative;height:96px;background:#EFE7D2;border-radius:10px;display:flex;align-items:center;justify-content:center;font:500 10px 'Hanken Grotesk';color:#8F8468">Imagen temporal<span style="position:absolute;top:6px;left:6px;background:#FFFBF2;font:700 8.5px 'Hanken Grotesk';padding:3px 5px;transform:rotate(-2deg);color:#211A12">PRECIO PENDIENTE</span></div>
+              <span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">reposo</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="position:relative;height:96px;background:#E7DCBB;border-radius:10px;display:flex;align-items:center;justify-content:center;font:500 10px 'Hanken Grotesk';color:#8F8468;transform:scale(1.03)">foto 1.03×<span style="position:absolute;top:6px;left:6px;background:#F2BE45;font:700 8.5px 'Hanken Grotesk';padding:3px 5px;transform:rotate(-2deg);color:#211A12">PRECIO PENDIENTE</span></div>
+              <span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">hover — etiqueta a manteca</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="position:relative;height:96px;background:#EFE7D2;border-radius:10px;border:2px solid #33261B;display:flex;align-items:center;justify-content:center;font:500 10px 'Hanken Grotesk';color:#8F8468;box-sizing:border-box">Imagen temporal</div>
+              <span style="font:500 10.5px 'Hanken Grotesk';color:#6E6553">seleccionada</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP HOME ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E6553">Desktop 1440 · Home (página con scroll, fold en 900)</div>
+    <div style="width:1440px;background:#FFFBF2;border:1px solid #C9C1AC;box-shadow:0 2px 14px rgba(33,26,18,.1);position:relative;overflow:hidden">
+
+      <!-- header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:74px;border-bottom:1px solid #E8DFC9">
+        <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px;letter-spacing:-.01em">CHEF ARTURO <span style="font:500 12px 'Hanken Grotesk';color:#6E6553;letter-spacing:0">by Julia y Montserrat</span></div>
+        <nav style="display:flex;gap:32px;font:600 14.5px 'Hanken Grotesk'">
+          <span style="border-bottom:3px solid #F2BE45;padding-bottom:3px">Pastelería</span>
+          <span style="color:#5A5040">Merienda</span>
+          <span style="color:#5A5040">Lunch para eventos</span>
+        </nav>
+        <div style="display:flex;align-items:center;gap:12px">
+          <button style="min-height:44px;padding:0 18px;background:none;border:1px solid #211A12;border-radius:6px;font:600 13.5px 'Hanken Grotesk'">WhatsApp</button>
+          <button style="position:relative;width:44px;height:44px;background:#F2BE45;border:none;border-radius:6px;display:flex;align-items:center;justify-content:center">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#211A12" stroke-width="1.8"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+            <span style="position:absolute;top:-6px;right:-6px;background:#33261B;color:#FFFBF2;font:700 10px 'Hanken Grotesk';width:18px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:50%">2</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- hero -->
+      <div style="padding:44px 48px 0;display:flex;flex-direction:column;gap:20px">
+        <h2 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:76px;line-height:.95;letter-spacing:-.025em;max-width:1000px">Rico hoy, en tu puerta.</h2>
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:40px">
+          <p style="margin:0;font-size:16px;line-height:1.55;color:#5A5040;max-width:460px">Pastelería, merienda y lunch para fiestas en Florida, Uruguay. Comprá del día con Mercado Pago o encargá para tu fecha.</p>
+          <div style="display:flex;gap:12px;flex:none">
+            <button style="min-height:52px;padding:0 32px;background:#33261B;color:#FFFBF2;border:none;border-radius:6px;font:700 15px 'Hanken Grotesk'">Comprar ahora</button>
+            <button style="min-height:52px;padding:0 24px;background:none;color:#211A12;border:1px solid #211A12;border-radius:6px;font:600 14px 'Hanken Grotesk'">Pedir por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:28px;position:relative">
+        <div style="height:430px"><image-slot id="b-d-hero" shape="rect" radius="0" placeholder="Imagen temporal — mesa de merienda 16:9, paneo lento"></image-slot></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#F2BE45;color:#211A12;font-family:'Bricolage Grotesque',sans-serif;font-weight:700;font-size:14px;letter-spacing:.1em;padding:10px 0;white-space:nowrap;overflow:hidden;pointer-events:none">PASTELERÍA · MERIENDA · LUNCH PARA FIESTAS · RETIRO O ENTREGA EN FLORIDA · MERCADO PAGO · PASTELERÍA · MERIENDA · LUNCH PARA FIESTAS · RETIRO O ENTREGA</div>
+      </div>
+
+      <!-- categorías -->
+      <div style="padding:64px 48px 0;display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px">
+        <div style="position:relative;height:300px;border-radius:10px;overflow:hidden">
+          <image-slot id="b-d-cat1" shape="rect" radius="0" placeholder="Imagen temporal — pastelería"></image-slot>
+          <div style="position:absolute;left:14px;bottom:14px;background:#F2BE45;padding:10px 18px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;pointer-events:none">Pastelería →</div>
+        </div>
+        <div style="position:relative;height:300px;border-radius:10px;overflow:hidden">
+          <image-slot id="b-d-cat2" shape="rect" radius="0" placeholder="Imagen temporal — merienda"></image-slot>
+          <div style="position:absolute;left:14px;bottom:14px;background:#FFFBF2;padding:10px 18px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;pointer-events:none">Merienda →</div>
+        </div>
+        <div style="position:relative;height:300px;border-radius:10px;overflow:hidden">
+          <image-slot id="b-d-cat3" shape="rect" radius="0" placeholder="Imagen temporal — lunch"></image-slot>
+          <div style="position:absolute;left:14px;bottom:14px;background:#77893B;color:#FFFBF2;padding:10px 18px;border-radius:6px;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px;pointer-events:none">Lunch para eventos →</div>
+        </div>
+      </div>
+
+      <!-- selección -->
+      <div style="padding:64px 48px;display:flex;flex-direction:column;gap:24px">
+        <div style="display:flex;justify-content:space-between;align-items:baseline">
+          <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:44px;letter-spacing:-.02em">Lo de hoy</h3>
+          <span style="font:700 14px 'Hanken Grotesk';border-bottom:2px solid #F2BE45;padding-bottom:2px">Ver todo el catálogo →</span>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:20px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="position:relative;height:280px;border-radius:10px;overflow:hidden">
+              <image-slot id="b-d-p1" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+              <span style="position:absolute;top:10px;left:10px;background:#FFFBF2;font:700 11px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+            </div>
+            <div style="font:600 15px 'Hanken Grotesk'">Producto de pastelería</div>
+            <span style="font:600 11.5px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Compra directa</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="position:relative;height:280px;border-radius:10px;overflow:hidden">
+              <image-slot id="b-d-p2" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+              <span style="position:absolute;top:10px;left:10px;background:#FFFBF2;font:700 11px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+            </div>
+            <div style="font:600 15px 'Hanken Grotesk'">Producto de merienda</div>
+            <span style="font:600 11.5px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Compra directa</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="position:relative;height:280px;border-radius:10px;overflow:hidden">
+              <image-slot id="b-d-p3" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+              <span style="position:absolute;top:10px;left:10px;background:#F2BE45;font:700 11px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">POR ENCARGO</span>
+            </div>
+            <div style="font:600 15px 'Hanken Grotesk'">Producto de pastelería</div>
+            <span style="font:600 11.5px 'Hanken Grotesk';color:#A4501F;text-transform:uppercase;letter-spacing:.05em">Anticipación por confirmar</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="position:relative;height:280px;border-radius:10px;overflow:hidden">
+              <image-slot id="b-d-p4" shape="rect" radius="0" placeholder="Imagen temporal"></image-slot>
+              <span style="position:absolute;top:10px;left:10px;background:#FFFBF2;font:700 11px 'Hanken Grotesk';padding:5px 8px;transform:rotate(-2deg);pointer-events:none">PRECIO PENDIENTE</span>
+            </div>
+            <div style="font:600 15px 'Hanken Grotesk'">Producto de lunch</div>
+            <span style="font:600 11.5px 'Hanken Grotesk';color:#77893B;text-transform:uppercase;letter-spacing:.05em">Para eventos</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- modos -->
+      <div style="background:#F2BE45;padding:56px 48px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px">
+        <div style="border:1.5px solid #211A12;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:8px;background:#FFFBF2">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px">Comprá ahora</div>
+          <div style="font:500 13.5px 'Hanken Grotesk';color:#5A5040;line-height:1.55">Stock del día. Pago online con Mercado Pago, retiro o entrega.</div>
+          <span style="font:700 13px 'Hanken Grotesk';margin-top:6px">Ir al catálogo →</span>
+        </div>
+        <div style="border:1.5px solid #211A12;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:8px;background:#FFFBF2">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px">Encargá para una fecha</div>
+          <div style="font:500 13.5px 'Hanken Grotesk';color:#5A5040;line-height:1.55">Elegís el día. Anticipación por confirmar; puede requerir seña.</div>
+          <span style="font:700 13px 'Hanken Grotesk';margin-top:6px">Encargar →</span>
+        </div>
+        <div style="border:1.5px solid #211A12;border-radius:10px;padding:24px;display:flex;flex-direction:column;gap:8px;background:#FFFBF2">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:22px">Consultá por tu evento</div>
+          <div style="font:500 13.5px 'Hanken Grotesk';color:#5A5040;line-height:1.55">Lunch para fiestas con cotización previa por WhatsApp.</div>
+          <span style="font:700 13px 'Hanken Grotesk';margin-top:6px">Consultar →</span>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <div style="padding:22px 48px;display:flex;justify-content:space-between;align-items:center;font:500 12.5px 'Hanken Grotesk';color:#6E6553">
+        <span style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:15px;color:#211A12">CHEF ARTURO</span>
+        <span>by Julia y Montserrat · Florida, Uruguay · retiro y entrega · WhatsApp</span>
+      </div>
+
+      <div style="position:absolute;left:0;right:0;top:900px;border-top:2px dashed #A4501F;pointer-events:none"></div>
+      <div style="position:absolute;right:10px;top:904px;font:700 10px 'Hanken Grotesk';color:#A4501F;letter-spacing:.08em">FOLD 900</div>
+    </div>
+  </div>
+
+  <!-- ============ DESKTOP QUICK VIEW ============ -->
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <div style="font-weight:600;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#6E6553">Desktop 1440×900 · Vista rápida (modal centrado)</div>
+    <div style="width:1440px;height:900px;background:#FFFBF2;border:1px solid #C9C1AC;position:relative;overflow:hidden;box-shadow:0 2px 14px rgba(33,26,18,.1)">
+      <div style="opacity:.4">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 48px;height:74px;border-bottom:1px solid #E8DFC9">
+          <div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:24px">CHEF ARTURO</div>
+          <nav style="display:flex;gap:32px;font:600 14.5px 'Hanken Grotesk'"><span>Pastelería</span><span>Merienda</span><span>Lunch para eventos</span></nav>
+          <span style="width:44px;height:44px;background:#F2BE45;border-radius:6px"></span>
+        </div>
+        <div style="padding:44px 48px"><div style="font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:76px;line-height:.95;letter-spacing:-.025em">Rico hoy, en tu puerta.</div></div>
+        <div style="height:500px;background:#EFE7D2"></div>
+      </div>
+      <div style="position:absolute;inset:0;background:rgba(33,26,18,.5)"></div>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:860px;background:#FFFBF2;border-radius:12px;display:grid;grid-template-columns:400px 1fr;overflow:hidden;box-shadow:0 24px 60px rgba(33,26,18,.4)">
+        <div style="height:520px"><image-slot id="b-d-qv" shape="rect" radius="0" placeholder="Imagen temporal — producto"></image-slot></div>
+        <div style="padding:28px 32px;display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <span style="font:700 11.5px 'Hanken Grotesk';letter-spacing:.1em;color:#77893B">PASTELERÍA</span>
+            <button style="width:44px;height:44px;background:none;border:1px solid #E8DFC9;border-radius:6px;font:400 18px 'Hanken Grotesk'">✕</button>
+          </div>
+          <h3 style="margin:0;font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:34px;line-height:1;letter-spacing:-.01em">Producto de pastelería</h3>
+          <div style="font:700 15px 'Hanken Grotesk'">Precio pendiente</div>
+          <p style="margin:0;font:400 13.5px 'Hanken Grotesk';color:#5A5040;line-height:1.55">Contenido pendiente de validación.</p>
+          <div style="display:flex;gap:8px">
+            <button style="flex:1;min-height:48px;background:#F2BE45;border:1.5px solid #211A12;border-radius:6px;font:700 13.5px 'Hanken Grotesk'">Comprá ahora</button>
+            <button style="flex:1;min-height:48px;background:none;border:1px solid #C9C1AC;border-radius:6px;font:600 13px 'Hanken Grotesk';color:#5A5040">Encargá para una fecha</button>
+          </div>
+          <div style="font:500 12px 'Hanken Grotesk';color:#A4501F">Anticipación por confirmar · puede requerir seña</div>
+          <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+            <button style="min-height:52px;background:#33261B;color:#FFFBF2;border:none;border-radius:6px;font:700 15px 'Hanken Grotesk'">Agregar al carrito</button>
+            <button style="min-height:44px;background:none;color:#211A12;border:1px solid #211A12;border-radius:6px;font:600 13.5px 'Hanken Grotesk'">Consultar por WhatsApp</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

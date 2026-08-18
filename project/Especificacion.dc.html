@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#F7F3EA;color:#1A211E;font-family:Archivo,system-ui,sans-serif}a{color:#8A5320;text-decoration:underline;text-underline-offset:2px}a:hover{color:#1A211E}code{font-family:ui-monospace,Menlo,monospace;font-size:.92em;background:#EDE4D2;padding:1px 5px}</style>
+</helmet>
+<div style="max-width:1080px;margin:0 auto;padding:56px 40px 90px;display:flex;flex-direction:column;gap:44px">
+
+  <header style="display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #D9D2C2;padding-bottom:26px">
+    <div style="font:600 11px Archivo;letter-spacing:.14em;text-transform:uppercase;color:#6E675A">Chef Arturo · La Vitrina — entrega para implementación</div>
+    <h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:42px;color:#1E4B40">Especificación</h1>
+    <p style="margin:0;font-size:14px;line-height:1.55;max-width:680px;color:#4A443B">Tokens, inventario de componentes, especificación de movimiento y assets pendientes, preparados para implementar en Next.js + TypeScript + Tailwind + Framer Motion.</p>
+    <nav style="display:flex;gap:18px;flex-wrap:wrap;font:600 13px Archivo">
+      <a href="Home.dc.html">Home</a>
+      <a href="Pantallas 1 - Catalogo y Producto.dc.html">Pantallas 1–8</a>
+      <a href="Pantallas 2 - Carrito y Checkout.dc.html">Pantallas 9–18</a>
+      <a href="Pantallas 3 - Evento y Estado.dc.html">Pantallas 19–21</a>
+    </nav>
+  </header>
+
+  <!-- TOKENS -->
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px">1 · Tokens visuales</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:13px;line-height:1.6">
+      <div style="border:1px solid #D9D2C2;background:#FBF8F1;padding:20px 22px;display:flex;flex-direction:column;gap:10px">
+        <div style="font:700 11.5px Archivo;letter-spacing:.1em;color:#8A5320">COLOR</div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#1E4B40;flex:none"></span><code>--verde-vitrina: #1E4B40</code> — tinta dominante, CTAs primarios, hero</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#142E28;flex:none"></span><code>--verde-profundo: #142E28</code> — bandas de cierre y "modos"</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#F7F3EA;border:1px solid #D9D2C2;flex:none"></span><code>--papel: #F7F3EA</code> — fondo base</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#EDE4D2;flex:none"></span><code>--crema: #EDE4D2</code> — placeholders, matte de arcos</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#C1762F;flex:none"></span><code>--caramelo: #C1762F</code> — acento controlado: badges, subrayados, foco</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#C98B45;flex:none"></span><code>--caramelo-claro: #C98B45</code> — acento sobre verde oscuro</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#8A5320;flex:none"></span><code>--caramelo-texto: #8A5320</code> — acento legible en texto chico sobre papel</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#1A211E;flex:none"></span><code>--tinta: #1A211E</code> · <span style="width:20px;height:20px;background:#6E675A;display:inline-block;vertical-align:middle"></span> <code>--tinta-suave: #6E675A</code></div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#D9D2C2;flex:none"></span><code>--linea: #D9D2C2</code> — hairlines</div>
+          <div style="display:flex;align-items:center;gap:10px"><span style="width:20px;height:20px;background:#B04A28;flex:none"></span><code>--alerta: #B04A28</code> — agotado, errores recuperables</div>
+        </div>
+      </div>
+      <div style="border:1px solid #D9D2C2;background:#FBF8F1;padding:20px 22px;display:flex;flex-direction:column;gap:14px">
+        <div>
+          <div style="font:700 11.5px Archivo;letter-spacing:.1em;color:#8A5320;margin-bottom:8px">TIPOGRAFÍA</div>
+          <div><b>Instrument Serif</b> (display, romana e itálica; nunca bold) + <b>Archivo</b> (UI y texto, 400–700). Ambas OFL / Google Fonts.</div>
+          <div style="margin-top:6px">Escala mobile: 34 / 26 / 20 / 15 / 12 · Desktop: 64 / 40 / 24 / 16 / 12.5. Interlínea 1.02–1.1 display, 1.5–1.6 texto. Con Tailwind: <code>clamp()</code> por token (<code>text-display: clamp(36px,5vw,64px)</code>).</div>
+        </div>
+        <div>
+          <div style="font:700 11.5px Archivo;letter-spacing:.1em;color:#8A5320;margin-bottom:8px">ESPACIADO Y GEOMETRÍA</div>
+          <div>Base 4 → 8 · 12 · 16 · 24 · 32 · 48 · 72 · 96. Secciones: 48–56 mobile / 96–104 desktop.</div>
+          <div style="margin-top:6px">Radios: <code>2–3px</code> en todo, <b>excepto el arco</b>: <code>border-radius: 999px 999px 3px 3px</code> con matte interior de 7–9px y borde 1px. Botones rectos, borde 1px. Sin sombras difusas salvo overlays (drawer/sheet).</div>
+        </div>
+        <div>
+          <div style="font:700 11.5px Archivo;letter-spacing:.1em;color:#8A5320;margin-bottom:8px">MOVIMIENTO (TOKENS)</div>
+          <div><code>--ease-editorial: cubic-bezier(.33,1,.68,1)</code> (ease-out) · micro 200–250ms · transiciones 400–500ms · picos por scroll-progress, no por tiempo. Foco visible: <code>outline: 2px solid #C1762F; offset 2px</code>.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPONENTES -->
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px">2 · Inventario de componentes</h2>
+    <div style="border:1px solid #D9D2C2;font-size:13px;line-height:1.55">
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:10px 16px;background:#EDE4D2;font:700 11px Archivo;letter-spacing:.08em;color:#4A443B"><span>COMPONENTE</span><span>NOTAS</span><span>DÓNDE SE VE</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>Header</b><span>Transparente/crema → compacto al scroll (76→58px, hairline + sombra leve). Menú mobile en panel lateral.</span><span>Home, todas</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>ArcoMedia</b><span>Ventana arqueada con matte; variantes: hero (viva), card, thumb. Única portadora de fotografía.</span><span>Home, catálogo, fichas</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>CardProducto</b><span>Estados: reposo · hover (foto 1.04 + subrayado caramelo) · seleccionado (marco caramelo) · agotado (op .55 + etiqueta alerta) · sin fecha (banda alerta).</span><span>Catálogo, selección</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>TagModalidad</b><span>DIRECTA (verde) · ENCARGO / CONSULTAR (caramelo-texto) · AGOTADO (alerta). Siempre borde, nunca relleno.</span><span>Todas</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>BotónPrimario / Secundario</b><span>Verde lleno / borde verde. Estados agregando ("Agregando…") y agregado ("Agregado ✓", caramelo, 1.6s).</span><span>Todas</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>QuickView</b><span>Bottom sheet mobile / panel lateral 480px desktop. Selector de modalidad con radios.</span><span>Home, pantalla 8</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>CartBar / CartDrawer</b><span>Barra fija inferior mobile (siempre recuperable, safe-area) · drawer 430px desktop.</span><span>Home, pantallas 9–10</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>PasosCheckout</b><span>4 barras de progreso + pantallas de un paso por vista. Estado de error nunca destruye carrito ni fecha.</span><span>Pantallas 11–18</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>ArmáTuOcasión</b><span>Stepper editorial 3 pasos, chips táctiles, resumen legible. Versión sin JS: los 3 pasos apilados como formulario único.</span><span>Home 05, pantalla 19</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>CampañaCard</b><span>Estados programada / activa / finalizada; admite imagen o video + rango de fechas + CTA. Orden administrable.</span><span>Home 06</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>GaleríaRieles</b><span>Dos rieles con scroll nativo (drag/swipe), velocidades distintas, influencia leve del scroll, pausa al interactuar. Datos: src, ratio, alt, orden, tipo (foto/video), link IG opcional.</span><span>Home 08</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>AcordeónFAQ</b><span>Nativo (details/summary estilizado), accesible, sin JS.</span><span>Home 09</span></div>
+      <div style="display:grid;grid-template-columns:190px 1fr 190px;gap:14px;padding:12px 16px;border-top:1px solid #D9D2C2"><b>TimelineEstado</b><span>Recibido → Confirmado → Listo. Consulta por código o teléfono.</span><span>Pantalla 21</span></div>
+    </div>
+    <p style="margin:0;font:400 12.5px Archivo;color:#6E675A;line-height:1.6">Contenido separado del diseño: productos, campañas, FAQ y galería se modelan como colecciones (nombre, modalidad, precio?, fechas?, media[]) con los placeholders actuales como valores por defecto. Ningún precio, zona, horario ni política está afirmado en la UI.</p>
+  </section>
+
+  <!-- MOVIMIENTO -->
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px">3 · Especificación de movimiento</h2>
+    <div style="border:1px solid #1E4B40;background:#FBF8F1;padding:22px 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.6">
+      <div style="font:700 12px Archivo;letter-spacing:.1em;color:#1E4B40">PICO 1 — LA VITRINA VIVA (HERO)</div>
+      <div><b>Trigger:</b> scroll-progress del track (<code>useScroll</code> sobre contenedor de 175svh, hero sticky 100svh). <b>Propiedades:</b> transform (translate + scale), border-radius del arco, border-color del matte, scale interno del video. <b>Easing:</b> smoothstep / <code>useSpring</code> suave.</div>
+      <div><b>Secuencia:</b> 0–0.25 entrada de titular y ventana (fade+8px, una vez al montar) · 0.20–0.55 el medio se acerca (scale interno 1→1.16) · 0.30–0.78 el arco escala hasta cubrir viewport (<code>sMax = max(vw/w, vh/h)·1.06</code>) y su radio 999→0, matte y hairline se desvanecen · 0.35–0.55 texto y CTAs salen (opacity→0, −24px, <code>pointer-events:none</code>) antes de ser cubiertos · 0.78–1 el medio entrega a "Elegí tu ocasión". Sin rotaciones 3D.</div>
+      <div><b>Mobile:</b> misma coreografía, arco centrado (340×430). <b>Desktop:</b> composición split, el arco viaja al centro del viewport mientras escala. <b>Reduced motion:</b> hero estático de 100svh con toda la información visible; solo fade 200ms.</div>
+      <div><b>Asset:</b> video vertical 9:16, 1080×1920, 7–10s, loop continuo, encuadre central, safe areas 18% sup/inf, poster obligatorio. Desktop: 16:10 o 4:3, mín. 1920×1200, sujeto centrado, poster obligatorio. Contenido a decidir con material real (terminación de torta, packaging, mesa o bandeja). Autoplay + muted + loop + playsInline; pausa fuera de viewport.</div>
+    </div>
+    <div style="border:1px solid #1E4B40;background:#FBF8F1;padding:22px 24px;display:flex;flex-direction:column;gap:10px;font-size:13px;line-height:1.6">
+      <div style="font:700 12px Archivo;letter-spacing:.1em;color:#1E4B40">PICO 2 — EL DETALLE FINAL</div>
+      <div><b>Trigger:</b> scroll-progress de track 200svh, ventana sticky centrada. <b>Propiedades:</b> scale de la ventana (rectángulo matte, no arco — no repite el hero), border-color, opacity/translate de 3 frases. <b>Easing:</b> smoothstep.</div>
+      <div><b>Secuencia:</b> 0–0.25 ventana pequeña (640×400 máx.) con título visible · 0.20–0.55 expansión a ~94% del viewport · 0.42 / 0.55 / 0.68 entran las tres frases (plates verdes sólidos, sin glass) · 0.70–1 entrega a "Armá tu ocasión". Video nunca sincronizado frame a frame.</div>
+      <div><b>Reduced motion:</b> ventana estática a tamaño medio con las tres frases visibles. <b>Asset:</b> video de terminación o armado, 16:9 1920×1080 (desktop) y recorte 4:5 (mobile), 6–10s loop, poster obligatorio; mismo régimen de reproducción que el hero.</div>
+    </div>
+    <div style="border:1px solid #D9D2C2;font-size:12.5px;line-height:1.55">
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:10px 16px;background:#EDE4D2;font:700 11px Archivo;letter-spacing:.08em;color:#4A443B"><span>MOVIMIENTO SECUNDARIO</span><span>SPEC</span><span>REDUCED MOTION</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Header compacto</b><span>scroll &gt; 40px · height + shadow + hairline · 300ms ease</span><span>Igual (no es motion decorativo)</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Categorías (desktop)</b><span>hover/click · flex-grow 1→1.8 + borde verde + copy fade · 500ms</span><span>Cambio instantáneo, sin transición</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Categorías (mobile)</b><span>carrusel scroll-snap nativo + indicadores de posición</span><span>Igual (scroll nativo)</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Selección: cambio de protagonista</b><span>crossfade 240ms (out) / 240ms (in) al elegir fila; <code>AnimatePresence</code> en Next</span><span>Cambio directo</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Reveals de sección</b><span>IntersectionObserver · opacity 0→1 + 16px · 600ms · solo encabezados, una vez</span><span>Sin reveal, todo visible</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Línea de pasos (07)</b><span>avanza con progreso de sección · width/height % · lineal</span><span>Línea completa fija</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Galería rieles (08)</b><span>scroll nativo + deriva ±0.3/−0.22 del deltaY · pausa al interactuar</span><span>Sin deriva; solo swipe/drag</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Sheet / drawer / modal</b><span>translateY/X 100%→0 · 350ms ease-out · backdrop fade</span><span>Fade simple 150ms</span></div>
+      <div style="display:grid;grid-template-columns:170px 1fr 1fr;gap:12px;padding:11px 16px;border-top:1px solid #D9D2C2"><b>Agregar al carrito</b><span>idle → agregando (700ms) → agregado ✓ caramelo (1.6s) → idle; badge del carrito +1</span><span>Igual (feedback funcional)</span></div>
+    </div>
+    <p style="margin:0;font:400 12.5px Archivo;color:#6E675A;line-height:1.6">Implementación prevista: <code>useScroll</code> + <code>useTransform</code> + <code>useSpring</code> para los dos picos, <code>motion</code>/<code>AnimatePresence</code> para overlays y crossfades, IntersectionObserver para reveals, CSS sticky y scroll-snap nativos. Nunca bloquear el scroll vertical; sin WebGL ni giroscopio.</p>
+  </section>
+
+  <!-- ASSETS -->
+  <section style="display:flex;flex-direction:column;gap:16px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:28px">4 · Assets pendientes</h2>
+    <div style="border:1px solid #D9D2C2;font-size:13px;line-height:1.55">
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:10px 16px;background:#EDE4D2;font:700 11px Archivo;letter-spacing:.08em;color:#4A443B"><span>ASSET</span><span>FORMATO</span><span>USO</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>Video hero "La Vitrina Viva" + poster</span><span>9:16 1080×1920 y 16:10 ≥1920×1200 · 7–10s</span><span>Home 01</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>Video "El detalle final" + poster</span><span>16:9 1920×1080 + recorte 4:5 · 6–10s</span><span>Home 04</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>3 fotos de categoría (luz cálida, encuadre cerrado)</span><span>4:5 ≥1200px</span><span>Home 02, catálogo</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>6–10 fotos de producto para catálogo y fichas</span><span>4:5 y 1:1 ≥1200px · AVIF/WebP</span><span>Pantallas 1–8</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>8+ fotos de galería (mezcla vertical/horizontal) + 1 video breve</span><span>libre · alt obligatorio</span><span>Home 08</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>Imagen o video por campaña</span><span>4:5</span><span>Home 06</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>Logo en una tinta (papel y grafito) + wordmark</span><span>SVG</span><span>Header, footer, confirmaciones</span></div>
+      <div style="display:grid;grid-template-columns:1fr 220px 220px;gap:14px;padding:11px 16px;border-top:1px solid #D9D2C2"><span>Contenido a validar: precios, anticipación, seña, zonas y costos de entrega, dirección de retiro, FAQ, políticas, campañas vigentes, wa.me definitivo</span><span>texto</span><span>Global</span></div>
+    </div>
+    <p style="margin:0;font:400 12.5px Archivo;color:#6E675A;line-height:1.6">Rendimiento: imágenes responsive AVIF/WebP con dimensiones reservadas, posters siempre presentes (el contenido nunca depende del video), videos mobile/desktop independientes cargados bajo demanda, lazy bajo el fold, pausa fuera de viewport. Objetivos: LCP mobile &lt; 2.5s (hero = poster estático), CLS &lt; 0.1.</p>
+  </section>
+
+  <section style="border-top:1px solid #D9D2C2;padding-top:24px;display:flex;flex-direction:column;gap:8px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:24px">5 · Índice de pantallas</h2>
+    <p style="margin:0;font:400 13px Archivo;color:#4A443B;line-height:1.7">Home (secciones 01–10, responsive real 360–1440 con los dos picos representados en CSS/JS ligero) · <a href="Pantallas 1 - Catalogo y Producto.dc.html">1–8: catálogo general y filtrado, búsqueda vacía, fichas directa/encargo/fecha/no disponible, vista rápida m+d</a> · <a href="Pantallas 2 - Carrito y Checkout.dc.html">9–18: carritos, retiro/entrega, fecha, datos, resumen, Mercado Pago/WhatsApp, pendiente, confirmado, error</a> · <a href="Pantallas 3 - Evento y Estado.dc.html">19–21: solicitud de evento, confirmación, estado del pedido</a>. Checkout desktop usa la misma columna centrada (640px) sobre papel con el resumen fijo a la derecha ≥1024px.</p>
+  </section>
+</div>
+</x-dc>
+</body>
+</html>

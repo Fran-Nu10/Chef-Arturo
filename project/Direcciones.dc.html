@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#EFEDE8;color:#211E1A;font-family:Archivo,system-ui,sans-serif}a{color:#7A4A1B;text-decoration:underline;text-underline-offset:2px}a:hover{color:#211E1A}</style>
+</helmet>
+<div style="max-width:1120px;margin:0 auto;padding:56px 40px 80px;display:flex;flex-direction:column;gap:40px">
+  <header style="display:flex;flex-direction:column;gap:10px;border-bottom:1px solid #C9C3B6;padding-bottom:28px">
+    <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#7A7364;font-weight:600">Chef Arturo · Florida, Uruguay — demo e-commerce · iteración 1</div>
+    <h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:44px;line-height:1.05">Tres direcciones visuales</h1>
+    <p style="margin:0;font-size:14.5px;line-height:1.55;max-width:640px;color:#4A443B">Misma arquitectura de contenido en las tres. Cada dirección es un archivo independiente con vista mobile (390), desktop (1440, con scroll), quick view de producto y tablero de estados. Las zonas de imagen aceptan fotos arrastradas.</p>
+    <nav style="display:flex;gap:20px;margin-top:8px;flex-wrap:wrap;font-size:14px;font-weight:600">
+      <a href="Direccion A - La Vitrina.dc.html">A — La Vitrina</a>
+      <a href="Direccion B - Mediodia.dc.html">B — Mediodía</a>
+      <a href="Direccion C - El Obrador.dc.html">C — El Obrador</a>
+    </nav>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:14px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:26px">1 · Análisis de la captura</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;font-size:13.5px;line-height:1.6">
+      <div style="background:#F7F5F0;border:1px solid #D8D2C5;padding:20px 22px">
+        <div style="font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;color:#3E6B4F">Observable — pertenece a la marca</div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          <li>Logo circular verde oscuro, "Arturo" en script blanco y "CHEF" en versalitas.</li>
+          <li>Presentación pública: "Chef Arturo, by Julia y Montserrat".</li>
+          <li>Categorías declaradas: lunch para fiestas, pastelería, merienda.</li>
+          <li>Retiro y entrega ("Retiralo o directo a tu puerta").</li>
+          <li>Contacto por WhatsApp (wa.me visible).</li>
+          <li>Horario publicado: L a V 9–19, S 9–15.</li>
+          <li>Fotografía cálida de producto real: tortas con pistacho, hojaldres, budines, empanadas, postres individuales.</li>
+          <li>Piezas gráficas estacionales (ej. "Hola, papá") con tipografía script.</li>
+        </ul>
+      </div>
+      <div style="background:#F7F5F0;border:1px solid #D8D2C5;padding:20px 22px">
+        <div style="font-weight:700;font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;color:#9A5A20">No determinable — no se inventa</div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          <li>Paleta oficial más allá del verde del logo.</li>
+          <li>Tipografías de marca.</li>
+          <li>Nombres, precios, porciones e ingredientes de productos.</li>
+          <li>Zonas y costos de entrega.</li>
+          <li>Anticipación requerida para encargos y política de seña.</li>
+          <li>Historia de la marca.</li>
+        </ul>
+        <p style="margin:12px 0 0;color:#6B6456">Donde falta información los mockups usan: "Producto de pastelería", "Precio pendiente", "Anticipación por confirmar", "Imagen temporal", "Contenido pendiente de validación".</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:18px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:26px">2 · Las tres direcciones</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start">
+
+      <article style="background:#F7F5F0;border:1px solid #D8D2C5;display:flex;flex-direction:column">
+        <div style="background:#1E4B40;color:#F7F3EA;padding:18px 20px">
+          <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.75">Dirección A</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:28px;margin-top:2px">La Vitrina</div>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.5;font-style:italic;font-family:'Instrument Serif',serif">La confitería como vitrina: el verde del logo convertido en tinta dominante y las fotos enmarcadas en ventanas-arco de mostrador.</p>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:12px;font-size:12.5px;line-height:1.55">
+          <div><b>Adecuación.</b> Se apropia del único activo verificable (el verde del logo) y le da porte de casa de pastelería con nombre propio; sostiene igual de bien venta directa y encargos para eventos.</div>
+          <div><b>Paleta.</b> Verde vitrina <code>#1E4B40</code> · verde profundo <code>#142E28</code> · papel <code>#F7F3EA</code> · crema <code>#EDE4D2</code> · caramelo <code>#C1762F</code> · tinta <code>#1A211E</code> · línea <code>#D9D2C2</code>.</div>
+          <div><b>Tipografías.</b> Instrument Serif (display, romana e itálica) + Archivo (UI y texto). Ambas libres (OFL).</div>
+          <div><b>Escala.</b> Mobile 34/26/20/15/12 · Desktop 64/40/24/16/12.5. Interlínea 1.05 display, 1.55 texto.</div>
+          <div><b>Espaciado.</b> Base 4 → 8·12·16·24·32·48·72. Secciones: 48 mobile / 96 desktop.</div>
+          <div><b>Geometría.</b> Arcos de medio punto solo en ventanas de foto (radio superior 999); todo lo demás recto, radio 2. Botones rectangulares con borde 1px.</div>
+          <div><b>Fotografía.</b> Cálida, encuadre cerrado, producto protagonista; siempre dentro de la ventana-arco. Sin filtros fríos.</div>
+          <div><b>Productos.</b> Mosaico editorial (1 grande + 2 medianos), no grilla uniforme. Selección: marco caramelo 2px + zoom de foto 1.04.</div>
+          <div><b>Movimiento.</b> Hero: la foto se revela dentro del arco con clip-path desde la base mientras el titular sube 12px (900ms, ease-out, una vez). Asset: foto vertical 4:5 de torta sobre fondo limpio, safe area central 60%; mobile 4:5, desktop 3:4. Secundario: cross-fade 250ms entre categorías. Reduced-motion: fade simple 200ms, sin clip ni desplazamientos.</div>
+          <div><b>Riesgo.</b> El verde dominante puede apagarse si las fotos reales son oscuras; exige fotos con luz.</div>
+          <div><b>Dificultad.</b> Media (arcos responsivos, mosaico asimétrico).</div>
+          <div><b>Assets a producir.</b> 1 hero vertical fondo limpio, 6 fotos de producto encuadre cerrado, logo en una tinta papel.</div>
+          <div style="display:flex;gap:6px;margin-top:2px">
+            <span style="width:22px;height:22px;background:#1E4B40"></span><span style="width:22px;height:22px;background:#142E28"></span><span style="width:22px;height:22px;background:#F7F3EA;border:1px solid #D8D2C5"></span><span style="width:22px;height:22px;background:#EDE4D2"></span><span style="width:22px;height:22px;background:#C1762F"></span><span style="width:22px;height:22px;background:#1A211E"></span>
+          </div>
+          <a href="Direccion A - La Vitrina.dc.html" style="font-weight:700;font-size:13px">Ver mockups A →</a>
+        </div>
+      </article>
+
+      <article style="background:#F7F5F0;border:1px solid #D8D2C5;display:flex;flex-direction:column">
+        <div style="background:#F2BE45;color:#211A12;padding:18px 20px">
+          <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7">Dirección B</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:28px;margin-top:2px">Mediodía</div>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.5;font-style:italic;font-family:'Instrument Serif',serif">Energía de mostrador al mediodía: manteca y pistacho, grotesca robusta, foto full-bleed y venta directa sin ceremonia.</p>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:12px;font-size:12.5px;line-height:1.55">
+          <div><b>Adecuación.</b> Habla el idioma de la visita que llega desde Instagram: producto grande, acción inmediata, cero solemnidad. Ideal si el negocio pesa más en merienda y compra del día.</div>
+          <div><b>Paleta.</b> Manteca <code>#F2BE45</code> · crema luminosa <code>#FFFBF2</code> · pistacho <code>#77893B</code> · cacao <code>#33261B</code> · tinta <code>#211A12</code> · línea <code>#E8DFC9</code>.</div>
+          <div><b>Tipografías.</b> Bricolage Grotesque (display 600–700) + Hanken Grotesk (texto y UI). Ambas libres (OFL).</div>
+          <div><b>Escala.</b> Mobile 38/28/20/15/12 · Desktop 76/44/26/16/12.5. Display con tracking -0.02em.</div>
+          <div><b>Espaciado.</b> Base 4, ritmo denso: secciones 40 mobile / 72 desktop; grillas con gap 12/20.</div>
+          <div><b>Geometría.</b> Radio 10 en fotos, 6 en botones; etiquetas de estado rectas rotadas -2°. Sin píldoras.</div>
+          <div><b>Fotografía.</b> Full-bleed, luz de día, saturación alta, sin matte ni marcos.</div>
+          <div><b>Productos.</b> Grilla 2 col mobile / 4 col desktop con etiqueta "Precio pendiente" en esquina. Hover/selección: foto escala 1.03 + etiqueta pasa a manteca.</div>
+          <div><b>Movimiento.</b> Hero: cinta tipográfica continua (PASTELERÍA · MERIENDA · LUNCH, loop 18s) sobre foto con paneo horizontal lento. Asset: foto cenital 16:9 de mesa de merienda, safe area central 70%; mobile recorte 4:5 del mismo asset. Reduced-motion: cinta estática, foto fija.</div>
+          <div><b>Riesgo.</b> La energía de feria puede restar percepción de pastelería fina para tortas de encargo.</div>
+          <div><b>Dificultad.</b> Baja–media (cinta y grillas simples).</div>
+          <div><b>Assets a producir.</b> 1 cenital de mesa completa, 8 fotos de producto a luz de día, wordmark en negativo cacao.</div>
+          <div style="display:flex;gap:6px;margin-top:2px">
+            <span style="width:22px;height:22px;background:#F2BE45"></span><span style="width:22px;height:22px;background:#FFFBF2;border:1px solid #D8D2C5"></span><span style="width:22px;height:22px;background:#77893B"></span><span style="width:22px;height:22px;background:#33261B"></span><span style="width:22px;height:22px;background:#211A12"></span>
+          </div>
+          <a href="Direccion B - Mediodia.dc.html" style="font-weight:700;font-size:13px">Ver mockups B →</a>
+        </div>
+      </article>
+
+      <article style="background:#F7F5F0;border:1px solid #D8D2C5;display:flex;flex-direction:column">
+        <div style="background:#26241F;color:#F1EFEA;padding:18px 20px">
+          <div style="font-size:11px;letter-spacing:.14em;text-transform:uppercase;opacity:.7">Dirección C</div>
+          <div style="font-family:'Instrument Serif',serif;font-size:28px;margin-top:2px">El Obrador</div>
+          <p style="margin:8px 0 0;font-size:13px;line-height:1.5;font-style:italic;font-family:'Instrument Serif',serif">El taller a la vista: retícula precisa, datos en monoespaciada y cada producto tratado como ficha de obrador.</p>
+        </div>
+        <div style="padding:18px 20px;display:flex;flex-direction:column;gap:12px;font-size:12.5px;line-height:1.55">
+          <div><b>Adecuación.</b> Convierte la operación real (encargo, anticipación, seña, retiro/entrega) en el lenguaje visual mismo; transmite oficio y precisión, útil para eventos y cotizaciones.</div>
+          <div><b>Paleta.</b> Porcelana <code>#F1EFEA</code> · blanco <code>#FBFAF7</code> · grafito <code>#26241F</code> · caramelo <code>#AF6626</code> · gris cálido <code>#8B857A</code> · línea <code>#DBD6CC</code>.</div>
+          <div><b>Tipografías.</b> Familjen Grotesk (display y texto) + Spline Sans Mono (datos, estados, precios). Ambas libres (OFL).</div>
+          <div><b>Escala.</b> Mobile 30/22/17/14.5 + mono 11.5 · Desktop 54/32/20/15.5 + mono 12.</div>
+          <div><b>Espaciado.</b> Retícula estricta de 8; columnas con reglas visibles. Secciones 56 mobile / 104 desktop.</div>
+          <div><b>Geometría.</b> Radio 0 en todo; marcos de 1px; foto matteada con margen interior 8px.</div>
+          <div><b>Fotografía.</b> Producto sobre fondo neutro continuo, luz suave, sombra propia; serie consistente.</div>
+          <div><b>Productos.</b> Filas de ficha (foto + datos en mono: categoría, estado, precio pendiente, modalidad). Selección: fila invertida a grafito.</div>
+          <div><b>Movimiento.</b> Hero: la foto entra con máscara rectangular y los datos mono se escriben línea a línea (700ms total). Asset: producto sobre fondo gris continuo 1:1, safe area perimetral 15%; mobile 1:1, desktop 4:3. Secundario: subrayado que se desplaza entre categorías. Reduced-motion: todo aparece completo, sin máscara.</div>
+          <div><b>Riesgo.</b> Puede leerse frío si la fotografía no aporta calidez; depende de una serie fotográfica consistente.</div>
+          <div><b>Dificultad.</b> Media (disciplina de retícula, serie fotográfica).</div>
+          <div><b>Assets a producir.</b> Serie de producto sobre el mismo fondo gris (mín. 8), logo en una tinta grafito.</div>
+          <div style="display:flex;gap:6px;margin-top:2px">
+            <span style="width:22px;height:22px;background:#F1EFEA;border:1px solid #D8D2C5"></span><span style="width:22px;height:22px;background:#FBFAF7;border:1px solid #D8D2C5"></span><span style="width:22px;height:22px;background:#26241F"></span><span style="width:22px;height:22px;background:#AF6626"></span><span style="width:22px;height:22px;background:#8B857A"></span>
+          </div>
+          <a href="Direccion C - El Obrador.dc.html" style="font-weight:700;font-size:13px">Ver mockups C →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:10px;border-top:1px solid #C9C3B6;padding-top:28px">
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:26px">3 · Recomendación</h2>
+    <p style="margin:0;font-size:14px;line-height:1.6;max-width:720px"><b>A — La Vitrina</b> es la dirección más sólida: es la única que construye sobre un activo de marca verificable (el verde del logo), diferencia frente a la panadería local típica sin caer en el beige artesanal, y su tono editorial-cálido sostiene los tres negocios a la vez — compra directa, encargo con fecha y cotización de evento. <b>B</b> gana si el negocio prioriza merienda y venta del día; <b>C</b> gana si el peso está en eventos y encargos grandes. Las tres quedan disponibles para comparar.</p>
+  </section>
+</div>
+</x-dc>
+</body>
+</html>

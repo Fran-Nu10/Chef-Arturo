@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<script src="./image-slot.js"></script>
+<style>
+body{margin:0;background:#F7F3EA;color:#1A211E;font-family:Archivo,system-ui,sans-serif}
+a{color:#8A5320;text-decoration:underline;text-underline-offset:3px}a:hover{color:#1A211E}
+::selection{background:rgba(193,118,47,.25)}
+:focus-visible{outline:2px solid #C1762F;outline-offset:2px}
+button{cursor:pointer}
+summary{list-style:none;cursor:pointer}summary::-webkit-details-marker{display:none}
+details[open] .fx{transform:rotate(45deg)}
+.rail::-webkit-scrollbar{display:none}
+@media(max-width:1023px){.d-only{display:none !important}}
+@media(min-width:1024px){
+.m-only{display:none !important}
+.hero-grid{display:grid !important;grid-template-columns:1fr 520px;align-items:center;text-align:left !important;gap:64px;padding:0 72px !important}
+.hero-copy{align-items:flex-start !important;text-align:left !important}
+.occ-rail{display:flex !important;overflow:visible !important;padding:0 !important;gap:20px !important}
+.occ-card{flex-basis:0 !important;min-width:0 !important}
+.sel-grid{display:grid !important;grid-template-columns:430px 1fr;gap:64px;align-items:start}
+.sel-prot{position:sticky;top:96px}
+.steps-wrap{flex-direction:row !important}
+.step-item{border-left:none !important;padding-left:0 !important;padding-top:22px !important}
+.faq-grid{grid-template-columns:1fr 1fr !important}
+.form-grid{display:grid !important;grid-template-columns:.8fr 1.2fr;gap:72px}
+.camp-grid{display:flex !important;overflow:visible !important;padding:0 !important}
+.close-grid{display:grid !important;grid-template-columns:1fr 460px;align-items:center;gap:64px;text-align:left !important}
+.qvp{left:auto !important;right:0 !important;top:0 !important;bottom:0 !important;width:480px;height:100% !important;border-radius:0 !important;border-left:1px solid #D9D2C2}
+}
+@media(max-width:1023px){.occ-card{flex:0 0 76% !important}.camp-card{flex:0 0 80% !important}}
+@media(prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}
+</style>
+</helmet>
+
+<!-- HEADER -->
+<header id="hd" data-screen-label="Header" style="position:sticky;top:0;z-index:60;height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 clamp(14px,3vw,48px);background:#F7F3EA;border-bottom:1px solid transparent;transition:height .3s ease, box-shadow .3s ease, border-color .3s ease">
+  <button class="m-only" onClick="{{ openMenu }}" aria-label="Abrir menú" style="display:flex;align-items:center;gap:8px;background:none;border:none;font:600 13px Archivo;color:#1A211E;min-height:44px;min-width:44px;padding:0">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16M4 12h16M4 17h10"></path></svg>
+  </button>
+  <div style="display:flex;align-items:baseline;gap:10px">
+    <div style="line-height:1"><span style="font:600 9.5px Archivo;letter-spacing:.3em;color:#1E4B40;display:block">CHEF</span><span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:24px;color:#1E4B40">Arturo</span></div>
+    <span class="d-only" style="font:400 11px Archivo;color:#6E675A">by Julia y Montserrat</span>
+  </div>
+  <nav class="d-only" style="display:flex;gap:34px;font:500 14px Archivo">
+    <span style="color:#1E4B40;border-bottom:2px solid #C1762F;padding-bottom:4px;font-weight:600;cursor:pointer">Pastelería</span>
+    <span style="cursor:pointer">Merienda</span>
+    <span style="cursor:pointer">Lunch para eventos</span>
+    <span style="cursor:pointer">Catálogo completo</span>
+  </nav>
+  <div style="display:flex;align-items:center;gap:18px">
+    <span class="d-only" style="font:500 13.5px Archivo;color:#1E4B40;text-decoration:underline;text-underline-offset:3px;cursor:pointer">WhatsApp</span>
+    <button aria-label="Ver carrito" style="position:relative;background:none;border:none;color:#1A211E;min-height:44px;min-width:44px;display:flex;align-items:center;justify-content:center;padding:0">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 8h12l-1.2 12H7.2L6 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+      <span style="position:absolute;top:2px;right:0;background:#C1762F;color:#F7F3EA;font:700 10px Archivo;width:16px;height:16px;display:flex;align-items:center;justify-content:center;border-radius:50%">{{ cartN }}</span>
+    </button>
+  </div>
+</header>
+
+<!-- MENU MOBILE -->
+<sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:80;background:rgba(20,46,40,.45)" onClick="{{ closeMenu }}"></div>
+  <nav style="position:fixed;top:0;left:0;bottom:0;z-index:81;width:300px;background:#F7F3EA;border-right:1px solid #D9D2C2;padding:20px;display:flex;flex-direction:column;gap:4px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
+      <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:22px;color:#1E4B40">Arturo</span>
+      <button onClick="{{ closeMenu }}" aria-label="Cerrar" style="background:none;border:1px solid #D9D2C2;min-width:44px;min-height:44px;font-size:16px;color:#1A211E">✕</button>
+    </div>
+    <span style="font:600 15px Archivo;padding:14px 0;border-bottom:1px solid #D9D2C2;color:#1E4B40">Pastelería</span>
+    <span style="font:500 15px Archivo;padding:14px 0;border-bottom:1px solid #D9D2C2">Merienda</span>
+    <span style="font:500 15px Archivo;padding:14px 0;border-bottom:1px solid #D9D2C2">Lunch para eventos</span>
+    <span style="font:500 15px Archivo;padding:14px 0;border-bottom:1px solid #D9D2C2">Catálogo completo</span>
+    <span style="font:500 14px Archivo;padding:16px 0;color:#1E4B40;text-decoration:underline;text-underline-offset:3px">Pedir por WhatsApp</span>
+  </nav>
+</sc-if>
+
+<!-- 01 · LA VITRINA VIVA -->
+<section id="vv-track" data-screen-label="01 La Vitrina Viva" style="height:175svh;position:relative">
+  <div style="position:sticky;top:0;height:100svh;overflow:hidden;display:flex;align-items:center">
+    <div class="hero-grid" style="width:100%;display:flex;flex-direction:column;align-items:center;gap:26px;padding:86px 20px 40px;text-align:center;box-sizing:border-box">
+      <div id="vv-copy" class="hero-copy" style="display:flex;flex-direction:column;gap:18px;align-items:center;text-align:center;max-width:560px;position:relative;z-index:2">
+        <div style="font:600 11.5px Archivo;letter-spacing:.16em;text-transform:uppercase;color:#8A5320">Florida, Uruguay · retiro y entrega</div>
+        <h1 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(36px,5vw,64px);line-height:1.02;color:#1E4B40">Pastelería, merienda y <em>lunch</em> para fiestas</h1>
+        <p style="margin:0;font-size:clamp(14.5px,1.2vw,16px);line-height:1.6;color:#4A443B;max-width:430px">Comprá del día con Mercado Pago, encargá para una fecha o consultá por tu evento. Retiro en Florida o entrega a tu puerta.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center">
+          <button style="min-height:50px;padding:0 30px;background:#1E4B40;color:#F7F3EA;border:1px solid #1E4B40;font:600 14px Archivo;letter-spacing:.04em">Ver catálogo</button>
+          <button style="min-height:50px;padding:0 24px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 14px Archivo">Pedir por WhatsApp</button>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <div id="vv-arch" style="width:min(78vw,340px);height:min(58svh,430px);border:1px solid rgba(247,243,234,.35);outline:1px solid #D9D2C2;border-radius:1005px 1005px 6px 6px;padding:8px;background:#EDE4D2;box-sizing:border-box;will-change:transform">
+          <div id="vv-clip" style="width:100%;height:100%;border-radius:999px 999px 3px 3px;overflow:hidden;position:relative">
+            <div id="vv-media" style="position:absolute;inset:0;will-change:transform">
+              <image-slot id="home-vitrina-viva" shape="rect" placeholder="Poster temporal — video 9:16 / 16:10 pendiente"></image-slot>
+            </div>
+            <span style="position:absolute;top:12px;left:50%;transform:translateX(-50%);background:rgba(20,46,40,.78);color:#F7F3EA;font:600 9.5px Archivo;letter-spacing:.1em;padding:5px 10px;pointer-events:none;white-space:nowrap">VIDEO PENDIENTE · POSTER TEMPORAL</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="vv-hint" style="position:absolute;bottom:18px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:4px;color:#8A5320;font:600 10.5px Archivo;letter-spacing:.14em;pointer-events:none">DESLIZÁ<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16m0 0l-6-6m6 6l6-6"></path></svg></div>
+  </div>
+</section>
+
+<!-- 02 · ELEGÍ TU OCASIÓN -->
+<section data-screen-label="02 Elegí tu ocasión" style="padding:clamp(56px,8vw,104px) 0 clamp(40px,5vw,72px);background:#F7F3EA;position:relative;z-index:2">
+  <div style="padding:0 clamp(16px,3.4vw,48px);display:flex;flex-direction:column;gap:8px" data-rv>
+    <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">02 — NAVEGACIÓN</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px);color:#1A211E">Elegí tu ocasión</h2>
+  </div>
+  <div id="occ-rail" class="occ-rail rail" style="display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:26px clamp(16px,3.4vw,48px) 8px;scrollbar-width:none">
+    <div class="occ-card" onClick="{{ pickPasteleria }}" style="flex:{{ og1 }} 1 0;min-width:76%;scroll-snap-align:center;display:flex;flex-direction:column;gap:14px;border:1px solid {{ ob1 }};background:#FBF8F1;padding:18px 18px 20px;cursor:pointer;transition:flex-grow .5s ease, border-color .3s ease;box-sizing:border-box">
+      <div style="height:clamp(220px,26vw,320px);border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="home-occ-pasteleria" shape="rect" placeholder="Imagen temporal — pastelería"></image-slot></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <span style="font-family:'Instrument Serif',serif;font-size:clamp(22px,1.8vw,26px)">Pastelería</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:18px;color:#C1762F">01</span>
+      </div>
+      <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55;opacity:{{ oa1 }};transition:opacity .4s">Tortas y piezas dulces. Compra directa o por encargo con fecha.</div>
+      <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver pastelería</span>
+    </div>
+    <div class="occ-card" onClick="{{ pickMerienda }}" style="flex:{{ og2 }} 1 0;min-width:76%;scroll-snap-align:center;display:flex;flex-direction:column;gap:14px;border:1px solid {{ ob2 }};background:#FBF8F1;padding:18px 18px 20px;cursor:pointer;transition:flex-grow .5s ease, border-color .3s ease;box-sizing:border-box">
+      <div style="height:clamp(220px,26vw,320px);border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="home-occ-merienda" shape="rect" placeholder="Imagen temporal — merienda"></image-slot></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <span style="font-family:'Instrument Serif',serif;font-size:clamp(22px,1.8vw,26px)">Merienda</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:18px;color:#C1762F">02</span>
+      </div>
+      <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55;opacity:{{ oa2 }};transition:opacity .4s">Para la tarde, del día. Retiro en Florida o entrega a tu puerta.</div>
+      <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver merienda</span>
+    </div>
+    <div class="occ-card" onClick="{{ pickLunch }}" style="flex:{{ og3 }} 1 0;min-width:76%;scroll-snap-align:center;display:flex;flex-direction:column;gap:14px;border:1px solid {{ ob3 }};background:#FBF8F1;padding:18px 18px 20px;cursor:pointer;transition:flex-grow .5s ease, border-color .3s ease;box-sizing:border-box">
+      <div style="height:clamp(220px,26vw,320px);border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="home-occ-lunch" shape="rect" placeholder="Imagen temporal — lunch para eventos"></image-slot></div>
+      <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px">
+        <span style="font-family:'Instrument Serif',serif;font-size:clamp(22px,1.8vw,26px)">Lunch para eventos</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:18px;color:#C1762F">03</span>
+      </div>
+      <div style="font:400 13px Archivo;color:#6E675A;line-height:1.55;opacity:{{ oa3 }};transition:opacity .4s">Fiestas y reuniones. Propuesta con cotización previa.</div>
+      <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Consultar por tu evento</span>
+    </div>
+  </div>
+  <div class="m-only" style="display:flex;gap:8px;justify-content:center;padding-top:14px" role="tablist" aria-label="Posición del carrusel">
+    <span style="width:26px;height:3px;background:{{ oi1 }};transition:background .3s"></span>
+    <span style="width:26px;height:3px;background:{{ oi2 }};transition:background .3s"></span>
+    <span style="width:26px;height:3px;background:{{ oi3 }};transition:background .3s"></span>
+  </div>
+</section>
+
+<!-- 03 · SELECCIÓN DE LA CASA -->
+<section data-screen-label="03 Selección de la casa" style="padding:clamp(40px,5vw,72px) clamp(16px,3.4vw,48px) clamp(56px,7vw,96px);border-top:1px solid #D9D2C2">
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:30px" data-rv>
+    <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">03 — SELECCIÓN DE LA CASA</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px)">Del mostrador de hoy</h2>
+  </div>
+  <div class="sel-grid" style="display:flex;flex-direction:column;gap:28px">
+    <div class="sel-prot" style="display:flex;flex-direction:column;gap:14px">
+      <div id="sel-media" style="height:clamp(320px,42vw,470px);border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2;transition:opacity .24s ease">
+        <image-slot id="home-sel-protagonista" shape="rect" placeholder="Imagen temporal — producto protagonista"></image-slot>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div>
+          <div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.1">{{ protName }}</div>
+          <div style="font:500 13px Archivo;color:#6E675A;margin-top:4px">{{ protPrice }}</div>
+        </div>
+        <span style="font:600 10.5px Archivo;letter-spacing:.08em;text-transform:uppercase;color:{{ protTagColor }};border:1px solid {{ protTagColor }};padding:5px 9px;white-space:nowrap">{{ protTag }}</span>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button onClick="{{ addCart }}" style="flex:1;min-height:48px;background:{{ addBg }};color:{{ addColor }};border:1px solid {{ addBd }};font:600 14px Archivo;letter-spacing:.03em;transition:background .3s,color .3s">{{ addLabel }}</button>
+        <button onClick="{{ openSheet }}" style="min-height:48px;padding:0 18px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 13.5px Archivo">Vista rápida</button>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column">
+      <sc-for list="{{ rows }}" as="r" hint-placeholder-count="5">
+        <div onClick="{{ r.pick }}" style="display:grid;grid-template-columns:86px 1fr auto;gap:16px;align-items:center;padding:16px 12px;border-bottom:1px solid #D9D2C2;cursor:pointer;background:{{ r.bg }};border-left:3px solid {{ r.bl }};opacity:{{ r.op }};transition:background .3s,border-color .3s">
+          <div style="height:74px;background:#EDE4D2;border:1px solid #D9D2C2;border-radius:3px;display:flex;align-items:center;justify-content:center;font:400 9.5px Archivo;color:#9A937F;text-align:center;padding:4px;box-sizing:border-box">Imagen temporal</div>
+          <div style="display:flex;flex-direction:column;gap:3px">
+            <span style="font-family:'Instrument Serif',serif;font-size:19px;line-height:1.1">{{ r.name }}</span>
+            <span style="font:500 12px Archivo;color:#6E675A">{{ r.price }}</span>
+            <span style="font:600 11px Archivo;letter-spacing:.05em;text-transform:uppercase;color:{{ r.stColor }}">{{ r.st }}</span>
+          </div>
+          <span style="font:600 10.5px Archivo;letter-spacing:.07em;text-transform:uppercase;color:{{ r.tagColor }};border:1px solid {{ r.tagColor }};padding:5px 9px;white-space:nowrap">{{ r.tag }}</span>
+        </div>
+      </sc-for>
+      <div style="padding-top:18px"><span style="font:600 13.5px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Ver todo el catálogo →</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 · EL DETALLE FINAL -->
+<section id="dt-track" data-screen-label="04 El detalle final" style="height:200svh;position:relative;background:#F7F3EA">
+  <div style="position:sticky;top:0;height:100svh;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px">
+    <div id="dt-title" style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:0 20px">
+      <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">04 — EL DETALLE FINAL</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(28px,3.2vw,42px);color:#1E4B40">El detalle también forma parte del pedido</h2>
+    </div>
+    <div id="dt-win" style="width:min(86vw,640px);height:min(46svh,400px);border:1px solid rgba(30,75,64,.5);padding:8px;background:#EDE4D2;box-sizing:border-box;will-change:transform;position:relative">
+      <div style="width:100%;height:100%;overflow:hidden;position:relative">
+        <image-slot id="home-detalle-video" shape="rect" placeholder="Poster temporal — video de terminación o armado"></image-slot>
+        <span style="position:absolute;top:12px;left:12px;background:rgba(20,46,40,.78);color:#F7F3EA;font:600 9.5px Archivo;letter-spacing:.1em;padding:5px 10px;pointer-events:none">VIDEO DE TERMINACIÓN O ARMADO · PENDIENTE</span>
+        <div style="position:absolute;left:0;right:0;bottom:0;padding:18px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;pointer-events:none">
+          <span id="dt-f1" style="background:rgba(20,46,40,.78);color:#F7F3EA;font-family:'Instrument Serif',serif;font-size:clamp(17px,2vw,24px);padding:7px 14px;opacity:0">El detalle también forma parte del pedido.</span>
+          <span id="dt-f2" style="background:rgba(20,46,40,.78);color:#F7F3EA;font-family:'Instrument Serif',serif;font-size:clamp(17px,2vw,24px);padding:7px 14px;opacity:0">Contenido de proceso pendiente de validación.</span>
+          <span id="dt-f3" style="background:rgba(193,118,47,.9);color:#F7F3EA;font:600 12px Archivo;letter-spacing:.08em;padding:7px 14px;opacity:0">RETIRO EN FLORIDA · ENTREGA A TU PUERTA</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 · ARMÁ TU OCASIÓN -->
+<section data-screen-label="05 Armá tu ocasión" style="background:#1E4B40;color:#F7F3EA;padding:clamp(56px,7vw,96px) clamp(16px,3.4vw,48px);position:relative;z-index:2">
+  <div class="form-grid" style="display:flex;flex-direction:column;gap:32px">
+    <div style="display:flex;flex-direction:column;gap:14px" data-rv>
+      <div style="font:600 11px Archivo;letter-spacing:.16em;color:#C98B45">05 — PARA REUNIONES Y EVENTOS</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px);line-height:1.05">Armá tu ocasión</h2>
+      <p style="margin:0;font-size:14.5px;line-height:1.6;color:#EDE4D2;max-width:380px">Contanos qué estás organizando y armamos una propuesta. La disponibilidad y la anticipación se confirman antes de coordinar el pedido.</p>
+      <div style="display:flex;gap:6px;align-items:center;margin-top:6px">
+        <span style="height:3px;flex:1;background:{{ pb1 }};transition:background .3s"></span>
+        <span style="height:3px;flex:1;background:{{ pb2 }};transition:background .3s"></span>
+        <span style="height:3px;flex:1;background:{{ pb3 }};transition:background .3s"></span>
+      </div>
+      <div style="font:500 12px Archivo;color:#C98B45">Paso {{ step }} de 3</div>
+    </div>
+    <div style="border:1px solid rgba(247,243,234,.3);padding:clamp(20px,2.4vw,32px);display:flex;flex-direction:column;gap:22px;background:rgba(20,46,40,.35)">
+      <sc-if value="{{ isStep1 }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Tipo de ocasión</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ tipoChips }}" as="c" hint-placeholder-count="5">
+              <button onClick="{{ c.pick }}" style="min-height:44px;padding:0 16px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.bd }};font:500 13px Archivo;transition:background .25s">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Cantidad aproximada de personas</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ persChips }}" as="c" hint-placeholder-count="4">
+              <button onClick="{{ c.pick }}" style="min-height:44px;padding:0 16px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.bd }};font:500 13px Archivo;transition:background .25s">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isStep2 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Fecha deseada</div>
+          <input type="date" onChange="{{ onFecha }}" style="min-height:46px;background:rgba(247,243,234,.08);border:1px solid rgba(247,243,234,.4);color:#F7F3EA;font:500 14px Archivo;padding:0 12px;max-width:240px;color-scheme:dark">
+          <div style="font:400 11.5px Archivo;color:#C98B45">Anticipación por confirmar según el pedido.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Preferencia general</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ prefChips }}" as="c" hint-placeholder-count="3">
+              <button onClick="{{ c.pick }}" style="min-height:44px;padding:0 16px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.bd }};font:500 13px Archivo;transition:background .25s">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Retiro o entrega</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            <sc-for list="{{ entChips }}" as="c" hint-placeholder-count="2">
+              <button onClick="{{ c.pick }}" style="min-height:44px;padding:0 16px;background:{{ c.bg }};color:{{ c.color }};border:1px solid {{ c.bd }};font:500 13px Archivo;transition:background .25s">{{ c.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <sc-if value="{{ isStep3 }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="font:600 12px Archivo;letter-spacing:.08em;text-transform:uppercase;color:#C98B45">Observaciones</div>
+          <textarea onChange="{{ onObs }}" rows="3" placeholder="Lo que quieras contarnos sobre tu ocasión" style="background:rgba(247,243,234,.08);border:1px solid rgba(247,243,234,.4);color:#F7F3EA;font:400 14px Archivo;padding:12px;resize:vertical"></textarea>
+        </div>
+        <div style="border-top:1px solid rgba(247,243,234,.25);padding-top:18px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'Instrument Serif',serif;font-size:22px">Tu resumen</div>
+          <sc-for list="{{ resumen }}" as="s" hint-placeholder-count="5">
+            <div style="display:flex;justify-content:space-between;gap:16px;font:400 13px Archivo;padding:6px 0;border-bottom:1px solid rgba(247,243,234,.15)">
+              <span style="color:#C98B45">{{ s.k }}</span><span style="text-align:right">{{ s.v }}</span>
+            </div>
+          </sc-for>
+          <div style="font:400 12px Archivo;color:#C98B45;margin-top:4px">La disponibilidad será confirmada antes de coordinar el pedido.</div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button style="flex:1;min-height:50px;min-width:200px;background:#F7F3EA;color:#1E4B40;border:1px solid #F7F3EA;font:600 14px Archivo">Continuar por WhatsApp</button>
+          <button style="flex:1;min-height:50px;min-width:180px;background:none;color:#F7F3EA;border:1px solid rgba(247,243,234,.5);font:500 14px Archivo">Solicitar propuesta</button>
+        </div>
+      </sc-if>
+      <div style="display:flex;justify-content:space-between;border-top:1px solid rgba(247,243,234,.2);padding-top:16px">
+        <button onClick="{{ stepBack }}" style="min-height:44px;padding:0 18px;background:none;color:#F7F3EA;border:1px solid rgba(247,243,234,.4);font:500 13px Archivo;opacity:{{ backOp }}">← Volver</button>
+        <sc-if value="{{ notLast }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ stepNext }}" style="min-height:44px;padding:0 24px;background:#F7F3EA;color:#1E4B40;border:none;font:600 13.5px Archivo">Siguiente →</button>
+        </sc-if>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 06 · FECHAS QUE IMPORTAN -->
+<section data-screen-label="06 Fechas que importan" style="padding:clamp(56px,7vw,96px) 0 clamp(48px,6vw,80px);border-bottom:1px solid #D9D2C2">
+  <div style="padding:0 clamp(16px,3.4vw,48px);display:flex;flex-direction:column;gap:8px" data-rv>
+    <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">06 — CAMPAÑAS</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px)">Fechas que importan</h2>
+    <p style="margin:0;font:400 13px Archivo;color:#6E675A;max-width:520px;line-height:1.55">Archivo editorial de campañas. Los nombres y fechas son estructura de ejemplo, pendientes de validación.</p>
+  </div>
+  <div class="camp-grid rail" style="display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:30px clamp(16px,3.4vw,48px) 10px;scrollbar-width:none;align-items:flex-start">
+    <div class="camp-card" style="flex:1;scroll-snap-align:center;display:flex;flex-direction:column;gap:12px;border:1px solid #1E4B40;background:#FBF8F1;padding:16px 16px 20px;min-width:0">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font:700 10px Archivo;letter-spacing:.12em;background:#1E4B40;color:#F7F3EA;padding:5px 10px">ACTIVA</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:16px;color:#C1762F">A·01</span>
+      </div>
+      <div style="height:230px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="home-camp-activa" shape="rect" placeholder="Imagen o video temporal"></image-slot></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1">Campaña estacional</div>
+      <div style="font:400 12.5px Archivo;color:#6E675A;line-height:1.5">Contenido pendiente de validación.<br>Rango de fechas: pendiente.</div>
+      <button style="min-height:46px;background:#1E4B40;color:#F7F3EA;border:none;font:600 13px Archivo">Ver propuesta</button>
+    </div>
+    <div class="camp-card" style="flex:1;scroll-snap-align:center;display:flex;flex-direction:column;gap:12px;border:1px solid #D9D2C2;background:#FBF8F1;padding:16px 16px 20px;min-width:0;transform:translateY(26px)">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font:700 10px Archivo;letter-spacing:.12em;color:#1E4B40;border:1px solid #1E4B40;padding:4px 10px">PROGRAMADA</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:16px;color:#C1762F">A·02</span>
+      </div>
+      <div style="height:230px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2"><image-slot id="home-camp-prog" shape="rect" placeholder="Imagen temporal"></image-slot></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1">Campaña próxima</div>
+      <div style="font:400 12.5px Archivo;color:#6E675A;line-height:1.5">Se anuncia al acercarse la fecha.<br>Rango de fechas: pendiente.</div>
+      <button style="min-height:46px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 13px Archivo">Avisame</button>
+    </div>
+    <div class="camp-card" style="flex:1;scroll-snap-align:center;display:flex;flex-direction:column;gap:12px;border:1px solid #D9D2C2;background:#F1EBDD;padding:16px 16px 20px;min-width:0;transform:translateY(52px);opacity:.72">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <span style="font:700 10px Archivo;letter-spacing:.12em;color:#6E675A;border:1px solid #B9B2A0;padding:4px 10px">FINALIZADA</span>
+        <span style="font-family:'Instrument Serif',serif;font-size:16px;color:#B9B2A0">A·03</span>
+      </div>
+      <div style="height:230px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2;filter:saturate(.5)"><image-slot id="home-camp-fin" shape="rect" placeholder="Imagen temporal"></image-slot></div>
+      <div style="font-family:'Instrument Serif',serif;font-size:22px;line-height:1.1;color:#6E675A">Campaña anterior</div>
+      <div style="font:400 12.5px Archivo;color:#9A937F;line-height:1.5">Queda en el archivo de la casa.<br>Rango de fechas: finalizado.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 · DE LA COCINA A TU MESA -->
+<section data-screen-label="07 De la cocina a tu mesa" style="padding:clamp(56px,7vw,96px) clamp(16px,3.4vw,48px)">
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:34px" data-rv>
+    <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">07 — CÓMO FUNCIONA</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px)">De la cocina a tu mesa</h2>
+  </div>
+  <div id="steps-wrap" class="steps-wrap" style="display:flex;flex-direction:column;gap:0;position:relative">
+    <div style="position:absolute;left:0;top:0;bottom:0;width:2px;background:#D9D2C2" class="m-only"></div>
+    <div class="d-only" style="position:absolute;left:0;right:0;top:0;height:2px;background:#D9D2C2"></div>
+    <div id="steps-fill" style="position:absolute;left:0;top:0;background:#C1762F;width:2px;height:0;transition:width .2s linear,height .2s linear"></div>
+    <div class="step-item" style="flex:1;padding:6px 0 26px 26px;border-left:2px solid transparent;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:'Instrument Serif',serif;font-size:30px;color:#C1762F">01</span>
+      <span style="font:600 15px Archivo">Comprá directamente</span>
+      <span style="font:400 12.5px Archivo;color:#6E675A;line-height:1.55;max-width:220px">Del stock del día, con pago online por Mercado Pago.</span>
+    </div>
+    <div class="step-item" style="flex:1;padding:6px 0 26px 26px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:'Instrument Serif',serif;font-size:30px;color:#C1762F">02</span>
+      <span style="font:600 15px Archivo">Encargá para una fecha</span>
+      <span style="font:400 12.5px Archivo;color:#6E675A;line-height:1.55;max-width:220px">Anticipación por confirmar; puede requerir seña.</span>
+    </div>
+    <div class="step-item" style="flex:1;padding:6px 0 26px 26px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:'Instrument Serif',serif;font-size:30px;color:#C1762F">03</span>
+      <span style="font:600 15px Archivo">Consultá por tu evento</span>
+      <span style="font:400 12.5px Archivo;color:#6E675A;line-height:1.55;max-width:220px">Lunch para fiestas con cotización previa.</span>
+    </div>
+    <div class="step-item" style="flex:1;padding:6px 0 26px 26px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:'Instrument Serif',serif;font-size:30px;color:#C1762F">04</span>
+      <span style="font:600 15px Archivo">Elegí retiro o entrega</span>
+      <span style="font:400 12.5px Archivo;color:#6E675A;line-height:1.55;max-width:220px">Retiro en Florida o directo a tu puerta.</span>
+    </div>
+    <div class="step-item" style="flex:1;padding:6px 0 6px 26px;display:flex;flex-direction:column;gap:6px">
+      <span style="font-family:'Instrument Serif',serif;font-size:30px;color:#C1762F">05</span>
+      <span style="font:600 15px Archivo">Recibí confirmación</span>
+      <span style="font:400 12.5px Archivo;color:#6E675A;line-height:1.55;max-width:220px">Te confirmamos disponibilidad y detalle del pedido.</span>
+    </div>
+  </div>
+</section>
+
+<!-- 08 · LA MESA DE CHEF ARTURO -->
+<section data-screen-label="08 La mesa de Chef Arturo" style="padding:clamp(48px,6vw,80px) 0;border-top:1px solid #D9D2C2;overflow:hidden">
+  <div style="padding:0 clamp(16px,3.4vw,48px);display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap" data-rv>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">08 — GALERÍA</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px)">La mesa de Chef Arturo</h2>
+    </div>
+    <span style="font:600 13px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px;cursor:pointer">Ver en Instagram →</span>
+  </div>
+  <div id="g-rail1" class="rail" style="display:flex;gap:14px;overflow-x:auto;padding:26px clamp(16px,3.4vw,48px) 8px;scrollbar-width:none;cursor:grab">
+    <div style="flex:none;width:210px;height:270px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-1" shape="rect" placeholder="Foto vertical — temporal"></image-slot></div>
+    <div style="flex:none;width:340px;height:270px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-2" shape="rect" placeholder="Foto horizontal — temporal"></image-slot></div>
+    <div style="flex:none;width:210px;height:270px;border:1px solid #1E4B40;border-radius:3px;overflow:hidden;position:relative"><image-slot id="home-mesa-3" shape="rect" placeholder="Video breve — poster temporal"></image-slot><span style="position:absolute;top:10px;left:10px;background:rgba(20,46,40,.78);color:#F7F3EA;font:600 9px Archivo;letter-spacing:.1em;padding:4px 8px;pointer-events:none">VIDEO</span></div>
+    <div style="flex:none;width:340px;height:270px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-4" shape="rect" placeholder="Foto horizontal — temporal"></image-slot></div>
+    <div style="flex:none;width:210px;height:270px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-5" shape="rect" placeholder="Foto vertical — temporal"></image-slot></div>
+  </div>
+  <div id="g-rail2" class="rail" style="display:flex;gap:14px;overflow-x:auto;padding:14px clamp(16px,3.4vw,48px) 8px;scrollbar-width:none;cursor:grab">
+    <div style="flex:none;width:300px;height:200px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-6" shape="rect" placeholder="Foto horizontal — temporal"></image-slot></div>
+    <div style="flex:none;width:170px;height:200px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-7" shape="rect" placeholder="Foto vertical — temporal"></image-slot></div>
+    <div style="flex:none;width:300px;height:200px;border:1px solid #D9D2C2;border-radius:3px;overflow:hidden"><image-slot id="home-mesa-8" shape="rect" placeholder="Foto horizontal — temporal"></image-slot></div>
+    <div style="flex:none;width:170px;height:200px;border:1px solid #D9D2C2;border-radius:3px;background:#EDE4D2;display:flex;align-items:center;justify-content:center;text-align:center;padding:14px;box-sizing:border-box"><span style="font:600 12px Archivo;color:#8A5320;text-decoration:underline;text-underline-offset:3px">Ver más en Instagram →</span></div>
+  </div>
+</section>
+
+<!-- 09 · INFORMACIÓN PARA PEDIR -->
+<section data-screen-label="09 Información para pedir" style="padding:clamp(56px,7vw,96px) clamp(16px,3.4vw,48px);border-top:1px solid #D9D2C2">
+  <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:28px" data-rv>
+    <div style="font:600 11px Archivo;letter-spacing:.16em;color:#8A5320">09 — INFORMACIÓN PARA PEDIR</div>
+    <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(30px,3.4vw,44px)">Antes de tu pedido</h2>
+  </div>
+  <div class="faq-grid" style="display:grid;grid-template-columns:1fr;gap:0 56px">
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Con cuánta anticipación encargo?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Contenido pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Dónde retiro mi pedido?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Contenido pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Hacen entregas?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Contenido pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Cómo pago?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Mercado Pago online o coordinación por WhatsApp. Detalle pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Cuándo se pide seña?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Contenido pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Puedo cambiar mi pedido?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Contenido pendiente de validación.</p></details>
+    <details style="border-bottom:1px solid #D9D2C2"><summary style="display:flex;justify-content:space-between;align-items:center;gap:14px;min-height:56px;font:600 15px Archivo">¿Cómo funcionan los pedidos para eventos?<span class="fx" style="font-family:'Instrument Serif',serif;font-size:22px;color:#C1762F;transition:transform .25s">+</span></summary><p style="margin:0 0 18px;font:400 13.5px Archivo;color:#6E675A;line-height:1.6">Se cotizan según ocasión, personas y fecha. Detalle pendiente de validación.</p></details>
+  </div>
+</section>
+
+<!-- 10 · CIERRE EDITORIAL -->
+<section data-screen-label="10 Cierre" style="background:#142E28;color:#F7F3EA;padding:clamp(56px,7vw,96px) clamp(16px,3.4vw,48px) 0">
+  <div class="close-grid" style="display:flex;flex-direction:column;gap:32px;text-align:center;align-items:center;padding-bottom:clamp(48px,6vw,80px)">
+    <div style="display:flex;flex-direction:column;gap:18px;align-items:inherit" data-rv>
+      <div style="font:600 11px Archivo;letter-spacing:.16em;color:#C98B45">FLORIDA, URUGUAY</div>
+      <h2 style="margin:0;font-family:'Instrument Serif',serif;font-weight:400;font-size:clamp(34px,4vw,56px);line-height:1.05">La vitrina está abierta.</h2>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:inherit">
+        <button style="min-height:50px;padding:0 30px;background:#F7F3EA;color:#1E4B40;border:1px solid #F7F3EA;font:600 14px Archivo">Ver catálogo</button>
+        <button style="min-height:50px;padding:0 24px;background:none;color:#F7F3EA;border:1px solid rgba(247,243,234,.5);font:500 14px Archivo">Consultar por WhatsApp</button>
+      </div>
+      <div style="font:400 12px Archivo;color:#C98B45">Ubicación exacta: pendiente de validación.</div>
+    </div>
+    <div style="width:min(86vw,460px);height:clamp(280px,30vw,380px);border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid rgba(247,243,234,.35);padding:8px;background:rgba(247,243,234,.06);box-sizing:border-box">
+      <div style="width:100%;height:100%;border-radius:999px 999px 2px 2px;overflow:hidden"><image-slot id="home-cierre" shape="rect" placeholder="Imagen temporal — cierre"></image-slot></div>
+    </div>
+  </div>
+  <footer style="border-top:1px solid rgba(247,243,234,.25);padding:20px 0 calc(20px + env(safe-area-inset-bottom));display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font:400 12px Archivo;color:#D8CFBC">
+    <span style="font-family:'Instrument Serif',serif;font-style:italic;font-size:16px;color:#F7F3EA">Chef Arturo</span>
+    <span>by Julia y Montserrat · Florida, Uruguay · retiro y entrega · WhatsApp · Mercado Pago</span>
+  </footer>
+</section>
+
+<!-- CART BAR MOBILE -->
+<div class="m-only" style="position:fixed;left:0;right:0;bottom:0;z-index:70;background:#1E4B40;color:#F7F3EA;display:flex;align-items:center;justify-content:space-between;padding:0 18px calc(0px + env(safe-area-inset-bottom));height:52px;box-shadow:0 -4px 12px rgba(20,46,40,.25)">
+  <span style="font:500 13px Archivo">Carrito · {{ cartN }} productos</span>
+  <span style="font:700 13px Archivo;letter-spacing:.04em;border-bottom:1px solid #C98B45;padding-bottom:2px;cursor:pointer">Ver carrito</span>
+</div>
+
+<!-- QUICK VIEW SHEET / PANEL -->
+<sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;inset:0;z-index:90;background:rgba(20,46,40,.45)" onClick="{{ closeSheet }}"></div>
+  <div class="qvp" style="position:fixed;left:0;right:0;bottom:0;z-index:91;background:#F7F3EA;border-top:1px solid #D9D2C2;border-radius:0;max-height:88svh;height:auto;padding:12px 20px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:16px;overflow-y:auto;box-sizing:border-box">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font:600 11px Archivo;letter-spacing:.12em;text-transform:uppercase;color:#8A5320">Vista rápida</span>
+      <button onClick="{{ closeSheet }}" aria-label="Cerrar" style="background:none;border:1px solid #D9D2C2;min-width:44px;min-height:44px;font-size:16px;color:#1A211E">✕</button>
+    </div>
+    <div style="display:flex;gap:16px;align-items:flex-start">
+      <div style="width:130px;height:160px;border-radius:999px 999px 3px 3px;overflow:hidden;border:1px solid #D9D2C2;flex:none">
+        <image-slot id="home-quickview" shape="rect" placeholder="Imagen temporal"></image-slot>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;padding-top:4px">
+        <div style="font:600 10.5px Archivo;letter-spacing:.1em;text-transform:uppercase;color:#8A5320">{{ protTag }}</div>
+        <div style="font-family:'Instrument Serif',serif;font-size:24px;line-height:1.1">{{ protName }}</div>
+        <div style="font:600 14px Archivo;color:#1E4B40">{{ protPrice }}</div>
+        <div style="font:400 12px Archivo;color:#6E675A;line-height:1.5">Contenido pendiente de validación.</div>
+      </div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <label style="display:flex;gap:12px;align-items:center;border:1px solid #1E4B40;background:rgba(30,75,64,.07);padding:12px 14px;min-height:44px;box-sizing:border-box">
+        <span style="width:16px;height:16px;border:1.5px solid #1E4B40;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none"><span style="width:8px;height:8px;background:#1E4B40;border-radius:50%"></span></span>
+        <span><b style="font:600 13.5px Archivo">Comprá ahora</b><span style="display:block;font:400 12px Archivo;color:#6E675A">Stock del día · Mercado Pago</span></span>
+      </label>
+      <label style="display:flex;gap:12px;align-items:center;border:1px solid #B9B2A0;padding:12px 14px;min-height:44px;box-sizing:border-box">
+        <span style="width:16px;height:16px;border:1.5px solid #B9B2A0;border-radius:50%;flex:none"></span>
+        <span><b style="font:600 13.5px Archivo">Encargá para una fecha</b><span style="display:block;font:400 12px Archivo;color:#6E675A">Anticipación por confirmar · puede requerir seña</span></span>
+      </label>
+      <div style="font:500 11.5px Archivo;color:#8A5320;border:1px dashed #C1762F;padding:9px 12px">Ejemplo de estado: “No disponible para la fecha seleccionada — probá otra fecha”.</div>
+    </div>
+    <button onClick="{{ addCart }}" style="min-height:50px;background:{{ addBg }};color:{{ addColor }};border:1px solid {{ addBd }};font:600 15px Archivo;letter-spacing:.03em;transition:background .3s">{{ addLabel }}</button>
+    <button style="min-height:46px;background:none;color:#1E4B40;border:1px solid #1E4B40;font:500 14px Archivo">Consultar por WhatsApp</button>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;modoEstatico&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Movimiento&quot;},&quot;categoriaInicial&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;pasteleria&quot;,&quot;merienda&quot;,&quot;lunch&quot;],&quot;default&quot;:&quot;pasteleria&quot;,&quot;tsType&quot;:&quot;'pasteleria'|'merienda'|'lunch'&quot;,&quot;section&quot;:&quot;Contenido&quot;}}">
+class Component extends DCLogic {
+  state = { cat:null, occIdx:0, sel:0, sheet:false, add:'idle', cartN:2, menu:false, step:1, occ:{tipo:null,pers:null,fecha:'',pref:null,ent:null,obs:''} };
+  componentDidMount(){
+    this.rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches || (this.props.modoEstatico ?? false);
+    this.cur = {tx:0,ty:0}; this.lastY = window.scrollY; this.railPause = false; this.tick = false;
+    this.onScroll = () => { if(this.tick) return; this.tick = true; requestAnimationFrame(()=>{ this.tick=false; this.fx(); }); };
+    window.addEventListener('scroll', this.onScroll, {passive:true});
+    window.addEventListener('resize', this.onScroll, {passive:true});
+    if(!this.rm){
+      const els = Array.from(document.querySelectorAll('[data-rv]'));
+      const below = els.filter(e => e.getBoundingClientRect().top > innerHeight*0.92);
+      below.forEach(e => { e.style.opacity='0'; e.style.transform='translateY(16px)'; e.style.transition='opacity .6s ease, transform .6s ease'; });
+      this.io = new IntersectionObserver(es => es.forEach(x => { if(x.isIntersecting){ x.target.style.opacity='1'; x.target.style.transform='none'; this.io.unobserve(x.target); } }), {threshold:.12});
+      below.forEach(e => this.io.observe(e));
+    }
+    ['g-rail1','g-rail2'].forEach(id => { const r = document.getElementById(id); if(!r) return;
+      r.addEventListener('pointerenter', ()=> this.railPause = true);
+      r.addEventListener('pointerleave', ()=> this.railPause = false);
+      r.addEventListener('touchstart', ()=> this.railPause = true, {passive:true});
+    });
+    const or = document.getElementById('occ-rail');
+    if(or) or.addEventListener('scroll', ()=>{ if(innerWidth >= 1024) return;
+      const w = or.scrollWidth - or.clientWidth; const ix = w > 0 ? Math.min(2, Math.round((or.scrollLeft/w)*2)) : 0;
+      if(ix !== this.state.occIdx) this.setState({occIdx: ix});
+    }, {passive:true});
+    this.fx();
+  }
+  componentWillUnmount(){ window.removeEventListener('scroll', this.onScroll); window.removeEventListener('resize', this.onScroll); if(this.io) this.io.disconnect(); }
+  ez(t){ t = Math.max(0, Math.min(1, t)); return t*t*(3-2*t); }
+  fx(){
+    const vh = innerHeight, vw = innerWidth, y = scrollY;
+    const hd = document.getElementById('hd');
+    if(hd){ const c = y > 40; if(c !== this.hdC){ this.hdC = c; hd.style.height = c ? '58px' : '76px'; hd.style.borderBottomColor = c ? '#D9D2C2' : 'transparent'; hd.style.boxShadow = c ? '0 2px 12px rgba(26,33,30,.06)' : 'none'; } }
+    const dy = y - this.lastY; this.lastY = y;
+    if(!this.rm && !this.railPause && Math.abs(dy) < 200){
+      const r1 = document.getElementById('g-rail1'), r2 = document.getElementById('g-rail2');
+      if(r1) r1.scrollLeft += dy*.3; if(r2) r2.scrollLeft -= dy*.22;
+    }
+    const sl = document.getElementById('steps-wrap'), sf = document.getElementById('steps-fill');
+    if(sl && sf){ const r = sl.getBoundingClientRect(); const p = Math.max(0, Math.min(1, (vh*.85 - r.top)/(r.height + vh*.2)));
+      if(vw >= 1024){ sf.style.width = (p*100)+'%'; sf.style.height = '2px'; } else { sf.style.height = (p*100)+'%'; sf.style.width = '2px'; }
+    }
+    if(this.rm) return;
+    const t = document.getElementById('vv-track');
+    if(t){ const r = t.getBoundingClientRect(); const total = Math.max(1, t.offsetHeight - vh); const p = Math.max(0, Math.min(1, -r.top/total));
+      const co = document.getElementById('vv-copy'); const e1 = this.ez((p-.35)/.2);
+      if(co){ co.style.opacity = String(1-e1); co.style.transform = `translateY(${-24*e1}px)`; co.style.pointerEvents = e1 > .5 ? 'none' : 'auto'; }
+      const hint = document.getElementById('vv-hint'); if(hint) hint.style.opacity = String(1 - this.ez(p/.06));
+      const a = document.getElementById('vv-arch'), ai = document.getElementById('vv-clip'), m = document.getElementById('vv-media');
+      if(a && ai){ const e2 = this.ez((p-.3)/.48);
+        const aw = a.offsetWidth||1, ah = a.offsetHeight||1; const sMax = Math.max(vw/aw, vh/ah)*1.06;
+        const rect = a.getBoundingClientRect();
+        const cx = rect.left + rect.width/2 - this.cur.tx, cy = rect.top + rect.height/2 - this.cur.ty;
+        const tx = e2*(vw/2 - cx), ty = e2*(vh/2 - cy); this.cur = {tx, ty};
+        a.style.transform = `translate(${tx}px,${ty}px) scale(${1 + e2*(sMax-1)})`;
+        a.style.borderColor = `rgba(247,243,234,${.35*(1-e2)})`;
+        a.style.outlineColor = `rgba(217,210,194,${1-e2})`;
+        const rad = (1-e2)*999;
+        ai.style.borderRadius = `${rad}px ${rad}px 3px 3px`;
+        a.style.borderRadius = `${rad+6}px ${rad+6}px 6px 6px`;
+        if(m) m.style.transform = `scale(${1 + .16*this.ez((p-.2)/.35)})`;
+      }
+    }
+    const dt = document.getElementById('dt-track');
+    if(dt){ const r = dt.getBoundingClientRect(); const total = Math.max(1, dt.offsetHeight - vh); const p = Math.max(0, Math.min(1, -r.top/total));
+      const w = document.getElementById('dt-win'), ttl = document.getElementById('dt-title');
+      if(w){ const e = this.ez((p-.1)/.42); const ww = w.offsetWidth||1, wh = w.offsetHeight||1;
+        const sM = Math.max(vw/ww, vh*.94/wh)*1.02;
+        w.style.transform = `scale(${1 + e*(sM-1)})`; w.style.borderColor = `rgba(30,75,64,${.5*(1-e)})`;
+      }
+      if(ttl){ const eo = this.ez((p-.12)/.15); ttl.style.opacity = String(1-eo); ttl.style.transform = `translateY(${-16*eo}px)`; }
+      [['dt-f1',.42],['dt-f2',.55],['dt-f3',.68]].forEach(([id,st])=>{ const el = document.getElementById(id);
+        if(el){ const ei = this.ez((p-st)/.1); el.style.opacity = String(ei); el.style.transform = `translateY(${(1-ei)*14}px)`; } });
+    }
+  }
+  pickSel(i, row){
+    if(row && row.disabled){ /* agotado: selectable para ver estado */ }
+    if(i === this.state.sel) return;
+    const el = document.getElementById('sel-media');
+    if(el && !this.rm){ el.style.opacity = '0'; setTimeout(()=>{ el.style.opacity = '1'; }, 240); }
+    this.setState({sel:i, add:'idle'});
+  }
+  addCart(){
+    const prods = this.prods(); const p = prods[this.state.sel];
+    if(p.disabled || this.state.add !== 'idle') return;
+    this.setState({add:'adding'});
+    setTimeout(()=>{ this.setState({add:'added', cartN: this.state.cartN + 1});
+      setTimeout(()=> this.setState({add:'idle'}), 1600); }, 700);
+  }
+  prods(){
+    return [
+      {name:'Producto de pastelería', tag:'Compra directa', tagColor:'#1E4B40', price:'Precio pendiente', st:'', stColor:'#6E675A'},
+      {name:'Producto de merienda', tag:'Compra directa', tagColor:'#1E4B40', price:'Precio pendiente', st:'', stColor:'#6E675A'},
+      {name:'Producto de pastelería', tag:'Por encargo', tagColor:'#8A5320', price:'Precio pendiente', st:'Anticipación por confirmar', stColor:'#8A5320'},
+      {name:'Producto de lunch', tag:'Consultar', tagColor:'#8A5320', price:'Con cotización previa', st:'Para eventos', stColor:'#6E675A'},
+      {name:'Producto de merienda', tag:'Compra directa', tagColor:'#1E4B40', price:'Precio pendiente', st:'Agotado hoy', stColor:'#B04A28', disabled:true}
+    ];
+  }
+  setOcc(k,v){ this.setState({occ:{...this.state.occ, [k]:v}}); }
+  chip(list, key){
+    const cur = this.state.occ[key];
+    return list.map(label => ({ label,
+      bg: cur === label ? '#F7F3EA' : 'rgba(247,243,234,.06)',
+      color: cur === label ? '#1E4B40' : '#F7F3EA',
+      bd: cur === label ? '#F7F3EA' : 'rgba(247,243,234,.4)',
+      pick: ()=> this.setOcc(key, cur === label ? null : label)
+    }));
+  }
+  renderVals(){
+    const s = this.state;
+    const cat = s.cat ?? (this.props.categoriaInicial ?? 'pasteleria');
+    const G = {pasteleria:[1.8,1,1], merienda:[1,1.8,1], lunch:[1,1,1.8]}[cat] || [1.8,1,1];
+    const A = {pasteleria:[1,.55,.55], merienda:[.55,1,.55], lunch:[.55,.55,1]}[cat] || [1,.55,.55];
+    const B = {pasteleria:0, merienda:1, lunch:2}[cat] ?? 0;
+    const bd = i => (B === i ? '#1E4B40' : '#D9D2C2');
+    const prods = this.prods();
+    const prot = prods[s.sel];
+    const rows = prods.map((p,i) => ({...p,
+      bg: i === s.sel ? 'rgba(30,75,64,.06)' : 'transparent',
+      bl: i === s.sel ? '#C1762F' : 'transparent',
+      op: p.disabled ? .55 : 1,
+      pick: ()=> this.pickSel(i, p)
+    }));
+    const addMap = {
+      idle: prot.disabled ? ['Agotado hoy','#EDE4D2','#9A937F','#D9D2C2'] : ['Agregar al carrito','#1E4B40','#F7F3EA','#1E4B40'],
+      adding: ['Agregando…','#2C5A4E','#F7F3EA','#2C5A4E'],
+      added: ['Agregado ✓','#C1762F','#F7F3EA','#C1762F']
+    }[s.add];
+    const res = [
+      {k:'Ocasión', v: s.occ.tipo ?? '—'},
+      {k:'Personas', v: s.occ.pers ?? '—'},
+      {k:'Fecha deseada', v: s.occ.fecha || '—'},
+      {k:'Preferencia', v: s.occ.pref ?? '—'},
+      {k:'Retiro o entrega', v: s.occ.ent ?? '—'}
+    ];
+    return {
+      cartN: s.cartN, menu: s.menu, sheet: s.sheet, step: s.step,
+      openMenu: ()=> this.setState({menu:true}), closeMenu: ()=> this.setState({menu:false}),
+      openSheet: ()=> this.setState({sheet:true}), closeSheet: ()=> this.setState({sheet:false}),
+      pickPasteleria: ()=> this.setState({cat:'pasteleria'}),
+      pickMerienda: ()=> this.setState({cat:'merienda'}),
+      pickLunch: ()=> this.setState({cat:'lunch'}),
+      og1:G[0], og2:G[1], og3:G[2], oa1:A[0], oa2:A[1], oa3:A[2],
+      ob1:bd(0), ob2:bd(1), ob3:bd(2),
+      oi1: s.occIdx === 0 ? '#C1762F' : '#D9D2C2', oi2: s.occIdx === 1 ? '#C1762F' : '#D9D2C2', oi3: s.occIdx === 2 ? '#C1762F' : '#D9D2C2',
+      rows, protName: prot.name, protTag: prot.tag, protTagColor: prot.tagColor, protPrice: prot.price,
+      addCart: ()=> this.addCart(), addLabel: addMap[0], addBg: addMap[1], addColor: addMap[2], addBd: addMap[3],
+      isStep1: s.step === 1, isStep2: s.step === 2, isStep3: s.step === 3, notLast: s.step < 3,
+      pb1: s.step >= 1 ? '#C98B45' : 'rgba(247,243,234,.25)', pb2: s.step >= 2 ? '#C98B45' : 'rgba(247,243,234,.25)', pb3: s.step >= 3 ? '#C98B45' : 'rgba(247,243,234,.25)',
+      backOp: s.step > 1 ? 1 : .35,
+      stepBack: ()=> this.setState({step: Math.max(1, s.step - 1)}),
+      stepNext: ()=> this.setState({step: Math.min(3, s.step + 1)}),
+      tipoChips: this.chip(['Cumpleaños','Reunión familiar','Evento de trabajo','Merienda compartida','Otro'], 'tipo'),
+      persChips: this.chip(['Hasta 10','10 a 25','25 a 50','Más de 50'], 'pers'),
+      prefChips: this.chip(['Dulce','Salado','Mixto'], 'pref'),
+      entChips: this.chip(['Retiro en Florida','Entrega a domicilio'], 'ent'),
+      onFecha: e => this.setOcc('fecha', e.target.value),
+      onObs: e => this.setOcc('obs', e.target.value),
+      resumen: res
+    };
+  }
+}
+</script>
+</body>
+</html>
