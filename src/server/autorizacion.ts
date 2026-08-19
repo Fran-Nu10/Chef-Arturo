@@ -1,0 +1,89 @@
+import 'server-only'
+
+import { cache } from 'react'
+import { redirect } from 'next/navigation'
+import { clienteServidor } from '@/lib/supabase/servidor'
+import type { RolAdmin } from '@/lib/supabase/tipos'
+
+export interface SesionAdmin {
+  userId: string
+  email: string
+  rol: RolAdmin
+  nombre: string | null
+}
+
+/** Por qué no hay sesión utilizable. Lo necesita el panel para dar el mensaje justo. */
+export type EstadoAcceso = 'sin-backend' | 'sin-sesion' | 'sin-permiso' | 'ok'
+
+interface Resolucion {
+  estado: EstadoAcceso
+  sesion: SesionAdmin | null
+}
+
+/**
+ * Resuelve la identidad una sola vez por petición.
+ *
+ * `getUser()` no lee la cookie: valida el token contra el servidor de auth de
+ * Supabase, o sea que es una llamada de red. El layout, la página y cada
+ * acción preguntaban por separado, así que una sola vista del panel podía
+ * disparar cuatro o cinco validaciones idénticas. `cache()` de React las
+ * colapsa en una por petición sin relajar nada: sigue siendo una validación
+ * real contra el servidor, y no se comparte entre peticiones ni entre usuarios.
+ */
+const resolver = cache(async (): Promise<Resolucion> => {
+  const supabase = await clienteServidor()
+  if (!supabase) return { estado: 'sin-backend', sesion: null }
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  if (!user) return { estado: 'sin-sesion', sesion: null }
+
+  // El rol se lee de `admin_users` en cada petición. No se toma del JWT ni de
+  // la metadata del usuario: eso lo puede editar el propio usuario y no sirve
+  // para autorizar. La consulta pasa por RLS igual que cualquier otra.
+  const { data: admin } = await supabase
+    .from('admin_users')
+    .select('role, is_active, display_name')
+    .eq('id', user.id)
+    .maybeSingle()
+
+  if (!admin || !admin.is_active) return { estado: 'sin-permiso', sesion: null }
+
+  return {
+    estado: 'ok',
+    sesion: {
+      userId: user.id,
+      email: user.email ?? '',
+      rol: admin.role,
+      nombre: admin.display_name,
+    },
+  }
+})
+
+/** Quién está operando el panel, o `null`. */
+export async function sesionAdmin(): Promise<SesionAdmin | null> {
+  return (await resolver()).sesion
+}
+
+/**
+ * Exige sesión administrativa. Redirige del lado servidor si no la hay, así
+ * el HTML protegido nunca llega a enviarse.
+ */
+export async function exigirAdmin(): Promise<SesionAdmin> {
+  const sesion = await sesionAdmin()
+  if (!sesion) redirect('/admin/login')
+  return sesion
+}
+
+/** Exige rol de dueño para la configuración crítica. */
+export async function exigirOwner(): Promise<SesionAdmin> {
+  const sesion = await exigirAdmin()
+  if (sesion.rol !== 'owner') redirect('/admin?sin_permiso=1')
+  return sesion
+}
+
+/** Distingue "no configurado" de "no autorizado" para dar el mensaje correcto. */
+export async function estadoDeAcceso(): Promise<EstadoAcceso> {
+  return (await resolver()).estado
+}
