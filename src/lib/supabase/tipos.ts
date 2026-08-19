@@ -174,6 +174,17 @@ export type FilaHistorialPedido = {
   created_at: string
 }
 
+export type FilaEventoPago = {
+  id: string
+  provider: string
+  event_key: string
+  event_type: string | null
+  payload: Record<string, unknown> | null
+  processed_at: string | null
+  error: string | null
+  created_at: string
+}
+
 export type FilaPago = {
   id: string
   order_id: string
@@ -210,6 +221,7 @@ export interface Database {
       order_items: Tabla<FilaLineaPedido>
       order_status_history: Tabla<FilaHistorialPedido>
       payments: Tabla<FilaPago>
+      payment_events: Tabla<FilaEventoPago>
     }
     Views: Record<string, never>
     Functions: {
