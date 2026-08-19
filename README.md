@@ -12,8 +12,8 @@ cp .env.example .env.local   # opcional: sin esto arranca en modo demo
 npm run dev                  # http://localhost:3000
 npm run lint
 npm run typecheck
-npm run test                 # dominio
-npm run db:test              # migraciones + RLS contra PostgreSQL
+npm run test                 # 84 pruebas de dominio
+npm run db:test              # 81 aserciones SQL/RLS contra PostgreSQL real
 npm run build
 ```
 
@@ -33,6 +33,7 @@ faltan. Nunca finge un guardado ni muestra un panel operativo vacío.
 | [`docs/ADMIN_BOOTSTRAP.md`](docs/ADMIN_BOOTSTRAP.md) | Crear el primer dueño |
 | [`docs/MERCADO_PAGO.md`](docs/MERCADO_PAGO.md) | Checkout Pro y webhook |
 | [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Despliegue, backups, rollback |
+| [`docs/QA.md`](docs/QA.md) | Qué se probó, contra qué, y qué queda pendiente |
 
 El panel vive en `/admin`. No hay registro público: las cuentas se crean a mano
 siguiendo `docs/ADMIN_BOOTSTRAP.md`.

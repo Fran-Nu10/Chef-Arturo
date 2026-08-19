@@ -1,5 +1,14 @@
 import 'server-only'
 
+import {
+  diaDelNegocio,
+  hoyDelNegocio,
+  finDelDiaUtc,
+  inicioDelDiaUtc,
+  inicioDelMesUtc,
+  mesDelNegocio,
+} from '@/server/zona-horaria'
+
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { ticketPromedio } from '@/server/dinero'
 import type { FilaPedido } from '@/lib/supabase/tipos'
@@ -51,9 +60,15 @@ export const METRICAS_VACIAS: Metricas = {
   evolucion: [],
 }
 
-/** Agrupa por día si el rango es corto, por mes si es largo. */
+/**
+ * Agrupa por día si el rango es corto, por mes si es largo.
+ *
+ * La clave sale de la zona del negocio, no de recortar la cadena ISO. Ver
+ * `zona-horaria.ts`: recortarla mandaba al día siguiente todo pedido hecho
+ * después de las 21:00 en Florida.
+ */
 function claveDePeriodo(fecha: string, porMes: boolean): string {
-  return porMes ? fecha.slice(0, 7) : fecha.slice(0, 10)
+  return porMes ? mesDelNegocio(fecha) : diaDelNegocio(fecha)
 }
 
 /**
@@ -136,13 +151,16 @@ export async function metricasDelRango(desde: string, hasta: string): Promise<Me
   const supabase = await clienteServidor()
   if (!supabase) return null
 
-  const hastaFin = `${hasta}T23:59:59.999Z`
+  // Los límites del rango son los del día en Florida, no los de UTC. `desde`
+  // y `hasta` llegan como `YYYY-MM-DD` desde dos <input type="date">.
+  const inicio = inicioDelDiaUtc(desde)
+  const fin = finDelDiaUtc(hasta)
 
   const { data: pedidos, error } = await supabase
     .from('orders')
     .select('id, total_cents, status, payment_status, payment_method, created_at')
-    .gte('created_at', desde)
-    .lte('created_at', hastaFin)
+    .gte('created_at', inicio)
+    .lt('created_at', fin)
 
   if (error) throw error
   if (!pedidos || pedidos.length === 0) return METRICAS_VACIAS
@@ -175,9 +193,10 @@ export async function resumenPanel(): Promise<ResumenPanel | null> {
   const supabase = await clienteServidor()
   if (!supabase) return null
 
-  const hoy = new Date()
-  const inicioHoy = new Date(hoy.getFullYear(), hoy.getMonth(), hoy.getDate()).toISOString()
-  const inicioMes = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString()
+  // Antes se usaba `new Date(a, m, d)`, que toma la zona del **servidor**. En
+  // un host en UTC, "hoy" empezaba a las 21:00 del día anterior en Florida.
+  const inicioHoy = inicioDelDiaUtc(hoyDelNegocio())
+  const inicioMes = inicioDelMesUtc()
 
   const [pendientes, deHoy, delMes, ultimos] = await Promise.all([
     supabase.from('orders').select('id', { count: 'exact', head: true }).eq('status', 'pending'),

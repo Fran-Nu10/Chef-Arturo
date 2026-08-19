@@ -131,3 +131,40 @@ customers ──1:N── orders ──1:N── order_items ──────�
 
 site_sections   site_settings   payment_events   (independientes)
 ```
+
+
+## Stock: cuándo se descuenta y cuándo se repone
+
+**Se descuenta al crear el pedido**, dentro de `create_public_order`, con la
+fila del producto bloqueada por `for update`. Es lo que evita que dos
+compradores simultáneos se lleven la misma última unidad — comprobado con dos
+procesos concurrentes: uno crea el pedido, el otro recibe "Sin stock
+suficiente", y el stock queda en cero, nunca negativo.
+
+**Se repone al cancelar**, por el trigger `orders_restore_stock`. Vive en la
+base y no en la acción del panel para que valga por cualquier camino: panel,
+webhook o SQL manual. `orders.stock_restored_at` deja constancia e impide
+reponer dos veces si un operador saca el pedido de cancelado y vuelve a
+cancelarlo.
+
+**No se repone** cuando el pago queda en `rejected` o `refunded`: el pedido
+sigue vivo y la mercadería sigue comprometida. Cancelar es la decisión
+explícita que la libera.
+
+Sólo se toca el stock de los productos con `track_stock = true`.
+
+## Zona horaria
+
+Los instantes se guardan en `timestamptz`, o sea en UTC. Eso está bien: el
+instante es único.
+
+Lo que no puede hacerse es **leerlos** recortando la cadena ISO. Uruguay está
+tres horas detrás de UTC, así que un pedido de las 21:30 en Florida se guarda
+como las 00:30 UTC del día siguiente, y recortando aparecía en el reporte del
+día equivocado. Para un negocio que toma pedidos de tarde y de noche eso corre
+buena parte de la facturación un día hacia adelante.
+
+`src/server/zona-horaria.ts` resuelve los días y los límites de rango en
+`America/Montevideo` usando `Intl`, no restando tres horas a mano: si Uruguay
+volviera a tener horario de verano —lo tuvo hasta 2015— la resta fija quedaría
+mal.

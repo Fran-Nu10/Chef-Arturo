@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { terminoDeBusqueda } from '@/server/validacion'
+import { finDelDiaUtc, inicioDelDiaUtc } from '@/server/zona-horaria'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import type {
   FilaCliente,
@@ -45,8 +46,10 @@ export async function listarPedidos(filtros: FiltrosPedidos = {}) {
 
   if (filtros.estado) consulta = consulta.eq('status', filtros.estado)
   if (filtros.estadoPago) consulta = consulta.eq('payment_status', filtros.estadoPago)
-  if (filtros.desde) consulta = consulta.gte('created_at', filtros.desde)
-  if (filtros.hasta) consulta = consulta.lte('created_at', `${filtros.hasta}T23:59:59.999Z`)
+  // Días de Florida, no de UTC: con el corte en `T23:59:59.999Z` los pedidos
+  // de la noche del último día quedaban fuera del filtro.
+  if (filtros.desde) consulta = consulta.gte('created_at', inicioDelDiaUtc(filtros.desde))
+  if (filtros.hasta) consulta = consulta.lt('created_at', finDelDiaUtc(filtros.hasta))
 
   if (filtros.busqueda) {
     const termino = terminoDeBusqueda(filtros.busqueda)
