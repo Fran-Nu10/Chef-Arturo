@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { terminoDeBusqueda } from '@/server/validacion'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { entornoPublico } from '@/lib/supabase/env'
 import type { FilaCategoria, FilaProducto } from '@/lib/supabase/tipos'
@@ -143,7 +144,7 @@ export async function listarProductosAdmin(filtros: FiltrosProductos = {}) {
   if (filtros.estado) consulta = consulta.eq('status', filtros.estado)
   if (filtros.categoriaId) consulta = consulta.eq('category_id', filtros.categoriaId)
   if (filtros.busqueda) {
-    const termino = filtros.busqueda.replace(/[%,()]/g, ' ').trim()
+    const termino = terminoDeBusqueda(filtros.busqueda)
     if (termino) consulta = consulta.or(`name.ilike.%${termino}%,slug.ilike.%${termino}%`)
   }
 

@@ -18,6 +18,14 @@ export type ModoMercadoPago = 'deshabilitado' | 'prueba' | 'produccion'
 
 const API = 'https://api.mercadopago.com'
 
+/**
+ * Cuánto se acepta de desfase entre el `ts` firmado y el reloj propio.
+ *
+ * Generoso a propósito: cubre reintentos del proveedor y relojes desalineados
+ * sin dejar la ventana abierta para siempre.
+ */
+export const TOLERANCIA_FIRMA_SEGUNDOS = 15 * 60
+
 function accessToken(): string | null {
   return process.env.MERCADO_PAGO_ACCESS_TOKEN || null
 }
@@ -208,6 +216,16 @@ export function verificarFirmaWebhook(parametros: {
   const ts = partes.get('ts')
   const v1 = partes.get('v1')
   if (!ts || !v1) return { valida: false, motivo: 'Firma con formato inesperado' }
+
+  // Ventana de frescura. Sin esto, una notificación válida capturada una vez
+  // sirve para siempre: la idempotencia por `event_key` limita el daño, pero
+  // no es una defensa contra reenvío. Mercado Pago manda `ts` en segundos.
+  const segundos = Number(ts)
+  if (!Number.isFinite(segundos)) return { valida: false, motivo: 'Firma con ts inválido' }
+  const antiguedad = Math.abs(Date.now() / 1000 - segundos)
+  if (antiguedad > TOLERANCIA_FIRMA_SEGUNDOS) {
+    return { valida: false, motivo: 'Firma vencida' }
+  }
 
   const manifiesto = `id:${parametros.dataId};request-id:${parametros.requestId ?? ''};ts:${ts};`
   const esperado = createHmac('sha256', secreto).update(manifiesto).digest('hex')

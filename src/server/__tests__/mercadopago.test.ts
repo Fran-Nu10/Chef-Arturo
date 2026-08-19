@@ -1,6 +1,7 @@
 import { createHmac } from 'node:crypto'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import {
+  TOLERANCIA_FIRMA_SEGUNDOS,
   faltantesDeMercadoPago,
   mercadoPagoConfigurado,
   modoMercadoPago,
@@ -44,12 +45,16 @@ describe('modo de Mercado Pago', () => {
 })
 
 describe('verificarFirmaWebhook', () => {
+  // Las firmas ahora caducan, así que los casos válidos se firman con la hora
+  // actual. Un `ts` fijo probaría el rechazo por vencimiento, no la firma.
+  const ahora = () => String(Math.floor(Date.now() / 1000))
+
   beforeEach(() => {
     process.env.MERCADO_PAGO_WEBHOOK_SECRET = SECRETO
   })
 
   it('acepta una firma legítima', () => {
-    const ts = '1700000000'
+    const ts = ahora()
     const r = verificarFirmaWebhook({
       signature: `ts=${ts},v1=${firmar('12345', 'req-1', ts)}`,
       requestId: 'req-1',
@@ -59,7 +64,7 @@ describe('verificarFirmaWebhook', () => {
   })
 
   it('rechaza una firma calculada con otro secreto', () => {
-    const ts = '1700000000'
+    const ts = ahora()
     const r = verificarFirmaWebhook({
       signature: `ts=${ts},v1=${firmar('12345', 'req-1', ts, 'otro-secreto')}`,
       requestId: 'req-1',
@@ -69,7 +74,7 @@ describe('verificarFirmaWebhook', () => {
   })
 
   it('rechaza si cambia el id del pago', () => {
-    const ts = '1700000000'
+    const ts = ahora()
     const firma = firmar('12345', 'req-1', ts)
     const r = verificarFirmaWebhook({
       signature: `ts=${ts},v1=${firma}`,
@@ -80,7 +85,7 @@ describe('verificarFirmaWebhook', () => {
   })
 
   it('rechaza si cambia el request-id', () => {
-    const ts = '1700000000'
+    const ts = ahora()
     const firma = firmar('12345', 'req-1', ts)
     const r = verificarFirmaWebhook({
       signature: `ts=${ts},v1=${firma}`,
@@ -104,7 +109,7 @@ describe('verificarFirmaWebhook', () => {
 
   it('no valida nada si falta el secreto configurado', () => {
     delete process.env.MERCADO_PAGO_WEBHOOK_SECRET
-    const ts = '1700000000'
+    const ts = ahora()
     const r = verificarFirmaWebhook({
       signature: `ts=${ts},v1=${firmar('12345', 'req-1', ts)}`,
       requestId: 'req-1',
@@ -138,5 +143,45 @@ describe('traducirEstadoPago', () => {
     expect(traducirEstadoPago('in_process')).toBe('pending')
     expect(traducirEstadoPago('estado_futuro_inventado')).toBe('pending')
     expect(traducirEstadoPago('')).toBe('pending')
+  })
+})
+
+describe('verificarFirmaWebhook · frescura', () => {
+  beforeEach(() => {
+    process.env.MERCADO_PAGO_WEBHOOK_SECRET = SECRETO
+  })
+
+  const conDesfase = (segundos: number) => {
+    const ts = String(Math.floor(Date.now() / 1000) + segundos)
+    return verificarFirmaWebhook({
+      signature: `ts=${ts},v1=${firmar('12345', 'req-1', ts)}`,
+      requestId: 'req-1',
+      dataId: '12345',
+    })
+  }
+
+  it('acepta una firma dentro de la ventana', () => {
+    expect(conDesfase(-(TOLERANCIA_FIRMA_SEGUNDOS - 60)).valida).toBe(true)
+  })
+
+  it('rechaza una firma vieja aunque el HMAC sea correcto', () => {
+    // Éste es el caso de reenvío: la firma es criptográficamente válida, pero
+    // fue capturada hace horas.
+    const r = conDesfase(-(TOLERANCIA_FIRMA_SEGUNDOS + 60))
+    expect(r.valida).toBe(false)
+    expect(r.motivo).toBe('Firma vencida')
+  })
+
+  it('rechaza una firma con ts en el futuro lejano', () => {
+    expect(conDesfase(TOLERANCIA_FIRMA_SEGUNDOS + 60).valida).toBe(false)
+  })
+
+  it('rechaza un ts que no es un número', () => {
+    const r = verificarFirmaWebhook({
+      signature: 'ts=ayer,v1=abcd',
+      requestId: 'req-1',
+      dataId: '12345',
+    })
+    expect(r.valida).toBe(false)
   })
 })

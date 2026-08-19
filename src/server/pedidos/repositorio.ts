@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { terminoDeBusqueda } from '@/server/validacion'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import type {
   FilaCliente,
@@ -48,7 +49,7 @@ export async function listarPedidos(filtros: FiltrosPedidos = {}) {
   if (filtros.hasta) consulta = consulta.lte('created_at', `${filtros.hasta}T23:59:59.999Z`)
 
   if (filtros.busqueda) {
-    const termino = filtros.busqueda.replace(/[%,()"]/g, ' ').trim()
+    const termino = terminoDeBusqueda(filtros.busqueda)
     if (termino) {
       const soloDigitos = termino.replace(/[^0-9]/g, '')
       const partes = [`order_number.ilike.%${termino}%`]
@@ -139,7 +140,7 @@ export async function listarClientes(busqueda?: string) {
   let consulta = supabase.from('customers').select('*')
 
   if (busqueda) {
-    const termino = busqueda.replace(/[%,()"]/g, ' ').trim()
+    const termino = terminoDeBusqueda(busqueda)
     const digitos = termino.replace(/[^0-9]/g, '')
     const partes = [`name.ilike.%${termino}%`, `email.ilike.%${termino}%`]
     if (digitos.length >= 3) partes.push(`phone.ilike.%${digitos}%`)

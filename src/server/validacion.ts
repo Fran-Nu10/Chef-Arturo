@@ -200,3 +200,18 @@ export function transicionPermitida(
 export function esEstadoTerminal(estado: z.infer<typeof EstadoPedido>): boolean {
   return TRANSICIONES[estado].length === 0
 }
+
+/**
+ * Prepara un término libre para el filtro `or` de PostgREST.
+ *
+ * La sintaxis de PostgREST usa coma, paréntesis y comillas como separadores:
+ * un término sin limpiar puede inyectar cláusulas extra en el filtro. RLS
+ * sigue siendo el límite real de lo que se ve, pero el filtro no debe poder
+ * torcerse desde la caja de búsqueda.
+ *
+ * Estaba resuelto en tres lugares con tres expresiones distintas —una de
+ * ellas no quitaba las comillas—. Ahora es una sola.
+ */
+export function terminoDeBusqueda(crudo: string): string {
+  return crudo.replace(/[%,()"'\\*.:]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 80)
+}

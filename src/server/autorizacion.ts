@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import type { RolAdmin } from '@/lib/supabase/tipos'
@@ -11,36 +12,58 @@ export interface SesionAdmin {
   nombre: string | null
 }
 
+/** Por qué no hay sesión utilizable. Lo necesita el panel para dar el mensaje justo. */
+export type EstadoAcceso = 'sin-backend' | 'sin-sesion' | 'sin-permiso' | 'ok'
+
+interface Resolucion {
+  estado: EstadoAcceso
+  sesion: SesionAdmin | null
+}
+
 /**
- * Quién está operando el panel, o `null`.
+ * Resuelve la identidad una sola vez por petición.
  *
- * El rol se lee de `admin_users` en cada petición. No se toma del JWT ni de la
- * metadata del usuario: eso lo puede editar el propio usuario y no sirve para
- * autorizar. La consulta pasa por RLS igual que cualquier otra.
+ * `getUser()` no lee la cookie: valida el token contra el servidor de auth de
+ * Supabase, o sea que es una llamada de red. El layout, la página y cada
+ * acción preguntaban por separado, así que una sola vista del panel podía
+ * disparar cuatro o cinco validaciones idénticas. `cache()` de React las
+ * colapsa en una por petición sin relajar nada: sigue siendo una validación
+ * real contra el servidor, y no se comparte entre peticiones ni entre usuarios.
  */
-export async function sesionAdmin(): Promise<SesionAdmin | null> {
+const resolver = cache(async (): Promise<Resolucion> => {
   const supabase = await clienteServidor()
-  if (!supabase) return null
+  if (!supabase) return { estado: 'sin-backend', sesion: null }
 
   const {
     data: { user },
   } = await supabase.auth.getUser()
-  if (!user) return null
+  if (!user) return { estado: 'sin-sesion', sesion: null }
 
+  // El rol se lee de `admin_users` en cada petición. No se toma del JWT ni de
+  // la metadata del usuario: eso lo puede editar el propio usuario y no sirve
+  // para autorizar. La consulta pasa por RLS igual que cualquier otra.
   const { data: admin } = await supabase
     .from('admin_users')
     .select('role, is_active, display_name')
     .eq('id', user.id)
     .maybeSingle()
 
-  if (!admin || !admin.is_active) return null
+  if (!admin || !admin.is_active) return { estado: 'sin-permiso', sesion: null }
 
   return {
-    userId: user.id,
-    email: user.email ?? '',
-    rol: admin.role,
-    nombre: admin.display_name,
+    estado: 'ok',
+    sesion: {
+      userId: user.id,
+      email: user.email ?? '',
+      rol: admin.role,
+      nombre: admin.display_name,
+    },
   }
+})
+
+/** Quién está operando el panel, o `null`. */
+export async function sesionAdmin(): Promise<SesionAdmin | null> {
+  return (await resolver()).sesion
 }
 
 /**
@@ -61,23 +84,6 @@ export async function exigirOwner(): Promise<SesionAdmin> {
 }
 
 /** Distingue "no configurado" de "no autorizado" para dar el mensaje correcto. */
-export async function estadoDeAcceso(): Promise<
-  'sin-backend' | 'sin-sesion' | 'sin-permiso' | 'ok'
-> {
-  const supabase = await clienteServidor()
-  if (!supabase) return 'sin-backend'
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return 'sin-sesion'
-
-  const { data: admin } = await supabase
-    .from('admin_users')
-    .select('is_active')
-    .eq('id', user.id)
-    .maybeSingle()
-
-  if (!admin || !admin.is_active) return 'sin-permiso'
-  return 'ok'
+export async function estadoDeAcceso(): Promise<EstadoAcceso> {
+  return (await resolver()).estado
 }

@@ -19,7 +19,13 @@ export const metadata: Metadata = {
  */
 export default async function LayoutAdmin({ children }: { children: React.ReactNode }) {
   const cabeceras = await headers()
-  const ruta = cabeceras.get('x-pathname') ?? cabeceras.get('x-invoke-path') ?? ''
+  // Sólo `x-pathname`, que el middleware sobrescribe en cada petición. El
+  // fallback anterior leía `x-invoke-path`, que nadie escribe de nuestro lado
+  // y por lo tanto podía llegar desde el cliente: bastaba mandarlo apuntando
+  // al login para saltarse este chasis. No era explotable —cada página exige
+  // sesión por su cuenta— pero un guard no debe depender de algo que el
+  // visitante puede escribir.
+  const ruta = cabeceras.get('x-pathname') ?? ''
 
   // El login y la recuperación se sirven sin chasis ni sesión.
   if (ruta.startsWith('/admin/login') || ruta.startsWith('/admin/recuperar')) {
