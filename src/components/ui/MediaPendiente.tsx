@@ -1,4 +1,6 @@
+import Image from 'next/image'
 import type { ReactNode } from 'react'
+import { fotoDeSlot } from '@/content/imagenes'
 
 type Forma = 'arco' | 'rect'
 
@@ -22,15 +24,29 @@ export interface MediaPendienteProps {
   marca?: ReactNode
   /** Apaga el color, para campañas finalizadas o productos no disponibles. */
   apagado?: boolean
+  /**
+   * Identificador del hueco dentro del contrato de imágenes. Si `ASIGNACION`
+   * tiene una fotografía para este slot, se muestra la foto; si no, la leyenda
+   * del asset que falta.
+   */
+  slot?: string
+  /** Sólo el hero carga con prioridad; todo lo demás es lazy. */
+  prioridad?: boolean
+  /** `sizes` responsive de `next/image`. */
+  sizes?: string
   children?: ReactNode
 }
+
+/** Ancho por defecto del hueco cuando no se declara uno más preciso. */
+const SIZES_POR_DEFECTO = '(max-width: 1023px) 100vw, 33vw'
 
 /**
  * Hueco de imagen o video con dimensiones reservadas.
  *
- * Sustituye al `<image-slot>` del prototipo: cuando lleguen las fotos y videos
- * reales, este componente pasa a envolver `next/image` o `<video>` con el mismo
- * recorte y la misma caja, sin tocar la composición.
+ * Sustituye al `<image-slot>` del prototipo. Con una fotografía asignada
+ * renderiza `next/image` recortado al marco editorial; sin ella conserva el
+ * placeholder con la leyenda de qué falta. En ambos casos la caja mide lo mismo,
+ * así que colocar una foto no mueve el layout.
  */
 export function MediaPendiente({
   etiqueta,
@@ -38,15 +54,35 @@ export function MediaPendiente({
   className = '',
   marca,
   apagado = false,
+  slot,
+  prioridad = false,
+  sizes,
   children,
 }: MediaPendienteProps) {
+  const foto = slot ? fotoDeSlot(slot) : undefined
+
   return (
     <div
       className={`relative flex items-center justify-center overflow-hidden border border-linea bg-crema ${FORMA[forma]} ${apagado ? 'saturate-50' : ''} ${className}`}
     >
-      <span className="px-3 text-center text-[10px] leading-snug font-normal text-tinta-tenue">
-        {etiqueta}
-      </span>
+      {foto ? (
+        <Image
+          src={`/${foto.archivo.replace(/^\/+/, '')}`}
+          alt={foto.alt}
+          fill
+          sizes={sizes ?? SIZES_POR_DEFECTO}
+          priority={prioridad}
+          loading={prioridad ? undefined : 'lazy'}
+          style={{
+            objectFit: foto.objectFit ?? 'cover',
+            objectPosition: foto.objectPosition ?? 'center',
+          }}
+        />
+      ) : (
+        <span className="px-3 text-center text-[10px] leading-snug font-normal text-tinta-tenue">
+          {etiqueta}
+        </span>
+      )}
       {marca}
       {children}
     </div>

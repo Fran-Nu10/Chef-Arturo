@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState, type ReactNode } from 'react'
 import { NEGOCIO, OCASION_OPCIONES } from '@/content/datos'
 import { Boton } from '@/components/ui/Boton'
+import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { Reveal } from '@/components/ui/Reveal'
 
 interface Ocasion {
@@ -161,6 +162,17 @@ export function ArmaTuOcasion() {
               'Los tres pasos, en una sola vista'
             )}
           </div>
+          {/*
+            La fotografía acompaña al copy, no se mete detrás del formulario:
+            los campos y los chips conservan su contraste completo.
+          */}
+          <MediaPendiente
+            slot="home-arma-ocasion"
+            etiqueta="Imagen temporal — lunch para eventos"
+            forma="arco"
+            sizes="(max-width: 1023px) 100vw, 380px"
+            className="mt-2 h-[clamp(220px,26vw,300px)] w-full max-w-[380px] border-papel/30 bg-papel/[0.06]"
+          />
         </Reveal>
 
         <form

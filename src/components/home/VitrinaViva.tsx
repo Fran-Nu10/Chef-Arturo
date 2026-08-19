@@ -24,7 +24,7 @@ const BAJADA =
   'Comprá del día con Mercado Pago, encargá para una fecha o consultá por tu evento. Retiro en Florida o entrega a tu puerta.'
 
 /** Contrato del asset, mientras no llegue el video real. */
-const POSTER_PENDIENTE = 'Poster temporal — video 9:16 / 16:10 pendiente'
+const POSTER_PENDIENTE = 'Poster pendiente — video 9:16 / 16:10'
 
 function CopyHero() {
   return (
@@ -71,6 +71,9 @@ function ArcoHero({
     >
       <MediaPendiente
         etiqueta={leyenda}
+        slot="home-hero"
+        prioridad
+        sizes="(max-width: 1023px) 78vw, 340px"
         className="h-full w-full rounded-none border-0"
         marca={
           <MarcaVideo posicion="abajo">
@@ -78,7 +81,7 @@ function ArcoHero({
               style={contraescala ? { scale: contraescala } : undefined}
               className="inline-block"
             >
-              VIDEO PENDIENTE · POSTER TEMPORAL
+              VIDEO PENDIENTE
             </motion.span>
           </MarcaVideo>
         }
@@ -215,7 +218,7 @@ export function VitrinaViva() {
         <motion.div
           style={{ opacity: pistaOpacidad }}
           aria-hidden="true"
-          className="pointer-events-none absolute bottom-[70px] left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 text-[10.5px] font-semibold tracking-[0.14em] text-caramelo-texto lg:bottom-[18px]"
+          className="pointer-events-none absolute bottom-[70px] left-1/2 flex -translate-x-1/2 flex-col items-center gap-1 rounded-borde bg-papel/85 px-3 py-1.5 text-[10.5px] font-semibold tracking-[0.14em] text-caramelo-texto lg:bottom-[18px]"
         >
           DESLIZÁ
           <IconoFlechaAbajo size={14} />

@@ -57,6 +57,8 @@ export function VistaCarrito() {
             >
               <MediaPendiente
                 etiqueta={producto.imagenPendiente}
+                slot={`producto-${producto.slug}`}
+                sizes="84px"
                 className="h-[84px] text-[9px]"
               />
               <div className="flex flex-col gap-1">

@@ -123,6 +123,7 @@ export function VistaRapida({
             <div className="flex items-start gap-4">
               <MediaPendiente
                 etiqueta={producto.imagenPendiente}
+                slot={`producto-${producto.slug}`}
                 forma="arco"
                 className="h-[160px] w-[130px] flex-none lg:h-[230px] lg:w-full"
               />

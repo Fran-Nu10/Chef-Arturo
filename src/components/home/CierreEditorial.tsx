@@ -35,7 +35,8 @@ export function CierreEditorial() {
 
         <div className="box-border h-[clamp(280px,30vw,380px)] w-[min(86vw,460px)] rounded-t-[999px] rounded-b-borde border border-papel/35 bg-papel/[0.06] p-2">
           <MediaPendiente
-            etiqueta="Imagen temporal — cierre"
+            etiqueta="Falta foto del local en Florida — cierre"
+            sizes="(max-width: 1023px) 86vw, 460px"
             forma="arco"
             className="h-full w-full border-0 bg-transparent"
           />

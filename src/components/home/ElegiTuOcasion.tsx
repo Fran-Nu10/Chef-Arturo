@@ -66,6 +66,8 @@ export function ElegiTuOcasion({ inicial = 'pasteleria' }: { inicial?: Categoria
             >
               <MediaPendiente
                 etiqueta={categoria.imagenPendiente}
+                slot={`home-categoria-${categoria.slug}`}
+                sizes="(max-width: 1023px) 76vw, 33vw"
                 forma="arco"
                 className="h-[clamp(220px,26vw,320px)]"
               />

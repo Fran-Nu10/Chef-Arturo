@@ -89,6 +89,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="relative h-[300px] w-[270px] self-center">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            slot={`producto-${producto.slug}`}
             forma="arco"
             apagado
             className="h-full w-full"
@@ -122,6 +123,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="grid grid-cols-[130px_1fr] items-start gap-4">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            slot={`producto-${producto.slug}`}
             forma="arco"
             className="h-[160px]"
           />
@@ -207,6 +209,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="grid grid-cols-[130px_1fr] items-start gap-4">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            slot={`producto-${producto.slug}`}
             forma="arco"
             className="h-[160px]"
           />
@@ -255,6 +258,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
     <div className="flex flex-col gap-4 px-4 pt-5 pb-7">
       <MediaPendiente
         etiqueta={producto.imagenPendiente}
+        slot={`producto-${producto.slug}`}
         forma="arco"
         className="h-[320px] w-[280px] self-center"
       />

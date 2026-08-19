@@ -46,6 +46,7 @@ export function CardProducto({
           <div className="overflow-hidden">
             <MediaPendiente
               etiqueta={producto.imagenPendiente}
+              slot={`producto-${producto.slug}`}
               forma="arco"
               apagado={noDisponible}
               className={`${destacado ? 'h-[230px] lg:h-[250px]' : alto} transition-transform duration-300 ease-editorial group-hover:scale-[1.04]`}
