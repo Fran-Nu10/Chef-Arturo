@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation'
 import { CabeceraAdmin, SinBackend } from '@/components/admin/Chasis'
 import { Pildora } from '@/components/admin/Tabla'
 import { PanelPedido } from '@/components/admin/PanelPedido'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import {
   ETIQUETA_ESTADO_PAGO,
   ETIQUETA_ESTADO_PEDIDO,
@@ -23,7 +23,7 @@ export default async function PaginaPedido({
 }: {
   params: Promise<{ id: string }>
 }) {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const { id } = await params

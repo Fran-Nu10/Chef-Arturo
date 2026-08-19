@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { FormularioLogin } from '@/components/admin/FormularioLogin'
 import { Marca } from '@/components/layout/Header'
-import { hayBackend, faltantesDeBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, modoDemo, panelOperativo } from '@/lib/supabase/env'
 import { sesionAdmin } from '@/server/autorizacion'
 
 export const metadata: Metadata = { title: 'Panel · Ingresar', robots: { index: false } }
@@ -18,7 +18,9 @@ export default async function PaginaLogin({
 }) {
   const { error } = await searchParams
 
-  if (hayBackend() && (await sesionAdmin())) redirect('/admin')
+  // `sesionAdmin()` ya devuelve null sin backend y sin sesión de demostración,
+  // así que sirve para los dos modos.
+  if (await sesionAdmin()) redirect('/admin')
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-papel px-5 py-12">
@@ -30,7 +32,20 @@ export default async function PaginaLogin({
           </p>
         </div>
 
-        {hayBackend() ? (
+        {modoDemo() && (
+          <div className="mb-4 border border-caramelo bg-caramelo/[0.10] p-4">
+            <p className="m-0 text-[13px] font-semibold text-caramelo-texto">
+              Modo demostración
+            </p>
+            <p className="mt-1.5 mb-0 text-[12.5px] leading-relaxed text-tinta-suave">
+              Supabase todavía no está conectado. Entrá con cualquier email y
+              cualquier contraseña para recorrer el panel con datos de ejemplo.
+              Nada de lo que hagas se guarda.
+            </p>
+          </div>
+        )}
+
+        {panelOperativo() ? (
           <FormularioLogin errorInicial={error} />
         ) : (
           <div className="border border-caramelo bg-papel-alt p-5">

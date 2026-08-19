@@ -1,6 +1,6 @@
 import { CabeceraAdmin, SinBackend, VacioAdmin } from '@/components/admin/Chasis'
 import { Pildora } from '@/components/admin/Tabla'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { fechaCorta } from '@/lib/etiquetas'
 import { exigirAdmin } from '@/server/autorizacion'
 import { listarMedios } from '@/server/contenido/repositorio'
@@ -9,7 +9,7 @@ import { urlPublica } from '@/server/catalogo/repositorio'
 export const metadata = { title: 'Medios' }
 
 export default async function PaginaMedios() {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const medios = await listarMedios()

@@ -3,7 +3,24 @@
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { clienteServidor } from '@/lib/supabase/servidor'
-import { entornoPublico } from '@/lib/supabase/env'
+import { entornoPublico, modoDemo } from '@/lib/supabase/env'
+import {
+  abrirSesionDemo,
+  borrarSesionVisible,
+  cerrarSesionDemo,
+  marcarSesionVisible,
+} from '@/server/demo/sesion'
+
+/**
+ * En demostración alcanza con que los dos campos vengan con algo. No se
+ * comprueba el formato del correo porque no hay contra qué comprobarlo: no
+ * existe la cuenta. Lo que sí se mantiene es la validación de campos vacíos,
+ * para que el formulario se comporte como el real.
+ */
+const CredencialesDemo = z.object({
+  email: z.string().trim().min(1, 'Ingresá un email'),
+  password: z.string().min(1, 'Ingresá una contraseña'),
+})
 
 const Credenciales = z.object({
   email: z.string().email('Ingresá un email válido'),
@@ -27,6 +44,23 @@ export async function ingresar(
   _previo: ResultadoAuth,
   datos: FormData,
 ): Promise<ResultadoAuth> {
+  // ── Demostración ─────────────────────────────────────────────────────────
+  // Sólo entra acá si `DEMO_ADMIN_BYPASS=true` **y** no hay Supabase
+  // configurado. Con la base conectada esta rama es inalcanzable y el ingreso
+  // vuelve a ser el de Supabase, sin excepciones.
+  if (modoDemo()) {
+    const demo = CredencialesDemo.safeParse({
+      email: datos.get('email'),
+      password: datos.get('password'),
+    })
+    if (!demo.success) {
+      return { error: demo.error.issues[0]?.message ?? 'Completá los dos campos' }
+    }
+    await abrirSesionDemo(demo.data.email)
+    await marcarSesionVisible()
+    redirect('/admin')
+  }
+
   const analisis = Credenciales.safeParse({
     email: datos.get('email'),
     password: datos.get('password'),
@@ -61,10 +95,16 @@ export async function ingresar(
     return { error: 'Tu cuenta está desactivada. Pedile al dueño que la reactive.' }
   }
 
+  await marcarSesionVisible()
   redirect('/admin')
 }
 
 export async function salir() {
+  // La cookie de demostración se borra siempre, esté o no activo el modo: si
+  // alguien conectó Supabase con una cookie vieja en el navegador, salir la
+  // limpia igual.
+  await cerrarSesionDemo()
+  await borrarSesionVisible()
   const supabase = await clienteServidor()
   if (supabase) await supabase.auth.signOut()
   redirect('/admin/login')

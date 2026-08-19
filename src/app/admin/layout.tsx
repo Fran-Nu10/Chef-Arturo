@@ -1,7 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import { BarraLateral } from '@/components/admin/Chasis'
-import { hayBackend } from '@/lib/supabase/env'
+import { BannerDemo, BarraLateral } from '@/components/admin/Chasis'
+import { panelOperativo } from '@/lib/supabase/env'
 import { sesionAdmin } from '@/server/autorizacion'
 import { redirect } from 'next/navigation'
 
@@ -32,7 +32,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
     return children
   }
 
-  if (!hayBackend()) {
+  if (!panelOperativo()) {
     // Sin backend no hay sesión posible: se muestra el aviso desde la propia
     // página, que sabe qué falta. No se simula un panel operativo.
     return <div className="min-h-screen bg-papel">{children}</div>
@@ -41,10 +41,15 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
   const sesion = await sesionAdmin()
   if (!sesion) redirect('/admin/login')
 
+  // El banner envuelve todo el panel, no cada página: así ninguna ruta puede
+  // quedarse sin él por olvido.
   return (
-    <div className="min-h-screen bg-papel lg:flex">
-      <BarraLateral sesion={sesion} rutaActual={ruta} />
-      <div className="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">{children}</div>
+    <div className="min-h-screen bg-papel">
+      {sesion.esDemo && <BannerDemo />}
+      <div className="lg:flex">
+        <BarraLateral sesion={sesion} rutaActual={ruta} />
+        <div className="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">{children}</div>
+      </div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { CabeceraAdmin, SinBackend, VacioAdmin } from '@/components/admin/Chasis'
 import { Metrica } from '@/components/admin/Tabla'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { formatearImporte } from '@/server/dinero'
 import { exigirAdmin } from '@/server/autorizacion'
 import { metricasDelRango } from '@/server/reportes/repositorio'
@@ -25,7 +25,7 @@ export default async function PaginaReportes({
 }: {
   searchParams: Promise<{ desde?: string; hasta?: string }>
 }) {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const q = await searchParams

@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin } from '@/server/autorizacion'
 import { EstadoPedido, Uuid, transicionPermitida } from '@/server/validacion'
+import { rechazoDemo } from '@/server/demo/guardia'
 import { confirmarEscritura } from '@/server/resultados'
 import type { Resultado } from '@/server/resultados'
 
@@ -41,6 +42,9 @@ export async function cambiarEstadoPedido(
     forzar: datos.get('forzar') === 'on',
   })
   if (!analisis.success) return { error: 'Datos de cambio de estado inválidos.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -108,6 +112,9 @@ export async function guardarNotaInterna(
   const nota = z.string().max(4000).safeParse(datos.get('internalNotes') ?? '')
   if (!id.success || !nota.success) return { error: 'Datos inválidos.' }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -144,6 +151,9 @@ export async function ajustarImportes(
     descuentoPesos: datos.get('descuento') ?? 0,
   })
   if (!analisis.success) return { error: 'Importes inválidos.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -198,6 +208,9 @@ export async function registrarCoordinacionWhatsapp(
   const detalle = z.string().trim().min(1).max(1000).safeParse(datos.get('detalle'))
   if (!id.success || !detalle.success) return { error: 'Contanos qué se coordinó.' }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -242,6 +255,9 @@ export async function guardarNotaCliente(
   const id = Uuid.safeParse(datos.get('customerId'))
   const nota = z.string().max(4000).safeParse(datos.get('internalNotes') ?? '')
   if (!id.success || !nota.success) return { error: 'Datos inválidos.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }

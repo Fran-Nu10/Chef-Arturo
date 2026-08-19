@@ -12,7 +12,7 @@ cp .env.example .env.local   # opcional: sin esto arranca en modo demo
 npm run dev                  # http://localhost:3000
 npm run lint
 npm run typecheck
-npm run test                 # 84 pruebas de dominio
+npm run test                 # 97 pruebas de dominio
 npm run db:test              # 81 aserciones SQL/RLS contra PostgreSQL real
 npm run build
 ```
@@ -22,6 +22,34 @@ npm run build
 Sin credenciales de Supabase la aplicación **arranca igual**: el storefront
 público muestra los datos de `src/content/` y el panel avisa qué variables
 faltan. Nunca finge un guardado ni muestra un panel operativo vacío.
+
+## Panel de demostración
+
+Para mostrar el panel completo antes de conectar Supabase:
+
+```bash
+echo 'DEMO_ADMIN_BYPASS=true' >> .env.local
+npm run dev
+```
+
+Después, **Acceso de gestión** en el pie de la tienda, o `/admin/login`
+directamente. Entrá con cualquier email y cualquier contraseña —los dos campos
+tienen que tener algo— y el panel carga con productos, pedidos, clientes,
+contenido y reportes de ejemplo.
+
+Todo el panel muestra arriba un banner que dice **«Modo demostración — los
+cambios no se guardan»**, con un botón para salir. Los formularios se abren y
+validan como siempre, pero al guardar avisan que es una demostración: no se
+finge ninguna persistencia.
+
+**Cómo se apaga.** Borrá `DEMO_ADMIN_BYPASS` de `.env.local`, o poné cualquier
+valor que no sea exactamente `true`. Y sobre todo: **se apaga sola**. Con las
+variables de Supabase configuradas el bypass queda desactivado aunque la
+variable siga en `true`, así que no puede quedar abierto por olvido al pasar a
+producción. En modo real sólo funciona la autenticación de Supabase.
+
+Los datos de ejemplo están en `src/server/demo/datos.ts` y son inventados: no
+son el catálogo del negocio ni su lista de precios.
 
 ## Backend y panel
 

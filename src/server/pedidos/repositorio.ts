@@ -1,5 +1,13 @@
 import 'server-only'
 
+import { modoDemo } from '@/lib/supabase/env'
+import {
+  fichaClienteDemo,
+  listarClientesDemo,
+  listarPedidosDemo,
+  pedidoPorIdDemo,
+} from '@/server/demo/consultas'
+
 import { terminoDeBusqueda } from '@/server/validacion'
 import { finDelDiaUtc, inicioDelDiaUtc } from '@/server/zona-horaria'
 import { clienteServidor } from '@/lib/supabase/servidor'
@@ -33,6 +41,8 @@ export type PedidoConCliente = FilaPedido & {
  * paréntesis como separadores.
  */
 export async function listarPedidos(filtros: FiltrosPedidos = {}) {
+  if (modoDemo()) return listarPedidosDemo(filtros)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -99,6 +109,8 @@ export interface PedidoCompleto {
 }
 
 export async function pedidoPorId(id: string): Promise<PedidoCompleto | null> {
+  if (modoDemo()) return pedidoPorIdDemo(id)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -137,6 +149,8 @@ export async function pedidoPorId(id: string): Promise<PedidoCompleto | null> {
 // ── Clientes ────────────────────────────────────────────────────────────────
 
 export async function listarClientes(busqueda?: string) {
+  if (modoDemo()) return listarClientesDemo(busqueda)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -168,6 +182,8 @@ export interface FichaCliente {
 }
 
 export async function fichaCliente(id: string): Promise<FichaCliente | null> {
+  if (modoDemo()) return fichaClienteDemo(id)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 

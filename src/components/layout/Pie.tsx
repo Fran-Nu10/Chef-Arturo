@@ -1,4 +1,5 @@
 import { NEGOCIO } from '@/content/datos'
+import { AccesoGestion } from './AccesoGestion'
 
 const LEYENDA = `${NEGOCIO.autoras} · ${NEGOCIO.ciudad} · ${NEGOCIO.entrega} · WhatsApp · Mercado Pago`
 
@@ -19,7 +20,10 @@ export function Pie({ tono = 'verde' }: { tono?: 'verde' | 'papel' }) {
       >
         {NEGOCIO.nombre}
       </span>
-      <span>{LEYENDA}</span>
+      <span className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <span>{LEYENDA}</span>
+        <AccesoGestion oscuro={oscuro} />
+      </span>
     </footer>
   )
 }

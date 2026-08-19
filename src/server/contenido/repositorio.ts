@@ -1,5 +1,12 @@
 import 'server-only'
 
+import { modoDemo } from '@/lib/supabase/env'
+import {
+  listarMediosDemo,
+  seccionPorClaveDemo,
+  todasLasSeccionesDemo,
+} from '@/server/demo/consultas'
+
 import { clienteServidor } from '@/lib/supabase/servidor'
 import type { FilaSeccion } from '@/lib/supabase/tipos'
 import { CLAVES_SECCION, type ClaveSeccion } from './esquemas'
@@ -24,6 +31,8 @@ export async function seccionesPublicadas(): Promise<Record<string, unknown> | n
 
 /** Todas las secciones, para el panel. */
 export async function todasLasSecciones(): Promise<FilaSeccion[] | null> {
+  if (modoDemo()) return todasLasSeccionesDemo()
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -42,6 +51,8 @@ export async function todasLasSecciones(): Promise<FilaSeccion[] | null> {
 }
 
 export async function seccionPorClave(clave: ClaveSeccion): Promise<FilaSeccion | null> {
+  if (modoDemo()) return seccionPorClaveDemo(clave)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -56,6 +67,8 @@ export async function seccionPorClave(clave: ClaveSeccion): Promise<FilaSeccion 
 }
 
 export async function listarMedios() {
+  if (modoDemo()) return listarMediosDemo()
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
