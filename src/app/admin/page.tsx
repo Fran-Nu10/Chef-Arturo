@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { CabeceraAdmin, SinBackend, VacioAdmin } from '@/components/admin/Chasis'
 import { Metrica, Pildora, Tabla } from '@/components/admin/Tabla'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { ETIQUETA_ESTADO_PEDIDO, fechaHora, tonoEstadoPedido } from '@/lib/etiquetas'
 import { formatearImporte } from '@/server/dinero'
 import { exigirAdmin } from '@/server/autorizacion'
@@ -18,7 +18,7 @@ export const metadata = { title: 'Resumen' }
  * inventada: si no hay pedidos, no hay ventas.
  */
 export default async function PaginaPanel() {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
 
   await exigirAdmin()
   const [resumen, stockBajo] = await Promise.all([resumenPanel(), productosConStockBajo()])

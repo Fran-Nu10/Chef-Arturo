@@ -3,6 +3,8 @@ import 'server-only'
 import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { clienteServidor } from '@/lib/supabase/servidor'
+import { modoDemo } from '@/lib/supabase/env'
+import { sesionDemo } from '@/server/demo/sesion'
 import type { RolAdmin } from '@/lib/supabase/tipos'
 
 export interface SesionAdmin {
@@ -10,6 +12,11 @@ export interface SesionAdmin {
   email: string
   rol: RolAdmin
   nombre: string | null
+  /**
+   * Sesión de demostración, no de Supabase. El panel la usa para mostrar el
+   * banner y para rechazar cualquier escritura.
+   */
+  esDemo: boolean
 }
 
 /** Por qué no hay sesión utilizable. Lo necesita el panel para dar el mensaje justo. */
@@ -31,6 +38,26 @@ interface Resolucion {
  * real contra el servidor, y no se comparte entre peticiones ni entre usuarios.
  */
 const resolver = cache(async (): Promise<Resolucion> => {
+  // Modo demostración. `modoDemo()` ya exige que NO haya backend configurado,
+  // así que esta rama y la real nunca conviven: en cuanto se conectan las
+  // variables de Supabase, la cookie de demostración deja de valer sola.
+  if (modoDemo()) {
+    const demo = await sesionDemo()
+    if (!demo) return { estado: 'sin-sesion', sesion: null }
+    return {
+      estado: 'ok',
+      sesion: {
+        userId: 'demo',
+        email: demo.email,
+        // Rol de dueño para que se pueda recorrer todo el panel, incluida la
+        // configuración. No da acceso a nada: no hay base detrás.
+        rol: 'owner',
+        nombre: 'Demostración',
+        esDemo: true,
+      },
+    }
+  }
+
   const supabase = await clienteServidor()
   if (!supabase) return { estado: 'sin-backend', sesion: null }
 
@@ -57,6 +84,7 @@ const resolver = cache(async (): Promise<Resolucion> => {
       email: user.email ?? '',
       rol: admin.role,
       nombre: admin.display_name,
+      esDemo: false,
     },
   }
 })

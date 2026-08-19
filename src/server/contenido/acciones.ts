@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin, exigirOwner } from '@/server/autorizacion'
+import { rechazoDemo } from '@/server/demo/guardia'
 import { confirmarEscritura } from '@/server/resultados'
 import type { Resultado } from '@/server/resultados'
 import { Uuid } from '@/server/validacion'
@@ -41,6 +42,9 @@ export async function guardarBorradorSeccion(
     return { errores }
   }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -67,6 +71,9 @@ export async function publicarSeccion(_previo: Resultado, datos: FormData): Prom
 
   const clave = String(datos.get('clave') ?? '')
   if (!esClaveSeccion(clave)) return { error: 'Sección desconocida.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -113,6 +120,9 @@ export async function alternarSeccion(clave: string, habilitada: boolean): Promi
   await exigirAdmin()
   if (!esClaveSeccion(clave)) return { error: 'Sección desconocida.' }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -136,6 +146,9 @@ export async function borrarMedio(mediaId: string): Promise<Resultado> {
   await exigirAdmin()
   const id = Uuid.safeParse(mediaId)
   if (!id.success) return { error: 'Archivo inválido.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -197,6 +210,9 @@ export async function guardarAjuste(_previo: Resultado, datos: FormData): Promis
   } catch {
     return { error: 'El valor enviado no es válido.' }
   }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }

@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation'
 import { CabeceraAdmin, SinBackend } from '@/components/admin/Chasis'
 import { Metrica, Pildora, Tabla } from '@/components/admin/Tabla'
 import { NotasCliente } from '@/components/admin/NotasCliente'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import {
   ETIQUETA_ESTADO_PEDIDO,
   fechaCorta,
@@ -21,7 +21,7 @@ export default async function PaginaCliente({
 }: {
   params: Promise<{ id: string }>
 }) {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const { id } = await params

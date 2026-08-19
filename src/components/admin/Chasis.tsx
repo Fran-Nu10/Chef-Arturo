@@ -78,7 +78,7 @@ export function BarraLateral({
           {sesion.nombre ?? sesion.email}
         </p>
         <p className="m-0 text-[11px] text-tinta-suave">
-          {sesion.rol === 'owner' ? 'Dueño' : 'Equipo'}
+          {sesion.esDemo ? 'Demostración' : sesion.rol === 'owner' ? 'Dueño' : 'Equipo'}
         </p>
         <form action={salir}>
           <button
@@ -194,6 +194,36 @@ export function SinBackend({ faltantes }: { faltantes: string[] }) {
       <p className="mt-3 mb-0 text-[12.5px] leading-relaxed text-tinta-suave">
         Instrucciones en <code className="bg-crema px-1">docs/BACKEND.md</code>.
       </p>
+    </div>
+  )
+}
+
+/**
+ * Banner permanente del modo demostración.
+ *
+ * Va arriba de todo y en todas las pantallas del panel, no como un aviso que
+ * se cierra: mientras la sesión sea de demostración, quien mire la pantalla
+ * tiene que poder saberlo sin haber visto el login.
+ *
+ * `role="status"` para que lo anuncie el lector de pantalla al entrar.
+ */
+export function BannerDemo() {
+  return (
+    <div
+      role="status"
+      className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-caramelo bg-caramelo/[0.12] px-4 py-2.5"
+    >
+      <p className="m-0 text-[13px] font-semibold text-caramelo-texto">
+        Modo demostración — los cambios no se guardan
+      </p>
+      <form action={salir} className="flex-none">
+        <button
+          type="submit"
+          className="inline-flex min-h-[44px] items-center border border-caramelo px-3 text-[12.5px] font-semibold text-caramelo-texto transition-colors hover:bg-caramelo hover:text-papel focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-caramelo"
+        >
+          Salir de la demostración
+        </button>
+      </form>
     </div>
   )
 }

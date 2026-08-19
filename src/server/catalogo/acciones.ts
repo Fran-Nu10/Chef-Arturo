@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin } from '@/server/autorizacion'
 import { CategoriaEntrada, ProductoEntrada, Uuid } from '@/server/validacion'
+import { rechazoDemo } from '@/server/demo/guardia'
 import { confirmarEscritura, erroresDeZod, mensajeDeBase } from '@/server/resultados'
 export type { Resultado } from '@/server/resultados'
 import type { Resultado } from '@/server/resultados'
@@ -69,6 +70,9 @@ export async function crearProducto(_previo: Resultado, datos: FormData): Promis
   const analisis = ProductoEntrada.safeParse(camposProducto(datos))
   if (!analisis.success) return { errores: erroresDeZod(analisis.error) }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -95,6 +99,9 @@ export async function actualizarProducto(
 
   const analisis = ProductoEntrada.safeParse(camposProducto(datos))
   if (!analisis.success) return { errores: erroresDeZod(analisis.error) }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -123,6 +130,9 @@ export async function archivarProducto(id: string): Promise<Resultado> {
   const valido = Uuid.safeParse(id)
   if (!valido.success) return { error: 'Producto inválido.' }
 
+  const demo = rechazoDemo()
+  if (demo) return demo
+
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
@@ -145,6 +155,9 @@ export async function restaurarProducto(id: string): Promise<Resultado> {
   await exigirAdmin()
   const valido = Uuid.safeParse(id)
   if (!valido.success) return { error: 'Producto inválido.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -170,6 +183,9 @@ export async function ajustarStock(id: string, cantidad: number): Promise<Result
   if (!Number.isInteger(cantidad) || cantidad < 0) {
     return { error: 'La cantidad debe ser un entero no negativo.' }
   }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
@@ -205,6 +221,9 @@ export async function guardarCategoria(
     seoDescription: datos.get('seoDescription') || undefined,
   })
   if (!analisis.success) return { errores: erroresDeZod(analisis.error) }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
 
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }

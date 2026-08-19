@@ -1,5 +1,13 @@
 import 'server-only'
 
+import { modoDemo } from '@/lib/supabase/env'
+import {
+  listarCategoriasAdminDemo,
+  listarProductosAdminDemo,
+  productoPorIdDemo,
+  productosConStockBajoDemo,
+} from '@/server/demo/consultas'
+
 import { terminoDeBusqueda } from '@/server/validacion'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { entornoPublico } from '@/lib/supabase/env'
@@ -19,6 +27,11 @@ export interface ProductoConImagen extends FilaProducto {
 
 /** URL pública de un archivo del bucket `media`. */
 export function urlPublica(path: string): string {
+  // En demostración no hay Storage: sin esto la URL quedaba como
+  // `/storage/v1/object/public/media/...` —sin host— y daba 404 en cada
+  // imagen del panel. Los medios de demostración apuntan a las fotos que ya
+  // están en `public/fotos`.
+  if (modoDemo()) return path.startsWith('fotos/') ? `/${path}` : `/fotos/${path}`
   return `${entornoPublico.supabaseUrl}/storage/v1/object/public/media/${path}`
 }
 
@@ -130,6 +143,8 @@ export interface FiltrosProductos {
 }
 
 export async function listarProductosAdmin(filtros: FiltrosProductos = {}) {
+  if (modoDemo()) return listarProductosAdminDemo(filtros)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -175,6 +190,8 @@ export async function listarProductosAdmin(filtros: FiltrosProductos = {}) {
 
 /** Productos por debajo de su umbral. Sólo cuenta los que llevan stock. */
 export async function productosConStockBajo() {
+  if (modoDemo()) return productosConStockBajoDemo()
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -190,6 +207,8 @@ export async function productosConStockBajo() {
 }
 
 export async function listarCategoriasAdmin() {
+  if (modoDemo()) return listarCategoriasAdminDemo()
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 
@@ -203,6 +222,8 @@ export async function listarCategoriasAdmin() {
 }
 
 export async function productoPorId(id: string) {
+  if (modoDemo()) return productoPorIdDemo(id)
+
   const supabase = await clienteServidor()
   if (!supabase) return null
 

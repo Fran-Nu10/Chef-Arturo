@@ -1,13 +1,13 @@
 import { CabeceraAdmin, SinBackend } from '@/components/admin/Chasis'
 import { EditorSecciones } from '@/components/admin/EditorSecciones'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { exigirAdmin } from '@/server/autorizacion'
 import { todasLasSecciones } from '@/server/contenido/repositorio'
 
 export const metadata = { title: 'Contenido' }
 
 export default async function PaginaContenido() {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const secciones = await todasLasSecciones()

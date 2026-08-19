@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { CabeceraAdmin, SinBackend, VacioAdmin } from '@/components/admin/Chasis'
 import { Pildora, Tabla } from '@/components/admin/Tabla'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { ETIQUETA_ESTADO_PRODUCTO, ETIQUETA_MODALIDAD } from '@/lib/etiquetas'
 import { formatearImporte } from '@/server/dinero'
 import { exigirAdmin } from '@/server/autorizacion'
@@ -17,7 +17,7 @@ export default async function PaginaProductos({
 }: {
   searchParams: Promise<Record<string, string | undefined>>
 }) {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirAdmin()
 
   const q = await searchParams

@@ -1,5 +1,5 @@
 import { CabeceraAdmin, SinBackend } from '@/components/admin/Chasis'
-import { faltantesDeBackend, hayBackend } from '@/lib/supabase/env'
+import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
 import { exigirOwner } from '@/server/autorizacion'
 import {
   faltantesDeMercadoPago,
@@ -14,7 +14,7 @@ export const metadata = { title: 'Ajustes' }
  * antes de renderizar, y RLS rechazaría la escritura de todos modos.
  */
 export default async function PaginaAjustes() {
-  if (!hayBackend()) return <SinBackend faltantes={faltantesDeBackend()} />
+  if (!panelOperativo()) return <SinBackend faltantes={faltantesDeBackend()} />
   await exigirOwner()
 
   const modo = modoMercadoPago()
