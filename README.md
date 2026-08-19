@@ -3,15 +3,39 @@
 E-commerce gastronómico de Chef Arturo (Florida, Uruguay), implementado sobre la
 dirección visual **La Vitrina** exportada desde Claude Design.
 
-Stack: **Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion**.
+Stack: **Next.js 15 (App Router) · TypeScript · Tailwind CSS 4 · Framer Motion ·
+Supabase (PostgreSQL, Auth, Storage) · Zod**.
 
 ```bash
 npm install
-npm run dev        # http://localhost:3000
-npm run build      # build de producción (las 29 rutas son estáticas)
+cp .env.example .env.local   # opcional: sin esto arranca en modo demo
+npm run dev                  # http://localhost:3000
 npm run lint
 npm run typecheck
+npm run test                 # dominio
+npm run db:test              # migraciones + RLS contra PostgreSQL
+npm run build
 ```
+
+## Modo demo
+
+Sin credenciales de Supabase la aplicación **arranca igual**: el storefront
+público muestra los datos de `src/content/` y el panel avisa qué variables
+faltan. Nunca finge un guardado ni muestra un panel operativo vacío.
+
+## Backend y panel
+
+| Documento | Qué cubre |
+| --- | --- |
+| [`docs/BACKEND.md`](docs/BACKEND.md) | Arquitectura, puesta en marcha, definiciones del reporte |
+| [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) | Tablas, reglas en la base y relaciones |
+| [`docs/SECURITY.md`](docs/SECURITY.md) | RLS, `security definer`, secretos, riesgos pendientes |
+| [`docs/ADMIN_BOOTSTRAP.md`](docs/ADMIN_BOOTSTRAP.md) | Crear el primer dueño |
+| [`docs/MERCADO_PAGO.md`](docs/MERCADO_PAGO.md) | Checkout Pro y webhook |
+| [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) | Despliegue, backups, rollback |
+
+El panel vive en `/admin`. No hay registro público: las cuentas se crean a mano
+siguiendo `docs/ADMIN_BOOTSTRAP.md`.
 
 ## De dónde sale esto
 
