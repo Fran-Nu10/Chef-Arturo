@@ -60,7 +60,7 @@ export function EstadoCentrado({
   return (
     <div className="flex flex-col items-center justify-center gap-4 px-8 py-[clamp(48px,10vw,96px)] text-center">
       <div
-        className={`flex h-[170px] w-[140px] items-center justify-center rounded-t-[999px] rounded-b-borde bg-crema text-caramelo ${
+        className={`flex h-[150px] w-[150px] items-center justify-center rounded-borde bg-crema text-caramelo ${
           bordePunteado
             ? 'border border-dashed border-caramelo'
             : 'border border-caramelo'

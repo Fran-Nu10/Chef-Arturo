@@ -33,14 +33,13 @@ export function CierreEditorial() {
           <p className="m-0 text-xs text-caramelo-claro">{NEGOCIO.ubicacion}</p>
         </Reveal>
 
-        <div className="box-border h-[clamp(280px,30vw,380px)] w-[min(86vw,460px)] rounded-t-[999px] rounded-b-borde border border-papel/35 bg-papel/[0.06] p-2">
-          <MediaPendiente
-            etiqueta="Falta foto del local en Florida — cierre"
-            sizes="(max-width: 1023px) 86vw, 460px"
-            forma="arco"
-            className="h-full w-full border-0 bg-transparent"
-          />
-        </div>
+        <MediaPendiente
+          slot="home-cierre"
+          etiqueta="Falta foto del local en Florida — cierre"
+          sizes="(max-width: 1023px) 86vw, 460px"
+          ratio="4/5"
+          className="w-[min(86vw,460px)] border-papel/25"
+        />
       </div>
 
       <Pie />

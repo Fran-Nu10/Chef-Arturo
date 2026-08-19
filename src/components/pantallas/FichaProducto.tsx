@@ -86,15 +86,16 @@ export function FichaProducto({ producto }: { producto: Producto }) {
   if (producto.disponibilidad === 'no-disponible') {
     return (
       <div className="flex flex-col gap-4 px-4 pt-5 pb-7">
-        <div className="relative h-[300px] w-[270px] self-center">
+        <div className="relative w-full max-w-[340px] self-center">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
             slot={`producto-${producto.slug}`}
-            forma="arco"
+            ratio="4/5"
             apagado
-            className="h-full w-full"
+            sizes="(max-width: 1023px) 100vw, 460px"
+            className="w-full"
           />
-          <div className="pointer-events-none absolute inset-0 rounded-t-[999px] rounded-b-borde bg-papel/45" />
+          <div className="pointer-events-none absolute inset-0 rounded-borde bg-papel/45" />
           <span className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -rotate-[4deg] bg-tinta px-4 py-2 text-xs font-bold tracking-[0.1em] text-papel">
             NO DISPONIBLE
           </span>
@@ -124,8 +125,9 @@ export function FichaProducto({ producto }: { producto: Producto }) {
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
             slot={`producto-${producto.slug}`}
-            forma="arco"
-            className="h-[160px]"
+            ratio="4/5"
+            sizes="130px"
+            className="w-full"
           />
           <div className="flex flex-col gap-1.5">
             <TagModalidad
@@ -210,8 +212,9 @@ export function FichaProducto({ producto }: { producto: Producto }) {
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
             slot={`producto-${producto.slug}`}
-            forma="arco"
-            className="h-[160px]"
+            ratio="4/5"
+            sizes="130px"
+            className="w-full"
           />
           <div className="flex flex-col gap-1.5">
             <TagModalidad modalidad="encargo" className="self-start text-[10px]" />
@@ -259,8 +262,9 @@ export function FichaProducto({ producto }: { producto: Producto }) {
       <MediaPendiente
         etiqueta={producto.imagenPendiente}
         slot={`producto-${producto.slug}`}
-        forma="arco"
-        className="h-[320px] w-[280px] self-center"
+        ratio="4/5"
+        sizes="(max-width: 1023px) 100vw, 600px"
+        className="w-full"
       />
       <div className="flex items-start justify-between gap-3">
         <div>

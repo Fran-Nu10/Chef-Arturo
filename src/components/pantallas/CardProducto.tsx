@@ -16,12 +16,10 @@ import { useAgregar } from '@/lib/agregar'
 export function CardProducto({
   producto,
   destacado = false,
-  alto = 'h-[150px]',
 }: {
   producto: Producto
-  /** El primero del catálogo mobile ocupa las dos columnas. */
+  /** El primero del catálogo abre la grilla en panorámico, a dos columnas. */
   destacado?: boolean
-  alto?: string
 }) {
   const [vistaRapida, setVistaRapida] = useState(false)
   const [modalidad, setModalidad] = useState<'directa' | 'encargo'>(
@@ -35,7 +33,7 @@ export function CardProducto({
   return (
     <>
       <div
-        className={`group flex flex-col gap-2 ${destacado ? 'col-span-2 lg:col-span-1' : ''} ${
+        className={`group flex flex-col gap-2 ${destacado ? 'col-span-2' : ''} ${
           agotado || noDisponible ? 'opacity-55' : ''
         }`}
       >
@@ -47,9 +45,10 @@ export function CardProducto({
             <MediaPendiente
               etiqueta={producto.imagenPendiente}
               slot={`producto-${producto.slug}`}
-              forma="arco"
               apagado={noDisponible}
-              className={`${destacado ? 'h-[230px] lg:h-[250px]' : alto} transition-transform duration-300 ease-editorial group-hover:scale-[1.04]`}
+              conBorde={false}
+              ratio={destacado ? '3/2' : '4/5'}
+              className="w-full transition-transform duration-300 ease-editorial group-hover:scale-[1.04]"
             />
           </div>
           <div className="flex items-start justify-between gap-2.5">

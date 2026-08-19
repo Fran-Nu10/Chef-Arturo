@@ -2,14 +2,6 @@ import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { fotoDeSlot } from '@/content/imagenes'
 
-type Forma = 'arco' | 'rect'
-
-const FORMA: Record<Forma, string> = {
-  /* El arco de vitrina: único radio grande del sistema. */
-  arco: 'rounded-t-[999px] rounded-b-borde',
-  rect: 'rounded-borde',
-}
-
 export interface MediaPendienteProps {
   /**
    * Qué asset falta. Se muestra en el hueco, nunca se deja un vacío mudo.
@@ -17,53 +9,71 @@ export interface MediaPendienteProps {
    * escala y mantener la leyenda legible.
    */
   etiqueta: ReactNode
-  forma?: Forma
-  /** Dimensiones reservadas — evitan CLS cuando llegue la foto real. */
+  /**
+   * El arco de vitrina. Es la firma visual de la casa y por eso está racionado:
+   * sólo la ventana del hero y el producto protagonista de "Del mostrador de
+   * hoy" pueden llevarlo. Todo lo demás usa marco rectangular editorial.
+   */
+  arco?: boolean
+  /**
+   * Proporción del marco, en la forma `4/5`. Reserva la caja —evita CLS— y se
+   * elige según el sujeto de cada fotografía, no por uniformidad.
+   */
+  ratio?: string
+  /** Dimensiones o ajustes extra. */
   className?: string
-  /** Marca superpuesta, p. ej. "VIDEO PENDIENTE · POSTER TEMPORAL". */
+  /** Marca superpuesta, p. ej. "VIDEO PENDIENTE". */
   marca?: ReactNode
   /** Apaga el color, para campañas finalizadas o productos no disponibles. */
   apagado?: boolean
-  /**
-   * Identificador del hueco dentro del contrato de imágenes. Si `ASIGNACION`
-   * tiene una fotografía para este slot, se muestra la foto; si no, la leyenda
-   * del asset que falta.
-   */
+  /** Identificador del hueco dentro del contrato de imágenes. */
   slot?: string
   /** Sólo el hero carga con prioridad; todo lo demás es lazy. */
   prioridad?: boolean
   /** `sizes` responsive de `next/image`. */
   sizes?: string
+  /** Dibuja el hairline del sistema. Se omite cuando la foto se basta sola. */
+  conBorde?: boolean
   children?: ReactNode
 }
 
-/** Ancho por defecto del hueco cuando no se declara uno más preciso. */
 const SIZES_POR_DEFECTO = '(max-width: 1023px) 100vw, 33vw'
 
 /**
  * Hueco de imagen o video con dimensiones reservadas.
  *
- * Sustituye al `<image-slot>` del prototipo. Con una fotografía asignada
- * renderiza `next/image` recortado al marco editorial; sin ella conserva el
- * placeholder con la leyenda de qué falta. En ambos casos la caja mide lo mismo,
- * así que colocar una foto no mueve el layout.
+ * Con una fotografía asignada renderiza `next/image` con el `object-fit` y el
+ * `object-position` que declara el manifiesto para esa foto en particular; sin
+ * ella conserva el placeholder con la leyenda de qué falta. En ambos casos la
+ * caja mide lo mismo, así que colocar una foto no mueve el layout.
  */
 export function MediaPendiente({
   etiqueta,
-  forma = 'rect',
+  arco = false,
+  ratio,
   className = '',
   marca,
   apagado = false,
   slot,
   prioridad = false,
   sizes,
+  conBorde = true,
   children,
 }: MediaPendienteProps) {
   const foto = slot ? fotoDeSlot(slot) : undefined
+  const ajuste = foto?.objectFit ?? 'cover'
+  const proporcion = ratio ?? foto?.ratio
+
+  // Radio: el arco de vitrina, o el rectángulo editorial de 0–4px del sistema.
+  const forma = arco ? 'rounded-t-[999px] rounded-b-borde' : 'rounded-borde'
 
   return (
     <div
-      className={`relative flex items-center justify-center overflow-hidden border border-linea bg-crema ${FORMA[forma]} ${apagado ? 'saturate-50' : ''} ${className}`}
+      style={proporcion ? { aspectRatio: proporcion } : undefined}
+      className={`relative flex items-center justify-center overflow-hidden ${forma} ${
+        // `contain` necesita un fondo detrás; `cover` lo tapa entero.
+        ajuste === 'contain' || !foto ? 'bg-crema' : ''
+      } ${conBorde ? 'border border-linea' : ''} ${apagado ? 'saturate-50' : ''} ${className}`}
     >
       {foto ? (
         <Image
@@ -74,7 +84,7 @@ export function MediaPendiente({
           priority={prioridad}
           loading={prioridad ? undefined : 'lazy'}
           style={{
-            objectFit: foto.objectFit ?? 'cover',
+            objectFit: ajuste,
             objectPosition: foto.objectPosition ?? 'center',
           }}
         />

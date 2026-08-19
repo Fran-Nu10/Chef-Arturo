@@ -61,6 +61,11 @@ export interface Fotografia {
   objectPosition?: string
   /** `contain` sólo cuando haga falta ver el producto entero. */
   objectFit?: 'cover' | 'contain'
+  /**
+   * Proporción del marco elegida para esta foto en particular, de modo que el
+   * recorte no coma nada importante del sujeto.
+   */
+  ratio?: string
   /** Alt prudente: describe la escena, nunca nombra un plato sin validar. */
   alt: string
   /** Uso del contrato en el que se colocó. */
@@ -77,10 +82,9 @@ export interface Fotografia {
  * Un slot ausente conserva su placeholder con la leyenda del asset que falta.
  */
 export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
-  // ─── 01 · La Vitrina Viva ────────────────────────────────────────────────
-  // Elegida por encuadre: sujeto centrado, aire arriba, y un fondo beige que
-  // es prácticamente el papel del sistema. Es la única con esa coincidencia
-  // cromática y con resolución suficiente para escalar a pantalla completa.
+  // ─── 01 · La Vitrina Viva — arco 1 de 2 ──────────────────────────────────
+  // Sujeto centrado, aire arriba y un fondo beige que es casi el papel del
+  // sistema. La única con esa coincidencia cromática y resolución para escalar.
   'home-hero': {
     archivo: 'fotos/merienda1.jpg',
     grupo: 'merienda',
@@ -91,13 +95,17 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     uso: 'hero',
   },
 
-  // ─── 02 · Elegí tu ocasión ───────────────────────────────────────────────
+  // ─── 02 · Elegí tu ocasión — marcos rectangulares ────────────────────────
+  // Las tres van en 4:5. La tabla de ratios sugería 4:3 en desktop, pero las
+  // tres fotos son verticales y un 4:3 deja sólo una banda del centro: parte
+  // la pila de brownies, corta los croissants y decapita la bandeja de pisos.
   'home-categoria-pasteleria': {
     archivo: 'fotos/pasteleria1.jpg',
     grupo: 'pasteleria',
     ancho: 1200,
     alto: 1800,
-    objectPosition: '50% 50%',
+    ratio: '4/5',
+    objectPosition: '50% 45%',
     alt: 'Piezas de pastelería apiladas en un plato, con cobertura de chocolate',
     uso: 'categoria',
   },
@@ -106,16 +114,19 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     grupo: 'merienda',
     ancho: 1200,
     alto: 1607,
-    objectPosition: '50% 60%',
+    ratio: '4/5',
+    objectPosition: '50% 58%',
     alt: 'Facturas hojaldradas apiladas, con relleno de chocolate a la vista',
     uso: 'categoria',
   },
-  // Lectura inmediata de "para muchos": bandeja en altura, varias porciones.
+  // La bandeja de varios pisos se lee entera: cualquier recorte la decapita.
   'home-categoria-lunch': {
     archivo: 'fotos/luncheventos1.jpg',
     grupo: 'luncheventos',
     ancho: 736,
     alto: 1104,
+    ratio: '4/5',
+    objectFit: 'contain',
     objectPosition: '50% 50%',
     alt: 'Bandeja de varios pisos con porciones individuales de repostería',
     uso: 'categoria',
@@ -129,20 +140,24 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     grupo: 'luncheventos',
     ancho: 676,
     alto: 1200,
-    objectPosition: '50% 40%',
+    ratio: '4/5',
+    objectPosition: '50% 35%',
     alt: 'Mesa servida para un evento, con torta, bocados dulces y velas',
     uso: 'arma-tu-ocasion',
   },
 
-  // ─── 08 · La mesa de Chef Arturo ─────────────────────────────────────────
-  // Sólo las que no llevan marcas de terceros, precios ni personas.
+  // ─── 08 · La mesa de Chef Arturo — mosaico irregular ─────────────────────
+  // Los interiores aguantan el recorte panorámico. En 7, 8 y 4 el encuadre
+  // apaisado bajo también sirve para dejar fuera el cartel de otro comercio,
+  // las pizarras con precios ajenos y a la persona identificable.
   'mesa-1': {
-    archivo: 'fotos/LamesadeChefArturo.jpg',
+    archivo: 'fotos/LamesadeChefArturo3.jpg',
     grupo: 'lamesa',
     ancho: 736,
-    alto: 920,
-    objectPosition: '50% 50%',
-    alt: 'Salón con mostrador de vitrina, plantas y ventanal arqueado',
+    alto: 1103,
+    ratio: '4/5',
+    objectPosition: '55% 55%',
+    alt: 'Interior de un salón con mostrador y mesas de madera',
     uso: 'la-mesa',
   },
   'mesa-2': {
@@ -150,29 +165,69 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     grupo: 'lamesa',
     ancho: 736,
     alto: 979,
-    objectPosition: '40% 55%',
+    ratio: '3/2',
+    objectPosition: '40% 58%',
     alt: 'Vitrina curva de un mostrador con bandejas de piezas horneadas',
     uso: 'la-mesa',
   },
   'mesa-3': {
-    archivo: 'fotos/LamesadeChefArturo3.jpg',
+    archivo: 'fotos/LamesadeChefArturo7.jpg',
     grupo: 'lamesa',
     ancho: 736,
-    alto: 1103,
-    objectPosition: '55% 55%',
-    alt: 'Interior de un salón con mostrador y mesas de madera',
+    alto: 981,
+    ratio: '3/2',
+    objectPosition: '50% 100%',
+    alt: 'Mostrador largo con bandejas de piezas saladas recién horneadas',
     uso: 'la-mesa',
+  },
+  'mesa-4': {
+    archivo: 'fotos/LamesadeChefArturo8.jpg',
+    grupo: 'lamesa',
+    ancho: 736,
+    alto: 981,
+    ratio: '3/2',
+    objectPosition: '25% 100%',
+    alt: 'Bandejas de facturas hojaldradas en el mostrador de una vitrina',
+    uso: 'la-mesa',
+  },
+  'mesa-5': {
+    archivo: 'fotos/LamesadeChefArturo4.jpg',
+    grupo: 'lamesa',
+    ancho: 736,
+    alto: 736,
+    ratio: '2/1',
+    objectPosition: '50% 100%',
+    alt: 'Mostrador con recipientes y una vitrina iluminada',
+    uso: 'la-mesa',
+  },
+
+  // ─── 10 · Cierre editorial ───────────────────────────────────────────────
+  // El salón con ventanal arqueado es lo más cercano a "la vitrina está
+  // abierta". El contrato dice que estas fotos son "principalmente" —no
+  // exclusivamente— de su sección.
+  'home-cierre': {
+    archivo: 'fotos/LamesadeChefArturo.jpg',
+    grupo: 'lamesa',
+    ancho: 736,
+    alto: 920,
+    ratio: '4/5',
+    objectPosition: '50% 50%',
+    alt: 'Salón con mostrador de vitrina, plantas y ventanal arqueado',
+    uso: 'cierre',
   },
 
   // ─── Productos ───────────────────────────────────────────────────────────
   // Una entrada por producto: la misma foto en catálogo, vista rápida, ficha
   // y carrito. Los productos sin entrada conservan su placeholder.
+  // `producto-pasteleria-01` es además el protagonista de "Del mostrador de
+  // hoy", el segundo y último arco del sistema.
   'producto-pasteleria-01': {
     archivo: 'fotos/pasteleria5.jpg',
     grupo: 'pasteleria',
     ancho: 600,
     alto: 900,
-    objectPosition: '50% 45%',
+    ratio: '4/5',
+    objectPosition: '50% 48%',
     alt: 'Torta fría con frutos rojos por encima, sobre una base oscura',
     uso: 'ficha',
   },
@@ -181,6 +236,7 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     grupo: 'merienda',
     ancho: 1200,
     alto: 1607,
+    ratio: '4/5',
     objectPosition: '50% 55%',
     alt: 'Facturas hojaldradas apiladas, con relleno rojo de frutas',
     uso: 'ficha',
@@ -190,6 +246,7 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     grupo: 'luncheventos',
     ancho: 736,
     alto: 981,
+    ratio: '1/1',
     objectPosition: '50% 50%',
     alt: 'Bandeja completa con muchos bocados dulces ordenados en filas',
     uso: 'ficha',

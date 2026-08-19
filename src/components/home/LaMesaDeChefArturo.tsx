@@ -3,7 +3,6 @@
 import { useReducedMotion } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import { NEGOCIO } from '@/content/datos'
-import { fotoDeSlot } from '@/content/imagenes'
 import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { EncabezadoSeccion } from '@/components/ui/Reveal'
 
@@ -11,56 +10,29 @@ import { EncabezadoSeccion } from '@/components/ui/Reveal'
 const DERIVA = { riel1: 0.3, riel2: -0.22 }
 
 interface Pieza {
-  /** Slot del manifiesto. Sin foto asignada, la pieza queda marcada como pendiente. */
+  /** Slot del manifiesto. Cada foto trae su propia proporción. */
   slot: string
-  /** Tamaño de la pieza: el ritmo es irregular a propósito, no una grilla. */
-  caja: string
+  /** Ancho de la pieza: el ritmo es irregular a propósito, no una grilla. */
+  ancho: string
   sizes: string
-  /** Qué falta, cuando falta. */
-  pendiente: string
 }
 
 /**
  * Composición de los dos rieles.
  *
- * Los tamaños alternan vertical, apaisado y pequeño para romper el ritmo. Las
- * fotos disponibles se colocaron en la caja que mejor les cae: los interiores
- * aguantan el recorte apaisado, el salón con ventanal pide formato vertical.
+ * Anchos y proporciones alternan vertical y panorámico para romper el ritmo.
+ * Los interiores aguantan bien el recorte apaisado; el salón con mesas pide
+ * formato vertical, así que va en 4:5.
  */
 const RIEL_1: Pieza[] = [
-  {
-    slot: 'mesa-1',
-    caja: 'w-[240px] h-[320px]',
-    sizes: '240px',
-    pendiente: 'Foto vertical — pendiente',
-  },
-  {
-    slot: 'mesa-2',
-    caja: 'w-[380px] h-[280px]',
-    sizes: '380px',
-    pendiente: 'Foto horizontal — pendiente',
-  },
-  {
-    slot: 'mesa-4',
-    caja: 'w-[200px] h-[300px]',
-    sizes: '200px',
-    pendiente: 'Foto vertical — pendiente',
-  },
+  { slot: 'mesa-1', ancho: 'w-[260px]', sizes: '260px' },
+  { slot: 'mesa-2', ancho: 'w-[430px]', sizes: '430px' },
+  { slot: 'mesa-4', ancho: 'w-[340px]', sizes: '340px' },
 ]
 
 const RIEL_2: Pieza[] = [
-  {
-    slot: 'mesa-3',
-    caja: 'w-[210px] h-[270px]',
-    sizes: '210px',
-    pendiente: 'Foto vertical — pendiente',
-  },
-  {
-    slot: 'mesa-6',
-    caja: 'w-[300px] h-[210px]',
-    sizes: '300px',
-    pendiente: 'Foto horizontal — pendiente',
-  },
+  { slot: 'mesa-3', ancho: 'w-[390px]', sizes: '390px' },
+  { slot: 'mesa-5', ancho: 'w-[300px]', sizes: '300px' },
 ]
 
 /**
@@ -122,13 +94,13 @@ function useDeriva(
 }
 
 function PiezaGaleria({ pieza }: { pieza: Pieza }) {
-  const foto = fotoDeSlot(pieza.slot)
   return (
     <MediaPendiente
       slot={pieza.slot}
-      etiqueta={pieza.pendiente}
+      etiqueta="Foto pendiente"
       sizes={pieza.sizes}
-      className={`flex-none ${pieza.caja} ${foto ? '' : 'border-dashed'}`}
+      conBorde={false}
+      className={`flex-none ${pieza.ancho}`}
     />
   )
 }
@@ -184,7 +156,7 @@ export function LaMesaDeChefArturo() {
         ))}
         <a
           href={NEGOCIO.whatsapp}
-          className="flex h-[210px] w-[170px] flex-none items-center justify-center rounded-borde border border-linea bg-crema px-3.5 text-center text-xs font-semibold text-caramelo-texto"
+          className="flex h-[200px] w-[170px] flex-none items-center justify-center rounded-borde border border-linea bg-crema px-3.5 text-center text-xs font-semibold text-caramelo-texto"
         >
           Ver más en Instagram →
         </a>

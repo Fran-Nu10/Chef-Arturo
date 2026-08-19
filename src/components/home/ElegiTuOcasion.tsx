@@ -59,19 +59,24 @@ export function ElegiTuOcasion({ inicial = 'pasteleria' }: { inicial?: Categoria
               onMouseEnter={() => setActiva(categoria.slug)}
               onFocus={() => setActiva(categoria.slug)}
               aria-current={esActiva ? 'true' : undefined}
-              style={{ flexGrow: esActiva ? 1.8 : 1 }}
-              className={`box-border flex min-w-[76%] shrink-0 snap-center flex-col gap-3.5 border bg-papel-alt px-[18px] pt-[18px] pb-5 no-underline transition-[flex-grow,border-color] duration-500 ease-editorial lg:min-w-0 lg:shrink lg:basis-0 ${
-                esActiva ? 'border-verde' : 'border-linea'
-              }`}
+              style={{ flexGrow: esActiva ? 1.3 : 1 }}
+              className={`box-border flex min-w-[76%] shrink-0 snap-center flex-col no-underline transition-[flex-grow] duration-500 ease-editorial lg:min-w-0 lg:shrink lg:basis-0`}
             >
               <MediaPendiente
                 etiqueta={categoria.imagenPendiente}
                 slot={`home-categoria-${categoria.slug}`}
                 sizes="(max-width: 1023px) 76vw, 33vw"
-                forma="arco"
-                className="h-[clamp(220px,26vw,320px)]"
+                ratio="4/5"
+                conBorde={false}
+                className={`w-full lg:h-[480px] transition-opacity duration-500 ${
+                  esActiva ? 'opacity-100' : 'opacity-90'
+                }`}
               />
-              <div className="flex items-baseline justify-between gap-2.5">
+              <div
+                className={`mt-4 flex items-baseline justify-between gap-2.5 border-t pt-3 transition-colors duration-500 ${
+                  esActiva ? 'border-verde' : 'border-linea'
+                }`}
+              >
                 <span className="font-display text-subtitulo text-tinta">
                   {categoria.nombre}
                 </span>

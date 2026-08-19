@@ -169,7 +169,6 @@ export function Catalogo({ categoria }: { categoria?: CategoriaSlug }) {
                 key={producto.slug}
                 producto={producto}
                 destacado={!categoria && !busqueda && i === 0}
-                alto="h-[150px] lg:h-[250px]"
               />
             ))}
           </div>

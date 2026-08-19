@@ -124,8 +124,9 @@ export function VistaRapida({
               <MediaPendiente
                 etiqueta={producto.imagenPendiente}
                 slot={`producto-${producto.slug}`}
-                forma="arco"
-                className="h-[160px] w-[130px] flex-none lg:h-[230px] lg:w-full"
+                ratio="4/5"
+                sizes="(max-width: 1023px) 130px, 420px"
+                className="w-[130px] flex-none lg:w-full"
               />
               <div className="flex flex-col gap-1.5 pt-1">
                 <TagModalidad

@@ -59,7 +59,8 @@ export function VistaCarrito() {
                 etiqueta={producto.imagenPendiente}
                 slot={`producto-${producto.slug}`}
                 sizes="84px"
-                className="h-[84px] text-[9px]"
+                ratio="1/1"
+                className="w-full text-[9px]"
               />
               <div className="flex flex-col gap-1">
                 <span className="font-display text-[17px] leading-tight">

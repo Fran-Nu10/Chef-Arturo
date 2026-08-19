@@ -91,8 +91,8 @@ export function FechasQueImportan() {
 
               <MediaPendiente
                 etiqueta={campana.imagenPendiente}
-                forma="arco"
-                className="h-[230px]"
+                ratio="3/2"
+                className="w-full"
                 apagado={campana.estado === 'finalizada'}
               />
 

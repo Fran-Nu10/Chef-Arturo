@@ -169,9 +169,9 @@ export function ArmaTuOcasion() {
           <MediaPendiente
             slot="home-arma-ocasion"
             etiqueta="Imagen temporal — lunch para eventos"
-            forma="arco"
+            ratio="4/5"
             sizes="(max-width: 1023px) 100vw, 380px"
-            className="mt-2 h-[clamp(220px,26vw,300px)] w-full max-w-[380px] border-papel/30 bg-papel/[0.06]"
+            className="mt-2 w-full max-w-[340px] border-papel/25"
           />
         </Reveal>
 

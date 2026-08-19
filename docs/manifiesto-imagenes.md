@@ -29,44 +29,82 @@ El grupo se deduce **sólo del nombre**, según el contrato.
 | `LamesadeChefArturo.jpg` | 736×920 | 0.80 | vertical | 155 KB | la mesa | ✅ en uso |
 | `LamesadeChefArturo2.jpg` | 736×1104 | 0.67 | vertical | 123 KB | la mesa | ⛔ marca de agua + precios |
 | `LamesadeChefArturo3.jpg` | 736×1103 | 0.67 | vertical | 117 KB | la mesa | ✅ en uso |
-| `LamesadeChefArturo4.jpg` | 736×736 | 1.00 | cuadrada | 82 KB | la mesa | ⛔ texto ilegible |
+| `LamesadeChefArturo4.jpg` | 736×736 | 1.00 | cuadrada | 82 KB | la mesa | ✅ en uso, recortada (pizarras ilegibles fuera de cuadro) |
 | `LamesadeChefArturo5.jpg` | 720×1280 | 0.56 | vertical | 117 KB | la mesa | ⛔ precios en USD |
 | `LamesadeChefArturo6.jpg` | 736×979 | 0.75 | vertical | 121 KB | la mesa | ✅ en uso |
-| `LamesadeChefArturo7.jpg` | 736×981 | 0.75 | vertical | 99 KB | la mesa | ⛔ marca ajena |
-| `LamesadeChefArturo8.jpg` | 736×981 | 0.75 | vertical | 135 KB | la mesa | ⛔ precios + persona |
+| `LamesadeChefArturo7.jpg` | 736×981 | 0.75 | vertical | 99 KB | la mesa | ✅ en uso, recortada (cartel ajeno fuera de cuadro) |
+| `LamesadeChefArturo8.jpg` | 736×981 | 0.75 | vertical | 135 KB | la mesa | ✅ en uso, recortada (precios y persona fuera de cuadro) |
 
 Los 20 archivos abren correctamente y los 20 respetan el contrato de nombres.
 **Ninguna imagen del lote es horizontal**: son todas verticales o cuadradas.
 
-## 2 · Asignación
+## 2 · Los dos únicos arcos
 
-| Slot | Archivo | Grupo | Sección | Posición | `object-fit` | `object-position` | Ratio caja | Mobile | Desktop | Alt | Reutilizable |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| `home-hero` | `merienda1.jpg` | merienda | 01 La Vitrina Viva | ventana arqueada | cover | `50% 55%` | 0.79 | 78vw | 340px | Una mano sostiene tres piezas dulces partidas al medio, sobre fondo claro | no — es la imagen del hero |
-| `home-categoria-pasteleria` | `pasteleria1.jpg` | pastelería | 02 Elegí tu ocasión | tarjeta 01 | cover | `50% 50%` | var. | 76vw | 33vw | Piezas de pastelería apiladas en un plato, con cobertura de chocolate | sí, en cabecera de categoría |
-| `home-categoria-merienda` | `merienda3.jpg` | merienda | 02 Elegí tu ocasión | tarjeta 02 | cover | `50% 60%` | var. | 76vw | 33vw | Facturas hojaldradas apiladas, con relleno de chocolate a la vista | sí, en cabecera de categoría |
-| `home-categoria-lunch` | `luncheventos1.jpg` | lunch | 02 Elegí tu ocasión | tarjeta 03 | cover | `50% 50%` | var. | 76vw | 33vw | Bandeja de varios pisos con porciones individuales de repostería | sí, en cabecera de categoría |
-| `home-arma-ocasion` | `luncheventos2.jpg` | lunch | 05 Armá tu ocasión | columna izquierda, junto al copy | cover | `50% 40%` | 1.27 | 100vw | 380px | Mesa servida para un evento, con torta, bocados dulces y velas | sí, en solicitud de evento |
-| `mesa-1` | `LamesadeChefArturo.jpg` | la mesa | 08 La mesa | riel 1, pieza 1 (240×320) | cover | `50% 50%` | 0.75 | 240px | 240px | Salón con mostrador de vitrina, plantas y ventanal arqueado | no |
-| `mesa-2` | `LamesadeChefArturo6.jpg` | la mesa | 08 La mesa | riel 1, pieza 2 (380×280) | cover | `40% 55%` | 1.36 | 380px | 380px | Vitrina curva de un mostrador con bandejas de piezas horneadas | no |
-| `mesa-3` | `LamesadeChefArturo3.jpg` | la mesa | 08 La mesa | riel 2, pieza 1 (210×270) | cover | `55% 55%` | 0.78 | 210px | 210px | Interior de un salón con mostrador y mesas de madera | no |
-| `producto-pasteleria-01` | `pasteleria5.jpg` | pastelería | producto | catálogo · ficha · vista rápida · carrito · protagonista de Selección | cover | `50% 45%` | var. | 100vw / 86px | 430px / 250px | Torta fría con frutos rojos por encima, sobre una base oscura | sí, en todas sus pantallas |
-| `producto-merienda-01` | `merienda4.jpg` | merienda | producto | catálogo · ficha · vista rápida · carrito · Selección | cover | `50% 55%` | var. | 100vw / 86px | 430px / 250px | Facturas hojaldradas apiladas, con relleno rojo de frutas | sí, en todas sus pantallas |
-| `producto-lunch-01` | `luncheventos3.jpg` | lunch | producto | catálogo · ficha · vista rápida · carrito · Selección | cover | `50% 50%` | var. | 100vw / 86px | 430px / 250px | Bandeja completa con muchos bocados dulces ordenados en filas | sí, en todas sus pantallas |
+El arco de vitrina quedó racionado como firma visual. Sólo existen dos
+contenedores de imagen arqueados en todo el sitio:
 
-Cada producto tiene **una sola** entrada, así que catálogo, vista rápida, ficha
-y carrito muestran siempre la misma fotografía. Ninguna imagen se repite dentro
-de la home. Cada categoría usa únicamente imágenes de su propio grupo.
-
-## 3 · Slots que siguen con placeholder
-
-| Slot | Sección | Por qué |
+| # | Slot | Sección |
 | --- | --- | --- |
-| `home-detalle-video` | 04 El detalle final | La sección es de video; no se sustituye por una foto. Falta el video de terminación o armado. |
-| `home-camp-activa` · `home-camp-prog` · `home-camp-fin` | 06 Fechas que importan | Ningún archivo del lote declara ser de campaña. No se usan fotos de pastelería como si lo fueran. |
-| `home-cierre` | 10 Cierre editorial | No queda una imagen sin repetir. Falta una foto del local en Florida. |
-| `mesa-4` · `mesa-6` | 08 La mesa | De las ocho `LamesadeChefArturo*`, cinco quedaron descartadas. |
-| `producto-pasteleria-02/03/04`, `producto-merienda-02/03` | catálogo y fichas | Sólo hay dos fotos de pastelería usables y tres de merienda, ya asignadas. |
+| 1 | `home-hero` | 01 La Vitrina Viva |
+| 2 | `producto-pasteleria-01` (protagonista) | 03 Del mostrador de hoy |
+
+Todo lo demás usa marco rectangular editorial de 0–4 px de radio. Se quitaron
+los arcos de categorías, cards de producto, productos secundarios, catálogo,
+ficha, vista rápida, campañas, "Armá tu ocasión", "La mesa de Chef Arturo",
+carrito, checkout, cierre editorial y estados vacíos.
+
+## 3 · Asignación
+
+`fit` y `object-position` se eligieron mirando el sujeto de cada foto, no por
+uniformidad. El ratio del marco se acerca al nativo cuando el producto debe
+verse entero.
+
+| Slot | Archivo | Grupo | Sección | Ratio | `object-fit` | `object-position` | Mobile | Desktop | Real / stock |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| `home-hero` | `merienda1.jpg` | merienda | 01 · **arco 1** | arco vertical | cover | `50% 55%` | 78vw | 340px | real |
+| `home-categoria-pasteleria` | `pasteleria1.jpg` | pastelería | 02 | 4:5 · alto fijo 480px en desktop | cover | `50% 45%` | 76vw | 33vw | real |
+| `home-categoria-merienda` | `merienda3.jpg` | merienda | 02 | 4:5 · ídem | cover | `50% 58%` | 76vw | 33vw | real |
+| `home-categoria-lunch` | `luncheventos1.jpg` | lunch | 02 | 4:5 · ídem | **contain** | `50% 50%` | 76vw | 33vw | real |
+| `producto-pasteleria-01` | `pasteleria5.jpg` | pastelería | 03 · **arco 2** + catálogo, ficha, vista rápida, carrito | arco 4:5 · 3:2 destacado en catálogo | cover | `50% 48%` | 100vw | 460px | real |
+| `producto-merienda-01` | `merienda4.jpg` | merienda | catálogo · ficha · vista rápida · carrito · Selección | 4:5 | cover | `50% 55%` | 100vw / 86px | 330px / 250px | real |
+| `producto-lunch-01` | `luncheventos3.jpg` | lunch | catálogo · ficha · vista rápida · carrito · Selección | 1:1 | cover | `50% 50%` | 100vw / 86px | 330px | real |
+| `home-arma-ocasion` | `luncheventos2.jpg` | lunch | 05 | 4:5 | cover | `50% 35%` | 100vw | 340px | real |
+| `mesa-1` | `LamesadeChefArturo3.jpg` | la mesa | 08 | 4:5 | cover | `55% 55%` | 260px | 260px | real |
+| `mesa-2` | `LamesadeChefArturo6.jpg` | la mesa | 08 | 3:2 | cover | `40% 58%` | 430px | 430px | real |
+| `mesa-3` | `LamesadeChefArturo7.jpg` | la mesa | 08 | 3:2 | cover | `50% 100%` | 390px | 390px | real |
+| `mesa-4` | `LamesadeChefArturo8.jpg` | la mesa | 08 | 3:2 | cover | `25% 100%` | 340px | 340px | real |
+| `mesa-5` | `LamesadeChefArturo4.jpg` | la mesa | 08 | 2:1 | cover | `50% 100%` | 300px | 300px | real |
+| `home-cierre` | `LamesadeChefArturo.jpg` | la mesa | 10 | 4:5 | cover | `50% 50%` | 86vw | 460px | real |
+
+Once fotografías propias, ninguna repetida en la home. Cada categoría usa sólo
+imágenes de su grupo. Cada producto tiene una única entrada, así que catálogo,
+vista rápida, ficha y carrito muestran siempre la misma foto.
+
+### Decisiones de encuadre que se apartan de la tabla de ratios
+
+- **Categorías en 4:5, no en 4:3.** Las tres fotos son verticales; un 4:3 deja
+  sólo una banda central que parte la pila de brownies, corta los croissants y
+  decapita la bandeja de pisos.
+- **`luncheventos1` con `contain`.** La bandeja de cuatro pisos pierde el
+  sentido si se recorta: se muestra entera sobre el fondo crema del sistema.
+- **`mesa-3`, `mesa-4` y `mesa-5` en panorámico anclado abajo.** El recorte
+  deja fuera el cartel de otro comercio, la pizarra con precios ajenos, la
+  persona identificable y las pizarras con texto ilegible. Los originales
+  quedan intactos: el recorte es sólo `object-position`.
+
+### Archivos propios descartados
+
+Quedan fuera cinco de los veinte: `pasteleria2`, `pasteleria3`, `pasteleria4`
+y `merienda2` llevan marcas de terceros legibles en la propia composición, y
+`LamesadeChefArturo2` una marca de agua de la biblioteca que la vendió —
+recortarla para esconderla sería esquivar la licencia, no resolverla.
+`LamesadeChefArturo5` muestra doce productos con precio en dólares en cada
+etiqueta: irrecuperable con recorte.
+
+`LamesadeChefArturo4`, `7` y `8` sí se recuperaron: un encuadre panorámico
+anclado abajo deja fuera el cartel ajeno, las pizarras ilegibles, los precios y
+la persona identificable. Verificado a 1440 px. Riesgo residual: en `8` quedan
+tarjetitas de precio sobre el mostrador, ilegibles al tamaño al que se sirve.
 
 ## 4 · Rendimiento
 

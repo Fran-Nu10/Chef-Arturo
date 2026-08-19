@@ -63,9 +63,10 @@ export function SeleccionDeLaCasa() {
               <MediaPendiente
                 etiqueta={protagonista.imagenPendiente}
                 slot={`producto-${protagonista.slug}`}
-                sizes="(max-width: 1023px) 100vw, 430px"
-                forma="arco"
-                className="h-[clamp(320px,42vw,470px)]"
+                sizes="(max-width: 1023px) 100vw, 460px"
+                arco
+                ratio="4/5"
+                className="w-full"
                 apagado={protagonista.disponibilidad === 'agotado'}
               />
             </motion.div>
@@ -127,7 +128,8 @@ export function SeleccionDeLaCasa() {
                   etiqueta={producto.imagenPendiente}
                   slot={`producto-${producto.slug}`}
                   sizes="86px"
-                  className="h-[74px] text-[9.5px]"
+                  ratio="1/1"
+                  className="w-full text-[9.5px]"
                 />
                 <div className="flex flex-col gap-[3px]">
                   <span className="font-display text-[19px] leading-tight">
