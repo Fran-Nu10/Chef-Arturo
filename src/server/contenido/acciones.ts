@@ -3,9 +3,13 @@
 import { revalidatePath } from 'next/cache'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin, exigirOwner } from '@/server/autorizacion'
-import type { Resultado } from '@/server/catalogo/acciones'
+import { confirmarEscritura } from '@/server/resultados'
+import type { Resultado } from '@/server/resultados'
 import { Uuid } from '@/server/validacion'
 import { esClaveSeccion, mediosDeSeccion, validarSeccion } from './esquemas'
+
+const NO_ALCANZO =
+  'No se guardó: la sección no existe o tu usuario no tiene permiso para modificarla.'
 
 /**
  * Guarda el borrador de una sección.
@@ -40,18 +44,21 @@ export async function guardarBorradorSeccion(
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase
-    .from('site_sections')
-    .update({
-      draft: validacion.datos as Record<string, unknown>,
-      media_ids: mediosDeSeccion(validacion.datos),
-    })
-    .eq('key', clave)
-
-  if (error) return { error: error.message }
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('site_sections')
+      .update({
+        draft: validacion.datos as Record<string, unknown>,
+        media_ids: mediosDeSeccion(validacion.datos),
+      })
+      .eq('key', clave)
+      .select('key'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
 
   revalidatePath('/admin/contenido')
-  return { ok: true }
+  return resultado
 }
 
 /** Publica el borrador. Es el único momento en que el storefront ve el cambio. */
@@ -81,16 +88,25 @@ export async function publicarSeccion(_previo: Resultado, datos: FormData): Prom
     }
   }
 
-  const { error } = await supabase
-    .from('site_sections')
-    .update({ published: seccion.draft, published_at: new Date().toISOString() })
-    .eq('key', clave)
-
-  if (error) return { error: error.message }
+  // Se publica `validacion.datos`, no `seccion.draft`. Zod descarta las claves
+  // que no están en el contrato: publicar el borrador crudo dejaba pasar al
+  // storefront cualquier campo extra que hubiera quedado guardado.
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('site_sections')
+      .update({
+        published: validacion.datos as Record<string, unknown>,
+        published_at: new Date().toISOString(),
+      })
+      .eq('key', clave)
+      .select('key'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
 
   revalidatePath('/')
   revalidatePath('/admin/contenido')
-  return { ok: true }
+  return resultado
 }
 
 export async function alternarSeccion(clave: string, habilitada: boolean): Promise<Resultado> {
@@ -100,15 +116,14 @@ export async function alternarSeccion(clave: string, habilitada: boolean): Promi
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase
-    .from('site_sections')
-    .update({ is_enabled: habilitada })
-    .eq('key', clave)
-
-  if (error) return { error: error.message }
+  const resultado = await confirmarEscritura(
+    supabase.from('site_sections').update({ is_enabled: habilitada }).eq('key', clave).select('key'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
   revalidatePath('/')
   revalidatePath('/admin/contenido')
-  return { ok: true }
+  return resultado
 }
 
 /**
@@ -125,7 +140,12 @@ export async function borrarMedio(mediaId: string): Promise<Resultado> {
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { data: usos } = await supabase.rpc('media_asset_usage', { p_media_id: id.data })
+  const { data: usos, error: errorUsos } = await supabase.rpc('media_asset_usage', {
+    p_media_id: id.data,
+  })
+  // Si no se puede comprobar el uso, no se borra: el riesgo es dejar un hueco
+  // roto en el sitio.
+  if (errorUsos) return { error: 'No se pudo comprobar si el archivo está en uso.' }
   if (usos && usos.length > 0) {
     const donde = usos.map((u) => u.usage_label).slice(0, 5).join(', ')
     return { error: `No se puede borrar: lo usa ${donde}.` }
@@ -137,15 +157,31 @@ export async function borrarMedio(mediaId: string): Promise<Resultado> {
     .eq('id', id.data)
     .maybeSingle()
 
+  // Primero la fila, después el objeto. Al revés —como estaba— un borrado que
+  // RLS bloqueaba en silencio ya había destruido el archivo: quedaba la fila
+  // apuntando a un objeto inexistente y la acción decía que todo salió bien.
+  const resultado = await confirmarEscritura(
+    supabase.from('media_assets').delete().eq('id', id.data).select('id'),
+    'No se borró: el archivo no existe o no tenés permiso para eliminarlo.',
+  )
+  if (!resultado.ok) return resultado
+
   if (medio) {
-    await supabase.storage.from(medio.bucket).remove([medio.path])
+    const { error: errorStorage } = await supabase.storage
+      .from(medio.bucket)
+      .remove([medio.path])
+    if (errorStorage) {
+      // La fila ya no está; el objeto sí. Se dice, porque queda ocupando
+      // espacio y hay que limpiarlo a mano.
+      return {
+        ok: true,
+        error: `Se quitó del listado, pero el archivo sigue en Storage (${medio.bucket}/${medio.path}). Borralo desde Supabase.`,
+      }
+    }
   }
 
-  const { error } = await supabase.from('media_assets').delete().eq('id', id.data)
-  if (error) return { error: error.message }
-
   revalidatePath('/admin/medios')
-  return { ok: true }
+  return resultado
 }
 
 /** Ajustes del sitio. Configuración crítica: sólo el dueño. */
@@ -165,13 +201,16 @@ export async function guardarAjuste(_previo: Resultado, datos: FormData): Promis
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase
-    .from('site_settings')
-    .upsert({ key: clave, value: valor as Record<string, unknown> }, { onConflict: 'key' })
-
-  if (error) return { error: error.message }
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('site_settings')
+      .upsert({ key: clave, value: valor as Record<string, unknown> }, { onConflict: 'key' })
+      .select('key'),
+    'No se guardó el ajuste.',
+  )
+  if (!resultado.ok) return resultado
 
   revalidatePath('/admin/ajustes')
   revalidatePath('/')
-  return { ok: true }
+  return resultado
 }

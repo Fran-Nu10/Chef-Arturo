@@ -5,6 +5,12 @@ import { z } from 'zod'
 import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin } from '@/server/autorizacion'
 import { CategoriaEntrada, ProductoEntrada, Uuid } from '@/server/validacion'
+import { confirmarEscritura, erroresDeZod, mensajeDeBase } from '@/server/resultados'
+export type { Resultado } from '@/server/resultados'
+import type { Resultado } from '@/server/resultados'
+
+const NO_ALCANZO =
+  'No se guardó: el registro no existe o tu usuario no tiene permiso para modificarlo.'
 
 /**
  * Acciones de catálogo.
@@ -13,31 +19,6 @@ import { CategoriaEntrada, ProductoEntrada, Uuid } from '@/server/validacion'
  * el segundo cerrojo: el primero es RLS, que rechazaría la escritura aunque
  * alguien invocara la acción sin permisos.
  */
-
-export interface Resultado {
-  ok?: boolean
-  error?: string
-  errores?: Record<string, string>
-  id?: string
-}
-
-function erroresDeZod(error: z.ZodError): Record<string, string> {
-  const mapa: Record<string, string> = {}
-  for (const issue of error.issues) {
-    const campo = issue.path.join('.') || 'general'
-    mapa[campo] ??= issue.message
-  }
-  return mapa
-}
-
-/** Traduce los errores de Postgres a algo que el operador entienda. */
-function mensajeDeBase(error: { code?: string; message: string }): string {
-  if (error.code === '23505') return 'Ya existe otro registro con ese slug.'
-  if (error.code === '23503') return 'Hay un registro relacionado que lo impide.'
-  if (error.code === '23514') return 'Los datos no cumplen una regla de la base.'
-  if (error.code === '42501') return 'No tenés permiso para esta operación.'
-  return error.message
-}
 
 const camposProducto = (datos: FormData) => ({
   slug: datos.get('slug'),
@@ -118,13 +99,16 @@ export async function actualizarProducto(
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase.from('products').update(aFila(analisis.data)).eq('id', id.data)
-  if (error) return { error: mensajeDeBase(error) }
+  const resultado = await confirmarEscritura(
+    supabase.from('products').update(aFila(analisis.data)).eq('id', id.data).select('id'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
 
   revalidatePath('/admin/productos')
   revalidatePath(`/admin/productos/${id.data}`)
   revalidatePath('/catalogo')
-  return { ok: true, id: id.data }
+  return resultado
 }
 
 /**
@@ -142,16 +126,19 @@ export async function archivarProducto(id: string): Promise<Resultado> {
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase
-    .from('products')
-    .update({ status: 'archived', archived_at: new Date().toISOString() })
-    .eq('id', valido.data)
-
-  if (error) return { error: mensajeDeBase(error) }
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('products')
+      .update({ status: 'archived', archived_at: new Date().toISOString() })
+      .eq('id', valido.data)
+      .select('id'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
 
   revalidatePath('/admin/productos')
   revalidatePath('/catalogo')
-  return { ok: true }
+  return resultado
 }
 
 export async function restaurarProducto(id: string): Promise<Resultado> {
@@ -163,14 +150,17 @@ export async function restaurarProducto(id: string): Promise<Resultado> {
   if (!supabase) return { error: 'El backend no está configurado.' }
 
   // Vuelve a borrador, nunca directo a publicado: que lo revise un humano.
-  const { error } = await supabase
-    .from('products')
-    .update({ status: 'draft', archived_at: null })
-    .eq('id', valido.data)
-
-  if (error) return { error: mensajeDeBase(error) }
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('products')
+      .update({ status: 'draft', archived_at: null })
+      .eq('id', valido.data)
+      .select('id'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
   revalidatePath('/admin/productos')
-  return { ok: true }
+  return resultado
 }
 
 export async function ajustarStock(id: string, cantidad: number): Promise<Resultado> {
@@ -184,14 +174,17 @@ export async function ajustarStock(id: string, cantidad: number): Promise<Result
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const { error } = await supabase
-    .from('products')
-    .update({ stock_quantity: cantidad })
-    .eq('id', valido.data)
-
-  if (error) return { error: mensajeDeBase(error) }
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('products')
+      .update({ stock_quantity: cantidad })
+      .eq('id', valido.data)
+      .select('id'),
+    NO_ALCANZO,
+  )
+  if (!resultado.ok) return resultado
   revalidatePath('/admin/productos')
-  return { ok: true }
+  return resultado
 }
 
 // ── Categorías ──────────────────────────────────────────────────────────────
@@ -227,14 +220,24 @@ export async function guardarCategoria(
     seo_description: analisis.data.seoDescription ?? null,
   }
 
-  const id = datos.get('id')
-  const { error } = id
-    ? await supabase.from('categories').update(fila).eq('id', String(id))
-    : await supabase.from('categories').insert(fila)
-
-  if (error) return { error: mensajeDeBase(error) }
+  const idCrudo = datos.get('id')
+  let resultado: Resultado
+  if (idCrudo) {
+    const id = Uuid.safeParse(idCrudo)
+    if (!id.success) return { error: 'Categoría inválida.' }
+    resultado = await confirmarEscritura(
+      supabase.from('categories').update(fila).eq('id', id.data).select('id'),
+      NO_ALCANZO,
+    )
+  } else {
+    resultado = await confirmarEscritura(
+      supabase.from('categories').insert(fila).select('id'),
+      'No se pudo crear la categoría.',
+    )
+  }
+  if (!resultado.ok) return resultado
 
   revalidatePath('/admin/categorias')
   revalidatePath('/catalogo')
-  return { ok: true }
+  return resultado
 }
