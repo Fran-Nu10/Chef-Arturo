@@ -1,6 +1,6 @@
 'use server'
 
-import { clienteServidor } from '@/lib/supabase/servidor'
+import { clienteServicio, clienteServidor } from '@/lib/supabase/servidor'
 import { PedidoPublico } from '@/server/validacion'
 import {
   crearPreferencia,
@@ -98,17 +98,42 @@ export async function crearPedidoPublico(
 
   // ── Mercado Pago ─────────────────────────────────────────────────────────
   if (pedido.paymentMethod === 'mercado_pago') {
+    // Estos dos pasos NO pueden hacerse con el cliente anónimo, y antes se
+    // hacían. `order_items` sólo es legible por administradores, así que la
+    // lectura devolvía cero líneas —sin error— y la preferencia se armaba
+    // vacía; e `insert` en `payments` no tiene política para nadie, así que
+    // reventaba con 42501 y el error se descartaba: el pedido quedaba sin
+    // fila de pago. Ambas cosas verificadas contra PostgreSQL 16.
+    //
+    // Van con la clave de servicio, acotadas al pedido que se acaba de crear
+    // en esta misma petición. Es servidor puro: nada de esto llega al
+    // navegador.
+    const servicio = clienteServicio()
+    if (!servicio) {
+      return {
+        ok: true,
+        numeroPedido: creado.order_number,
+        error:
+          'Registramos tu pedido, pero el pago online no está disponible. Coordinamos por WhatsApp.',
+      }
+    }
+
     try {
-      const { data: lineas } = await supabase
+      const { data: lineas, error: errorLineas } = await servicio
         .from('order_items')
         .select('id, product_name, quantity, unit_price_cents')
         .eq('order_id', creado.order_id)
+
+      if (errorLineas) throw new Error('No se pudieron leer las líneas del pedido')
+      if (!lineas || lineas.length === 0) {
+        throw new Error('El pedido quedó sin líneas')
+      }
 
       const preferencia = await crearPreferencia({
         orderId: creado.order_id,
         orderNumber: creado.order_number,
         emailComprador: pedido.customerEmail ?? null,
-        lineas: (lineas ?? []).map((l) => ({
+        lineas: lineas.map((l) => ({
           id: l.id,
           title: l.product_name,
           quantity: l.quantity,
@@ -117,13 +142,14 @@ export async function crearPedidoPublico(
       })
 
       // La fila de pago nace pendiente. Sólo el webhook puede aprobarla.
-      await supabase.from('payments').insert({
+      const { error: errorPago } = await servicio.from('payments').insert({
         order_id: creado.order_id,
         method: 'mercado_pago',
         status: 'pending',
         amount_cents: creado.total_cents,
         provider_preference_id: preferencia.preferenceId,
       })
+      if (errorPago) throw new Error('No se pudo registrar el pago pendiente')
 
       return {
         ok: true,

@@ -16,9 +16,10 @@ export const dynamic = 'force-dynamic'
  * El orden importa y es deliberado:
  *
  *   1. Verificar la firma. Sin eso, cualquiera aprueba pedidos con un POST.
- *   2. Registrar el evento con clave única. Si ya existía, se responde 200 y
- *      se corta: Mercado Pago reintenta la misma notificación varias veces y
- *      no puede provocar efectos repetidos.
+ *   2. Registrar el evento con clave única. Si ya existía **y se procesó
+ *      bien**, se responde 200 y se corta: Mercado Pago reintenta la misma
+ *      notificación varias veces y no puede provocar efectos repetidos. Si
+ *      quedó con error, se reintenta — para eso reintenta el proveedor.
  *   3. Consultar el pago al proveedor. Nunca se cree el cuerpo recibido: sólo
  *      se toma el id, y el estado se pregunta con una llamada autenticada.
  *   4. Recién ahí actualizar el estado local.
@@ -77,10 +78,35 @@ export async function POST(request: NextRequest) {
   })
 
   if (errorEvento) {
-    if (errorEvento.code === '23505') {
+    if (errorEvento.code !== '23505') {
+      return NextResponse.json({ error: 'No se pudo registrar el evento' }, { status: 500 })
+    }
+
+    // Ya vimos este evento. Antes se cortaba acá siempre, y eso rompía
+    // justamente el caso para el que existen los reintentos: si el primer
+    // intento falló a mitad de camino —una caída de red al consultar el pago—
+    // el evento quedaba registrado con su error y **ningún reintento del
+    // proveedor volvía a procesarlo**. El pedido se quedaba pendiente para
+    // siempre.
+    //
+    // Un evento ya procesado con éxito sí se corta: eso es la idempotencia.
+    // Uno que quedó con error se vuelve a intentar.
+    const { data: previo } = await supabase
+      .from('payment_events')
+      .select('processed_at, error')
+      .eq('provider', 'mercado_pago')
+      .eq('event_key', dataId)
+      .maybeSingle()
+
+    if (previo?.processed_at && !previo.error) {
       return NextResponse.json({ recibido: true, duplicado: true })
     }
-    return NextResponse.json({ error: 'No se pudo registrar el evento' }, { status: 500 })
+    // Se limpia el error anterior para que este intento quede reflejado.
+    await supabase
+      .from('payment_events')
+      .update({ error: null })
+      .eq('provider', 'mercado_pago')
+      .eq('event_key', dataId)
   }
 
   const registrarFallo = async (mensaje: string) => {
@@ -128,7 +154,13 @@ export async function POST(request: NextRequest) {
     }
 
     // ── 4 · Actualizar ─────────────────────────────────────────────────────
-    await supabase
+    // El error de estas escrituras se mira. Antes no, y el upsert fallaba
+    // SIEMPRE: `payments_provider_payment_key` era un índice parcial y
+    // Postgres no puede inferirlo en `on conflict (columna)`, así que
+    // devolvía 42P10. El webhook contestaba 200 y no registraba ningún pago.
+    // Corregido en la migración 0007; acá se agrega la comprobación para que
+    // un fallo equivalente no vuelva a pasar inadvertido.
+    const { error: errorPago } = await supabase
       .from('payments')
       .upsert(
         {
@@ -146,9 +178,14 @@ export async function POST(request: NextRequest) {
         { onConflict: 'provider_payment_id' },
       )
 
+    if (errorPago) {
+      await registrarFallo(`No se pudo registrar el pago: ${errorPago.message}`)
+      return NextResponse.json({ recibido: true, error: true }, { status: 500 })
+    }
+
     // El pago aprobado confirma el pedido, pero sólo si seguía pendiente: no
     // se pisa un pedido que un humano ya movió o canceló.
-    await supabase
+    const { data: actualizado, error: errorPedido } = await supabase
       .from('orders')
       .update(
         estado === 'approved' && pedido.status === 'pending'
@@ -156,6 +193,14 @@ export async function POST(request: NextRequest) {
           : { payment_status: estado },
       )
       .eq('id', pedido.id)
+      .select('id')
+
+    if (errorPedido || !actualizado || actualizado.length === 0) {
+      await registrarFallo(
+        `No se pudo actualizar el pedido ${pedido.id}: ${errorPedido?.message ?? 'cero filas'}`,
+      )
+      return NextResponse.json({ recibido: true, error: true }, { status: 500 })
+    }
 
     await supabase
       .from('payment_events')

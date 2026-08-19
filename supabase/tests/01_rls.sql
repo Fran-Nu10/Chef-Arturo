@@ -27,18 +27,26 @@ begin
 end;
 $$;
 
-create or replace function pg_temp.debe_fallar(descripcion text, sentencia text)
+create or replace function pg_temp.debe_fallar(
+  descripcion text, sentencia text, motivo_esperado text default null)
 returns void language plpgsql as $$
+declare v_error text;
 begin
   begin
     execute sentencia;
   exception when others then
-    raise notice 'ok · % (rechazado: %)', descripcion, sqlerrm;
+    v_error := sqlerrm;
+    -- Sin esta comprobación una prueba puede pasar por el motivo equivocado.
+    -- Pasó: cinco casos se rechazaban por el nombre del comprador y nunca
+    -- llegaban a la regla que decían probar.
+    if motivo_esperado is not null and position(motivo_esperado in v_error) = 0 then
+      raise exception 'FALLA · % — falló, pero por otro motivo: %', descripcion, v_error;
+    end if;
+    raise notice 'ok · % (rechazado: %)', descripcion, v_error;
     return;
   end;
-  raise exception 'FALLA · % — la sentencia se permitió y debía rechazarse', descripcion;
-end;
-$$;
+  raise exception 'FALLA · % — la sentencia fue aceptada', descripcion;
+end; $$;
 
 -- Con RLS, un UPDATE o un DELETE sin política aplicable no lanza error: la
 -- cláusula USING no encuentra ninguna fila y la sentencia afecta cero. Esa es
@@ -312,32 +320,32 @@ select pg_temp.esperar('el total lo calcula el servidor',
 
 select pg_temp.debe_fallar('anon no puede crear un pedido con un producto en borrador',
   $$select public.create_public_order(
-      'X', '099111333', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
+      'Ana', '099111333', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
       'whatsapp'::public.payment_method,
-      '[{"product_id":"00000000-0000-0000-0000-0000000000b2","quantity":1}]'::jsonb)$$);
+      '[{"product_id":"00000000-0000-0000-0000-0000000000b2","quantity":1}]'::jsonb)$$, 'Producto no disponible');
 
 select pg_temp.debe_fallar('anon no puede pedir más de lo que hay en stock',
   $$select public.create_public_order(
-      'X', '099111444', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
+      'Ana', '099111444', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
       'whatsapp'::public.payment_method,
-      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":999}]'::jsonb)$$);
+      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":999}]'::jsonb)$$, 'Sin stock suficiente');
 
 select pg_temp.debe_fallar('anon no puede declarar el pago ya aprobado',
   $$select public.create_public_order(
-      'X', '099111555', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
+      'Ana', '099111555', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
       'cash'::public.payment_method,
-      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":1}]'::jsonb)$$);
+      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":1}]'::jsonb)$$, 'Método de pago inválido');
 
 select pg_temp.debe_fallar('la entrega a domicilio exige dirección',
   $$select public.create_public_order(
-      'X', '099111666', null, 'delivery'::public.fulfillment_mode, null, null, null, '',
+      'Ana', '099111666', null, 'delivery'::public.fulfillment_mode, null, null, null, '',
       'whatsapp'::public.payment_method,
-      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":1}]'::jsonb)$$);
+      '[{"product_id":"00000000-0000-0000-0000-0000000000b1","quantity":1}]'::jsonb)$$, 'necesita dirección');
 
 select pg_temp.debe_fallar('un pedido sin líneas se rechaza',
   $$select public.create_public_order(
-      'X', '099111777', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
-      'whatsapp'::public.payment_method, '[]'::jsonb)$$);
+      'Ana', '099111777', null, 'pickup'::public.fulfillment_mode, null, null, null, '',
+      'whatsapp'::public.payment_method, '[]'::jsonb)$$, 'no tiene líneas');
 rollback;
 
 -- ══════════════════════════════════════════════════════════════════════════

@@ -22,5 +22,7 @@ for f in "$RAIZ"/supabase/migrations/*.sql; do
   psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$f"
 done
 
-echo "▸ Pruebas de RLS y reglas de negocio"
-psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$RAIZ/supabase/tests/01_rls.sql"
+echo "▸ Pruebas de RLS, pedidos, stock y pagos"
+for t in "$RAIZ"/supabase/tests/0[123]_*.sql; do
+  psql -q -d "$DB" -v ON_ERROR_STOP=1 -f "$t"
+done
