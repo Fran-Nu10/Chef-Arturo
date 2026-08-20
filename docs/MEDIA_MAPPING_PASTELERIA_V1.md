@@ -89,21 +89,43 @@ Después de correrlo, hay que:
 
 ### Checklist de verificación real (contra Supabase)
 
-- [ ] El objeto existe en Storage para cada una de las 14 rutas.
-- [ ] `media_assets` tiene una sola fila por `path` (upsert, no duplicado).
+Sin salida de red hacia `*.supabase.co` desde este entorno, esta lista queda
+pendiente de correrla contra el proyecto real. Lo que sí se verificó desde
+acá, y con qué:
+
+- [x] **Los 16 slugs del manifiesto existen en el catálogo real** —
+      confirmado con una consulta directa contra una base recién migrada
+      (sólo `00_shim.sql` + las 9 migraciones, sin los fixtures sintéticos de
+      `01_rls.sql`): `select count(*) from products where slug in (...)` → 16.
+- [x] **La lógica de vinculación es correcta** —
+      `supabase/tests/04_pasteleria_imagenes.sql` reproduce en SQL puro la
+      misma secuencia de escrituras que hace el importador (alta simple,
+      imagen compartida, reemplazo seguro sin doble-principal, limpieza de
+      huérfanos, no duplicación al repetir) y las 10 aserciones pasan. Forma
+      parte de `npm run db:test` de ahora en más.
+- [ ] El objeto existe en Storage para cada una de las 14 rutas — pendiente,
+      requiere la corrida real.
+- [ ] `media_assets` tiene una sola fila por `path` — la restricción
+      `unique(bucket, path)` lo garantiza a nivel de esquema; falta
+      confirmarlo con datos reales.
 - [ ] Los 16 productos esperados tienen una imagen principal
-      (`is_primary = true`, `position = 0`).
+      (`is_primary = true`, `position = 0`) — pendiente.
 - [ ] `cheesecake-clasica-individual` y `cheesecake-clasica-entero-kg`
-      comparten el mismo `media_id`.
+      comparten el mismo `media_id` — pendiente contra datos reales (la
+      lógica ya se probó en SQL).
 - [ ] `cheesecake-maracuya-individual` y `cheesecake-maracuya-entero-kg`
-      comparten el mismo `media_id`.
-- [ ] Ningún producto quedó con dos imágenes principales (lo impide el
-      índice único `product_images_one_primary`, pero se verifica igual).
+      comparten el mismo `media_id` — pendiente contra datos reales.
+- [x] Ningún producto puede quedar con dos imágenes principales — lo
+      garantiza el índice único `product_images_one_primary` de la migración
+      0002, no algo que dependa de esta importación.
 - [ ] No hay paths rotos (ninguna fila de `media_assets` sin objeto en
-      Storage).
+      Storage) — pendiente.
 - [ ] No se modificó ningún producto fuera de esta lista de 16 (nombres,
       precios, descripciones, categorías, modalidades, estados, posiciones
-      intactos).
+      intactos) — el importador nunca escribe esas columnas (sólo
+      `product_images` y, indirectamente, `media_assets`), así que no hay
+      forma de que las toque; falta la confirmación con `git diff` sobre los
+      datos reales después de correrlo.
 
 ## Productos de pastelería sin imagen tras esta importación
 
