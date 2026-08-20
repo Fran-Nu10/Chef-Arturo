@@ -63,7 +63,7 @@ const resolver = cache(async (): Promise<Resolucion> => {
   const { data, error } = await supabase.auth.getClaims()
   const claims = data?.claims
   const userId = typeof claims?.sub === 'string' ? claims.sub : null
-  if (error || !userId) return { estado: 'sin-sesion', sesion: null }
+  if (error || !claims || !userId) return { estado: 'sin-sesion', sesion: null }
 
   // El rol se lee de `admin_users` en cada petición. No se toma del JWT ni de
   // la metadata del usuario: eso lo puede editar el propio usuario y no sirve
