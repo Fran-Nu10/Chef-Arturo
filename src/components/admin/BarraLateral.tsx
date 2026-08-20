@@ -60,7 +60,7 @@ export function BarraLateral({ sesion }: { sesion: SesionAdmin }) {
       className="flex gap-1 overflow-x-auto border-b border-linea bg-papel-alt px-3 py-2 lg:h-screen lg:w-[220px] lg:flex-col lg:gap-0 lg:overflow-visible lg:border-r lg:border-b-0 lg:px-0 lg:py-0"
     >
       <div className="hidden border-b border-linea px-5 py-5 lg:block">
-        <Link href="/admin" className="no-underline">
+        <Link href="/admin" className="inline-flex min-h-[44px] items-center no-underline">
           <Marca tamano={22} />
         </Link>
         <p className="mt-2 mb-0 text-[10px] font-semibold tracking-[0.16em] text-caramelo-texto uppercase">

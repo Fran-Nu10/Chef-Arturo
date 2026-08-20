@@ -120,7 +120,9 @@ export function BannerDemo() {
   return (
     <div
       role="status"
-      className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-caramelo bg-caramelo/[0.12] px-4 py-2.5"
+      // El fondo se compone sobre papel para quedar opaco: el banner es sticky
+      // y el contenido no debe leerse a través de él al scrollear.
+      className="sticky top-0 z-30 flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-caramelo bg-papel bg-gradient-to-b from-caramelo/[0.12] to-caramelo/[0.12] px-4 py-2.5"
     >
       <p className="m-0 text-[13px] font-semibold text-caramelo-texto">
         Modo demostración — los cambios no se guardan

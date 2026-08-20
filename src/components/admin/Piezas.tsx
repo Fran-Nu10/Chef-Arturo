@@ -7,9 +7,14 @@ import { useFormStatus } from 'react-dom'
 export function BotonGuardar({
   children = 'Guardar',
   variante = 'primario',
+  name,
+  value,
 }: {
   children?: string
   variante?: 'primario' | 'secundario' | 'peligro'
+  /** Para formularios con dos envíos posibles (borrador / publicar). */
+  name?: string
+  value?: string
 }) {
   const { pending } = useFormStatus()
   const estilo =
@@ -22,6 +27,8 @@ export function BotonGuardar({
   return (
     <button
       type="submit"
+      name={name}
+      value={value}
       disabled={pending}
       className={`inline-flex min-h-[44px] items-center justify-center border px-5 text-[13.5px] font-semibold transition-colors disabled:opacity-60 ${estilo}`}
     >
@@ -98,13 +105,15 @@ export function Feedback({
     )
   }
   if (estado.errores && Object.keys(estado.errores).length > 0) {
+    // Sin nombres internos de campos: cada mensaje ya aparece junto a su
+    // campo, esto sólo avisa que hay algo para revisar.
     return (
       <div role="alert" className="border border-alerta bg-alerta-fondo px-3 py-2.5">
-        <p className="m-0 text-[13px] font-semibold text-alerta">Revisá estos campos:</p>
+        <p className="m-0 text-[13px] font-semibold text-alerta">Revisá los campos marcados:</p>
         <ul className="m-0 mt-1 flex list-none flex-col gap-0.5 p-0">
           {Object.entries(estado.errores).map(([campo, mensaje]) => (
             <li key={campo} className="text-[12.5px] text-alerta">
-              <span className="font-mono">{campo}</span>: {mensaje}
+              {mensaje}
             </li>
           ))}
         </ul>

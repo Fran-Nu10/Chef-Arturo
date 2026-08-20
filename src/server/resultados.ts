@@ -10,7 +10,8 @@ import type { z } from 'zod'
  * que lo acompañan.
  */
 export interface Resultado {
-  ok?: boolean
+  /** `true` o, directamente, el mensaje de éxito que debe ver el operador. */
+  ok?: boolean | string
   error?: string
   errores?: Record<string, string>
   id?: string

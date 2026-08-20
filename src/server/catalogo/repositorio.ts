@@ -2,8 +2,11 @@ import 'server-only'
 
 import { modoDemo } from '@/lib/supabase/env'
 import {
+  categoriaPorIdDemo,
   listarCategoriasAdminDemo,
+  listarCategoriasConDetalleDemo,
   listarProductosAdminDemo,
+  listarProductosParaOrdenarDemo,
   productoPorIdDemo,
   productosConStockBajoDemo,
 } from '@/server/demo/consultas'
@@ -154,7 +157,10 @@ export async function listarProductosAdmin(filtros: FiltrosProductos = {}) {
 
   let consulta = supabase
     .from('products')
-    .select('*, categories(name, slug)', { count: 'exact' })
+    .select(
+      '*, categories(name, slug), product_images(media_id, is_primary, position, media_assets(path))',
+      { count: 'exact' },
+    )
 
   if (filtros.estado) consulta = consulta.eq('status', filtros.estado)
   if (filtros.categoriaId) consulta = consulta.eq('category_id', filtros.categoriaId)
@@ -179,13 +185,71 @@ export async function listarProductosAdmin(filtros: FiltrosProductos = {}) {
   if (error) throw error
 
   return {
-    productos: (data ?? []) as unknown as (FilaProducto & {
-      categories: { name: string; slug: string } | null
-    })[],
+    productos: (data ?? []).map((fila) => {
+      const imagenes = (fila as unknown as { product_images?: ImagenCruda[] }).product_images ?? []
+      const principal =
+        imagenes.find((i) => i.is_primary) ??
+        [...imagenes].sort((a, b) => a.position - b.position)[0]
+      return {
+        ...(fila as unknown as FilaProducto & {
+          categories: { name: string; slug: string } | null
+        }),
+        imagen: principal?.media_assets?.path ?? null,
+      }
+    }),
     total: count ?? 0,
     pagina,
     porPagina,
   }
+}
+
+/** Producto de la pantalla «Ordenar productos»: lo mínimo para reconocerlo. */
+export interface ProductoParaOrdenar {
+  id: string
+  name: string
+  position: number
+  status: 'draft' | 'active'
+  category_id: string | null
+  imagen: string | null
+}
+
+/**
+ * Todos los productos no archivados, en su orden actual.
+ *
+ * La pantalla de orden trabaja con la lista completa: reordenar por partes
+ * con paginación no tiene sentido. Los archivados quedan afuera porque no se
+ * muestran en la tienda y ordenarlos no cambia nada.
+ */
+export async function listarProductosParaOrdenar(): Promise<ProductoParaOrdenar[] | null> {
+  if (modoDemo()) return listarProductosParaOrdenarDemo()
+
+  const supabase = await clienteServidor()
+  if (!supabase) return null
+
+  const { data, error } = await supabase
+    .from('products')
+    .select(
+      'id, name, position, status, category_id, product_images(media_id, is_primary, position, media_assets(path))',
+    )
+    .neq('status', 'archived')
+    .order('position', { ascending: true })
+
+  if (error) throw error
+
+  return (data ?? []).map((fila) => {
+    const imagenes = (fila as unknown as { product_images?: ImagenCruda[] }).product_images ?? []
+    const principal =
+      imagenes.find((i) => i.is_primary) ??
+      [...imagenes].sort((a, b) => a.position - b.position)[0]
+    return {
+      id: fila.id,
+      name: fila.name,
+      position: fila.position,
+      status: fila.status as 'draft' | 'active',
+      category_id: fila.category_id,
+      imagen: principal?.media_assets?.path ?? null,
+    }
+  })
 }
 
 /** Productos por debajo de su umbral. Sólo cuenta los que llevan stock. */
@@ -204,6 +268,57 @@ export async function productosConStockBajo() {
 
   if (error) throw error
   return (data ?? []).filter((p) => p.stock_quantity <= p.low_stock_threshold)
+}
+
+/** Categoría de la lista del panel: con miniatura y cantidad de productos. */
+export interface CategoriaConDetalle extends FilaCategoria {
+  imagen: string | null
+  cantidadProductos: number
+}
+
+export async function listarCategoriasConDetalle(): Promise<CategoriaConDetalle[] | null> {
+  if (modoDemo()) return listarCategoriasConDetalleDemo()
+
+  const supabase = await clienteServidor()
+  if (!supabase) return null
+
+  // Los archivados no cuentan: el número que ve el dueño es el de productos
+  // que existen de verdad en su catálogo.
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*, media_assets(path), products(count)')
+    .neq('products.status', 'archived')
+    .order('position', { ascending: true })
+
+  if (error) throw error
+
+  return (data ?? []).map((fila) => {
+    const { media_assets, products, ...categoria } = fila as unknown as FilaCategoria & {
+      media_assets: { path: string } | null
+      products: { count: number }[]
+    }
+    return {
+      ...categoria,
+      imagen: media_assets?.path ?? null,
+      cantidadProductos: products?.[0]?.count ?? 0,
+    }
+  })
+}
+
+export async function categoriaPorId(id: string) {
+  if (modoDemo()) return categoriaPorIdDemo(id)
+
+  const supabase = await clienteServidor()
+  if (!supabase) return null
+
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*, media_assets(path)')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data as (FilaCategoria & { media_assets: { path: string } | null }) | null
 }
 
 export async function listarCategoriasAdmin() {

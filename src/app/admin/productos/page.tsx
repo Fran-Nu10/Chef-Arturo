@@ -1,16 +1,44 @@
 import Link from 'next/link'
+import { AccionesProducto } from '@/components/admin/AccionesProducto'
 import { CabeceraAdmin, SinBackend, VacioAdmin } from '@/components/admin/Chasis'
+import { FiltrosColapsables } from '@/components/admin/FiltrosColapsables'
 import { Pildora, Tabla } from '@/components/admin/Tabla'
 import { faltantesDeBackend, panelOperativo } from '@/lib/supabase/env'
-import { ETIQUETA_ESTADO_PRODUCTO, ETIQUETA_MODALIDAD } from '@/lib/etiquetas'
+import { ETIQUETA_ESTADO_PRODUCTO, ETIQUETA_MODALIDAD_CORTA } from '@/lib/etiquetas'
 import { formatearImporte } from '@/server/dinero'
 import { exigirAdmin } from '@/server/autorizacion'
-import { listarCategoriasAdmin, listarProductosAdmin } from '@/server/catalogo/repositorio'
+import {
+  listarCategoriasAdmin,
+  listarProductosAdmin,
+  urlPublica,
+} from '@/server/catalogo/repositorio'
 import type { EstadoProducto } from '@/lib/supabase/tipos'
 
 export const metadata = { title: 'Productos' }
 
-const ESTADOS: EstadoProducto[] = ['draft', 'active', 'archived']
+const ESTADOS: EstadoProducto[] = ['active', 'draft', 'archived']
+
+const BOTON_PRIMARIO =
+  'inline-flex min-h-[44px] items-center border border-verde bg-verde px-5 text-[13.5px] font-semibold text-papel no-underline'
+const BOTON_SECUNDARIO =
+  'inline-flex min-h-[44px] items-center border border-verde px-5 text-[13.5px] font-semibold text-verde no-underline hover:bg-verde/[0.07]'
+
+/** Miniatura de la lista. Sin foto no hay hueco roto: lo dice con palabras. */
+function Miniatura({ path, alt }: { path: string | null; alt: string }) {
+  if (!path) {
+    return (
+      <span className="flex h-[60px] w-12 items-center justify-center border border-dashed border-linea-fuerte bg-papel-alt px-1 text-center text-[9px] leading-tight font-semibold tracking-wide text-tinta-suave uppercase">
+        Sin foto
+      </span>
+    )
+  }
+  return (
+    <span className="block h-[60px] w-12 overflow-hidden border border-linea bg-crema">
+      {/* eslint-disable-next-line @next/next/no-img-element -- miniatura pequeña */}
+      <img src={urlPublica(path)} alt={alt} loading="lazy" className="h-full w-full object-cover" />
+    </span>
+  )
+}
 
 export default async function PaginaProductos({
   searchParams,
@@ -28,7 +56,7 @@ export default async function PaginaProductos({
         ? (q.estado as EstadoProducto)
         : undefined,
       categoriaId: q.categoria,
-      orden: (q.orden as 'position' | 'name' | 'created_at' | 'stock') ?? 'position',
+      orden: 'position',
       pagina: Number(q.pagina ?? 1),
     }),
     listarCategoriasAdmin(),
@@ -36,18 +64,22 @@ export default async function PaginaProductos({
 
   if (!resultado) return <SinBackend faltantes={faltantesDeBackend()} />
 
+  const hayFiltrosActivos = Boolean(q.estado || q.categoria)
+
   return (
     <>
       <CabeceraAdmin
         titulo="Productos"
-        descripcion={`${resultado.total} productos en el catálogo.`}
+        descripcion={`${resultado.total} ${resultado.total === 1 ? 'producto' : 'productos'} en el catálogo.`}
         acciones={
-          <Link
-            href="/admin/productos/nuevo"
-            className="inline-flex min-h-[44px] items-center border border-verde bg-verde px-5 text-[13.5px] font-semibold text-papel no-underline"
-          >
-            Nuevo producto
-          </Link>
+          <>
+            <Link href="/admin/productos/ordenar" className={BOTON_SECUNDARIO}>
+              Ordenar productos
+            </Link>
+            <Link href="/admin/productos/nuevo" className={BOTON_PRIMARIO}>
+              Nuevo producto
+            </Link>
+          </>
         }
       />
 
@@ -61,51 +93,50 @@ export default async function PaginaProductos({
               type="search"
               name="q"
               defaultValue={q.q ?? ''}
-              placeholder="Nombre o slug"
+              placeholder="Buscar producto"
               className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm focus:border-verde focus:outline-none"
             />
           </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
-              Estado
-            </span>
-            <select name="estado" defaultValue={q.estado ?? ''}
-              className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm">
-              <option value="">Todos</option>
-              {ESTADOS.map((e) => (
-                <option key={e} value={e}>{ETIQUETA_ESTADO_PRODUCTO[e]}</option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
-              Categoría
-            </span>
-            <select name="categoria" defaultValue={q.categoria ?? ''}
-              className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm">
-              <option value="">Todas</option>
-              {(categorias ?? []).map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
-          </label>
-          <label className="flex flex-col gap-1.5">
-            <span className="text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
-              Ordenar
-            </span>
-            <select name="orden" defaultValue={q.orden ?? 'position'}
-              className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm">
-              <option value="position">Orden visual</option>
-              <option value="name">Nombre</option>
-              <option value="created_at">Más recientes</option>
-              <option value="stock">Stock</option>
-            </select>
-          </label>
-          <button
-            type="submit"
-            className="inline-flex min-h-[44px] items-center border border-verde bg-verde px-5 text-[13.5px] font-semibold text-papel"
-          >
-            Filtrar
+
+          <FiltrosColapsables abiertosAlInicio={hayFiltrosActivos}>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
+                Estado
+              </span>
+              <select
+                name="estado"
+                defaultValue={q.estado ?? ''}
+                className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm"
+              >
+                <option value="">Todos</option>
+                {ESTADOS.map((e) => (
+                  <option key={e} value={e}>
+                    {ETIQUETA_ESTADO_PRODUCTO[e]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
+                Categoría
+              </span>
+              <select
+                name="categoria"
+                defaultValue={q.categoria ?? ''}
+                className="min-h-[44px] border border-linea-fuerte bg-papel px-3 text-sm"
+              >
+                <option value="">Todas</option>
+                {(categorias ?? []).map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </FiltrosColapsables>
+
+          <button type="submit" className={BOTON_PRIMARIO}>
+            Buscar
           </button>
         </form>
 
@@ -115,38 +146,50 @@ export default async function PaginaProductos({
           vacio={
             <VacioAdmin
               titulo="Todavía no hay productos"
-              texto="Creá el primero para que aparezca en el catálogo público."
+              texto="Creá el primero para que aparezca en la tienda."
               accion={
-                <Link
-                  href="/admin/productos/nuevo"
-                  className="inline-flex min-h-[44px] items-center border border-verde bg-verde px-5 text-[13.5px] font-semibold text-papel no-underline"
-                >
-                  Nuevo producto
+                <Link href="/admin/productos/nuevo" className={BOTON_PRIMARIO}>
+                  Crear primer producto
                 </Link>
               }
             />
           }
           columnas={[
             {
+              clave: 'foto',
+              etiqueta: 'Foto',
+              render: (p) => <Miniatura path={p.imagen} alt={p.name} />,
+            },
+            {
               clave: 'nombre',
               etiqueta: 'Producto',
               render: (p) => (
-                <Link href={`/admin/productos/${p.id}`} className="font-medium text-verde">
+                <Link
+                  href={`/admin/productos/${p.id}`}
+                  className="inline-flex min-h-[44px] items-center py-1 font-medium text-verde"
+                >
                   {p.name}
-                  <span className="block font-mono text-[11px] text-tinta-suave">{p.slug}</span>
                 </Link>
               ),
             },
             {
               clave: 'categoria',
               etiqueta: 'Categoría',
-              secundaria: true,
               render: (p) => p.categories?.name ?? '—',
             },
             {
-              clave: 'modalidad',
-              etiqueta: 'Modalidad',
-              render: (p) => ETIQUETA_MODALIDAD[p.sale_mode],
+              clave: 'precio',
+              etiqueta: 'Precio',
+              render: (p) => (
+                <span className="flex flex-col items-start gap-0.5 lg:items-start">
+                  <span className="tnum text-[13.5px]">
+                    {p.price_cents != null ? formatearImporte(p.price_cents) : 'A consultar'}
+                  </span>
+                  <span className="text-[10px] font-semibold tracking-[0.06em] text-tinta-suave uppercase">
+                    {ETIQUETA_MODALIDAD_CORTA[p.sale_mode]}
+                  </span>
+                </span>
+              ),
             },
             {
               clave: 'estado',
@@ -161,25 +204,12 @@ export default async function PaginaProductos({
               ),
             },
             {
-              clave: 'stock',
-              etiqueta: 'Stock',
-              secundaria: true,
-              render: (p) =>
-                p.track_stock ? (
-                  <span
-                    className={`tnum ${p.stock_quantity <= p.low_stock_threshold ? 'text-alerta' : ''}`}
-                  >
-                    {p.stock_quantity}
-                  </span>
-                ) : (
-                  <span className="text-tinta-suave">Sin control</span>
-                ),
-            },
-            {
-              clave: 'precio',
-              etiqueta: 'Precio',
+              clave: 'acciones',
+              etiqueta: 'Acciones',
               alineacion: 'derecha',
-              render: (p) => <span className="tnum">{formatearImporte(p.price_cents)}</span>,
+              render: (p) => (
+                <AccionesProducto id={p.id} slug={p.slug} nombre={p.name} estado={p.status} />
+              ),
             },
           ]}
         />
