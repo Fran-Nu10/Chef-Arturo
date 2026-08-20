@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import { BannerDemo, BarraLateral } from '@/components/admin/Chasis'
+import { BannerDemo } from '@/components/admin/Chasis'
+import { BarraLateral } from '@/components/admin/BarraLateral'
 import { panelOperativo } from '@/lib/supabase/env'
 import { sesionAdmin } from '@/server/autorizacion'
 import { redirect } from 'next/navigation'
@@ -47,7 +48,7 @@ export default async function LayoutAdmin({ children }: { children: React.ReactN
     <div className="min-h-screen bg-papel">
       {sesion.esDemo && <BannerDemo />}
       <div className="lg:flex">
-        <BarraLateral sesion={sesion} rutaActual={ruta} />
+        <BarraLateral sesion={sesion} />
         <div className="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">{children}</div>
       </div>
     </div>
