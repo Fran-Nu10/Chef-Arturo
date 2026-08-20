@@ -6,30 +6,7 @@ import { useState, type MouseEvent } from 'react'
 import { Marca } from '@/components/layout/Header'
 import { salir } from '@/server/acciones-auth'
 import type { SesionAdmin } from '@/server/autorizacion'
-
-interface ItemNav {
-  href: string
-  etiqueta: string
-  exacto?: boolean
-  soloOwner?: boolean
-}
-
-const NAVEGACION: ItemNav[] = [
-  { href: '/admin', etiqueta: 'Resumen', exacto: true },
-  { href: '/admin/pedidos', etiqueta: 'Pedidos' },
-  { href: '/admin/productos', etiqueta: 'Productos' },
-  { href: '/admin/categorias', etiqueta: 'Categorías' },
-  { href: '/admin/contenido', etiqueta: 'Contenido' },
-  { href: '/admin/medios', etiqueta: 'Medios' },
-  { href: '/admin/clientes', etiqueta: 'Clientes' },
-  { href: '/admin/reportes', etiqueta: 'Reportes' },
-  { href: '/admin/ajustes', etiqueta: 'Ajustes', soloOwner: true },
-]
-
-export function esRutaActiva(ruta: string, item: Pick<ItemNav, 'href' | 'exacto'>): boolean {
-  if (item.exacto) return ruta === item.href
-  return ruta === item.href || ruta.startsWith(`${item.href}/`)
-}
+import { esRutaActiva, NAVEGACION } from '@/components/admin/navegacion'
 
 /**
  * Navegación cliente del panel.
