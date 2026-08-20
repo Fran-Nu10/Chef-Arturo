@@ -30,12 +30,11 @@ interface Resolucion {
 /**
  * Resuelve la identidad una sola vez por petición.
  *
- * `getUser()` no lee la cookie: valida el token contra el servidor de auth de
- * Supabase, o sea que es una llamada de red. El layout, la página y cada
- * acción preguntaban por separado, así que una sola vista del panel podía
- * disparar cuatro o cinco validaciones idénticas. `cache()` de React las
- * colapsa en una por petición sin relajar nada: sigue siendo una validación
- * real contra el servidor, y no se comparte entre peticiones ni entre usuarios.
+ * `getClaims()` verifica la firma y expiración del JWT. Con las claves asimétricas
+ * actuales usa WebCrypto y una JWKS cacheada, evitando una ida al servidor de
+ * Auth en cada clic. `cache()` de React colapsa las consultas repetidas del
+ * layout y la página dentro de la misma petición. El rol sigue consultándose
+ * en `admin_users` y protegido por RLS; nunca se confía en metadata editable.
  */
 const resolver = cache(async (): Promise<Resolucion> => {
   // Modo demostración. `modoDemo()` ya exige que NO haya backend configurado,
@@ -61,10 +60,10 @@ const resolver = cache(async (): Promise<Resolucion> => {
   const supabase = await clienteServidor()
   if (!supabase) return { estado: 'sin-backend', sesion: null }
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-  if (!user) return { estado: 'sin-sesion', sesion: null }
+  const { data, error } = await supabase.auth.getClaims()
+  const claims = data?.claims
+  const userId = typeof claims?.sub === 'string' ? claims.sub : null
+  if (error || !userId) return { estado: 'sin-sesion', sesion: null }
 
   // El rol se lee de `admin_users` en cada petición. No se toma del JWT ni de
   // la metadata del usuario: eso lo puede editar el propio usuario y no sirve
@@ -72,7 +71,7 @@ const resolver = cache(async (): Promise<Resolucion> => {
   const { data: admin } = await supabase
     .from('admin_users')
     .select('role, is_active, display_name')
-    .eq('id', user.id)
+    .eq('id', userId)
     .maybeSingle()
 
   if (!admin || !admin.is_active) return { estado: 'sin-permiso', sesion: null }
@@ -80,8 +79,8 @@ const resolver = cache(async (): Promise<Resolucion> => {
   return {
     estado: 'ok',
     sesion: {
-      userId: user.id,
-      email: user.email ?? '',
+      userId,
+      email: typeof claims.email === 'string' ? claims.email : '',
       rol: admin.role,
       nombre: admin.display_name,
       esDemo: false,
