@@ -138,3 +138,60 @@ owner. Se ejecutan con `npm run db:test`.
 | Sin captcha en el checkout | Mismo motivo |
 | El bucket `media` es de lectura pública | Es lo previsto: son las fotos del catálogo. Nada sensible debe ir ahí |
 | Rotación de credenciales | Sin procedimiento definido. Ver `docs/DEPLOYMENT.md` |
+
+
+## Los privilegios por defecto de Supabase sobre funciones
+
+Al conectar el proyecto real apareció algo que las pruebas locales no podían
+detectar. Supabase deja configurado, sobre el esquema `public`:
+
+```sql
+alter default privileges in schema public
+  grant all on functions to anon, authenticated, service_role;
+```
+
+O sea que **cada función nueva nace con un GRANT explícito a `anon`**. Las
+migraciones hacían `revoke all on function ... from public`, que revoca del
+pseudo-rol `PUBLIC` pero no toca ese grant explícito. Resultado: las nueve
+funciones quedaron publicadas en `/rest/v1/rpc/…`, incluidas las de trigger.
+
+Un PostgreSQL a secas no trae esos privilegios por defecto, así que el shim de
+`supabase/tests/` no lo reproducía y la suite local pasaba en verde. Lo levantó
+el linter del propio proyecto Supabase.
+
+**Impacto real: bajo.** Los helpers devuelven falso o nulo sin sesión, y una
+función de trigger llamada directamente falla. Pero no hay motivo para tenerlas
+expuestas.
+
+La migración `0008` lo corrige revocando de `public` **y** de los roles. Ésta
+es la matriz que queda, y conviene comprobarla después de agregar cualquier
+función nueva:
+
+| Función | `anon` | `authenticated` |
+| --- | --- | --- |
+| `create_public_order` | ✅ | ✅ |
+| `is_active_admin` | ❌ | ✅ |
+| `is_owner` | ❌ | ✅ |
+| `admin_role` | ❌ | ❌ |
+| `media_asset_usage` | ❌ | ✅ |
+| `touch_updated_at` | ❌ | ❌ |
+| `log_order_status_change` | ❌ | ❌ |
+| `prevent_delete_sold_product` | ❌ | ❌ |
+| `restore_stock_on_cancel` | ❌ | ❌ |
+
+`create_public_order` es la única deliberadamente pública: es la puerta del
+checkout y valida todo lo que recibe.
+
+`authenticated` necesita `is_active_admin()` e `is_owner()` porque las
+políticas RLS se evalúan con los privilegios de quien consulta: sin EXECUTE
+fallaría toda la lectura del panel.
+
+Comprobación:
+
+```sql
+select p.proname,
+       has_function_privilege('anon', p.oid, 'execute') as anon,
+       has_function_privilege('authenticated', p.oid, 'execute') as autenticado
+from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+where n.nspname = 'public' order by p.proname;
+```
