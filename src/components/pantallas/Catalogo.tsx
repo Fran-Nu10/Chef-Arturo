@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { useMemo, useState } from 'react'
-import { CATEGORIAS, NEGOCIO, PRODUCTOS } from '@/content/datos'
+import { NEGOCIO } from '@/content/datos'
+import type { Categoria, Producto } from '@/content/tipos'
 import type { CategoriaSlug, Modalidad } from '@/content/tipos'
 import { BotonEnlace } from '@/components/ui/Boton'
 import { IconoBuscar } from '@/components/ui/Iconos'
@@ -20,7 +21,20 @@ const MODALIDADES: { valor: Modalidad; etiqueta: string }[] = [
  * sin resultados. La cantidad de productos figura como pendiente: no se afirma
  * un número que todavía no está validado.
  */
-export function Catalogo({ categoria }: { categoria?: CategoriaSlug }) {
+export function Catalogo({
+  categoria,
+  categorias,
+  productos,
+  caido = false,
+}: {
+  categoria?: CategoriaSlug
+  categorias: Categoria[]
+  productos: Producto[]
+  /** La base no respondió. Distinto de "todavía no hay nada cargado". */
+  caido?: boolean
+}) {
+  const CATEGORIAS = categorias
+  const PRODUCTOS = productos
   const [busqueda, setBusqueda] = useState('')
   const [modalidades, setModalidades] = useState<Modalidad[]>([])
 
@@ -34,7 +48,27 @@ export function Catalogo({ categoria }: { categoria?: CategoriaSlug }) {
       if (termino && !p.nombre.toLowerCase().includes(termino)) return false
       return true
     })
-  }, [busqueda, categoria, modalidades])
+  }, [busqueda, categoria, modalidades, PRODUCTOS])
+
+  // Catálogo sin cargar todavía. Se dice, en lugar de mostrar una grilla vacía
+  // o rellenarla con ejemplos.
+  if (PRODUCTOS.length === 0 && CATEGORIAS.length === 0) {
+    return (
+      <div className="px-[clamp(16px,3.4vw,48px)] py-[clamp(48px,7vw,96px)]">
+        <EstadoCentrado
+          icono={<span className="font-display text-[44px]">·</span>}
+          titulo={caido ? 'No pudimos cargar la vitrina' : 'La vitrina todavía está vacía'}
+          texto={
+            caido
+              ? 'Volvé a intentar en un rato. Si te urge, escribinos y te respondemos.'
+              : 'Estamos cargando el catálogo. Mientras tanto podés escribirnos y te contamos qué hay.'
+          }
+        >
+          <BotonEnlace href={NEGOCIO.whatsapp}>Escribinos</BotonEnlace>
+        </EstadoCentrado>
+      </div>
+    )
+  }
 
   const alternarModalidad = (m: Modalidad) =>
     setModalidades((prev) =>

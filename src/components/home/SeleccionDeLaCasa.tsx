@@ -2,17 +2,13 @@
 
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useState } from 'react'
-import { PRODUCTOS, SELECCION_HOME } from '@/content/datos'
+import type { Producto } from '@/content/tipos'
 import { Boton, EnlaceEditorial } from '@/components/ui/Boton'
 import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { EncabezadoSeccion } from '@/components/ui/Reveal'
 import { TagModalidad } from '@/components/ui/TagModalidad'
 import { VistaRapida } from '@/components/ui/VistaRapida'
 import { useAgregar } from '@/lib/agregar'
-
-const SELECCION = SELECCION_HOME.map(
-  (slug) => PRODUCTOS.find((p) => p.slug === slug)!,
-).filter(Boolean)
 
 /**
  * 03 · SELECCIÓN DE LA CASA — módulo editorial de compra, no una grilla uniforme.
@@ -23,20 +19,26 @@ const SELECCION = SELECCION_HOME.map(
  * Estados representados: reposo, seleccionado, agotado, precio pendiente,
  * anticipación por confirmar, agregando y agregado.
  */
-export function SeleccionDeLaCasa() {
+export function SeleccionDeLaCasa({ seleccion }: { seleccion: Producto[] }) {
+  const SELECCION = seleccion
   const [indice, setIndice] = useState(0)
   const [vistaRapida, setVistaRapida] = useState(false)
   const [modalidad, setModalidad] = useState<'directa' | 'encargo'>('directa')
   const reducido = useReducedMotion()
 
-  const protagonista = SELECCION[indice]
+  // `useAgregar` ya acepta `undefined`, así que el catálogo vacío no rompe la
+  // regla de los hooks: se llama siempre y la sección decide qué mostrar.
+  const protagonista: Producto | undefined = SELECCION[indice]
   const { activar, aspecto, estado } = useAgregar(protagonista)
 
   const elegir = (i: number) => {
     if (i === indice) return
     setIndice(i)
-    setModalidad(SELECCION[i].modalidad === 'encargo' ? 'encargo' : 'directa')
+    setModalidad(SELECCION[i]?.modalidad === 'encargo' ? 'encargo' : 'directa')
   }
+
+  // Sin productos cargados la sección no se rellena con ejemplos: se omite.
+  if (SELECCION.length === 0) return null
 
   return (
     <section
