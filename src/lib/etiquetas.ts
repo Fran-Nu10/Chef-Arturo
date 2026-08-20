@@ -18,16 +18,27 @@ export const ETIQUETA_ESTADO_PAGO: Record<EstadoPago, string> = {
   refunded: 'Reembolsado',
 }
 
+/**
+ * Lenguaje comercial, no técnico: el dueño ve "Publicado" u "Oculto", nunca
+ * "active" ni "draft".
+ */
 export const ETIQUETA_ESTADO_PRODUCTO: Record<EstadoProducto, string> = {
-  draft: 'Borrador',
-  active: 'Activo',
+  draft: 'Oculto',
+  active: 'Publicado',
   archived: 'Archivado',
 }
 
 export const ETIQUETA_MODALIDAD: Record<ModalidadVenta, string> = {
   direct: 'Compra directa',
   preorder: 'Por encargo',
-  quote: 'Con cotización',
+  quote: 'Consultar precio',
+}
+
+/** Versión corta para la etiqueta junto al precio en la lista de productos. */
+export const ETIQUETA_MODALIDAD_CORTA: Record<ModalidadVenta, string> = {
+  direct: 'Compra directa',
+  preorder: 'Por encargo',
+  quote: 'Consultar',
 }
 
 export function tonoEstadoPedido(estado: EstadoPedido) {

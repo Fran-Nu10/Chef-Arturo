@@ -17,6 +17,25 @@ export const Slug = z
 
 export const Uuid = z.string().uuid('Identificador inválido')
 
+/**
+ * Deriva un slug de un nombre.
+ *
+ * El dueño ya no escribe slugs: se generan de acá y las colisiones se
+ * resuelven en el servidor con un sufijo numérico. Si el nombre no deja
+ * ningún carácter usable, cae a 'producto'/'categoria' según quien llame.
+ */
+export function slugificar(texto: string, respaldo = 'producto'): string {
+  const slug = texto
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 72)
+    .replace(/-+$/, '')
+  return slug.length >= 2 ? slug : respaldo
+}
+
 /** Teléfono uruguayo o internacional, normalizado a dígitos. */
 export const Telefono = z
   .string()

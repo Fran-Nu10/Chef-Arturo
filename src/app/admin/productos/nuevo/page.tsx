@@ -16,7 +16,7 @@ export default async function PaginaNuevoProducto() {
       <CabeceraAdmin
         titulo="Nuevo producto"
         migas={[{ etiqueta: 'Productos', href: '/admin/productos' }, { etiqueta: 'Nuevo' }]}
-        descripcion="Se crea como borrador salvo que elijas otro estado."
+        descripcion="Foto, nombre, categoría y precio: con eso alcanza para publicarlo."
       />
       <div className="px-4 py-6 lg:px-8">
         <FormularioProducto categorias={categorias ?? []} />

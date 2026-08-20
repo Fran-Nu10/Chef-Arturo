@@ -68,11 +68,25 @@ export function listarProductosAdminDemo(filtros: {
   return {
     productos: lista
       .slice(desde, desde + porPagina)
-      .map((p) => ({ ...p, categories: categoriaDe(p) })),
+      // Sin relaciones producto→imagen en la demostración: miniatura vacía.
+      .map((p) => ({ ...p, categories: categoriaDe(p), imagen: null })),
     total: lista.length,
     pagina,
     porPagina,
   }
+}
+
+export function listarProductosParaOrdenarDemo() {
+  return PRODUCTOS_DEMO.filter((p) => p.status !== 'archived')
+    .sort((a, b) => a.position - b.position)
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      position: p.position,
+      status: p.status as 'draft' | 'active',
+      category_id: p.category_id,
+      imagen: null,
+    }))
 }
 
 export function productosConStockBajoDemo() {
