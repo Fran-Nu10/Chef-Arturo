@@ -36,7 +36,14 @@ const NOMBRES: Record<ClaveSeccion, string> = {
  */
 const SECCIONES_OBSOLETAS: string[] = ['mostrador']
 
-export function EditorSecciones({ secciones }: { secciones: FilaSeccion[] }) {
+export function EditorSecciones({
+  secciones,
+  mediosPorId,
+}: {
+  secciones: FilaSeccion[]
+  /** URL pública de cada imagen ya guardada, para el subidor de contenido. */
+  mediosPorId: Record<string, string>
+}) {
   const visibles = secciones.filter((s) => !SECCIONES_OBSOLETAS.includes(s.key))
   const [abierta, setAbierta] = useState<string | null>(visibles[0]?.key ?? null)
 
@@ -56,6 +63,7 @@ export function EditorSecciones({ secciones }: { secciones: FilaSeccion[] }) {
             nombre={NOMBRES[s.key as ClaveSeccion] ?? s.key}
             abierta={abierta === s.key}
             onAbrir={() => setAbierta(abierta === s.key ? null : s.key)}
+            mediosPorId={mediosPorId}
           />
         ))}
     </div>
@@ -67,11 +75,13 @@ function SeccionEditable({
   nombre,
   abierta,
   onAbrir,
+  mediosPorId,
 }: {
   seccion: FilaSeccion
   nombre: string
   abierta: boolean
   onAbrir: () => void
+  mediosPorId: Record<string, string>
 }) {
   const [guardado, accionGuardar] = useActionState(guardarBorradorSeccion, {} as Resultado)
   const [publicado, accionPublicar] = useActionState(publicarSeccion, {} as Resultado)
@@ -130,6 +140,7 @@ function SeccionEditable({
             clave={seccion.key as ClaveSeccion}
             valor={contenido}
             onCambio={setContenido}
+            mediosPorId={mediosPorId}
           />
 
           <form action={accionGuardar} className="flex flex-col gap-3">

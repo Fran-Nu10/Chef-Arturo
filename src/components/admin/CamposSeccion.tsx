@@ -3,6 +3,7 @@
 import type { ClaveSeccion } from '@/server/contenido/esquemas'
 import { DESTINOS_PERMITIDOS } from '@/server/contenido/esquemas'
 import { AreaTexto, Campo, Casilla, Entrada, Seleccion } from './Piezas'
+import { SubidorImagenContenido } from './SubidorImagenContenido'
 
 /**
  * Formulario estructurado de cada sección.
@@ -40,6 +41,8 @@ interface Props {
   clave: ClaveSeccion
   valor: Valor
   onCambio: (v: Valor) => void
+  /** URL pública de cada imagen ya guardada, para mostrarla sin ids. */
+  mediosPorId: Record<string, string>
 }
 
 function CampoTextoCtl({
@@ -103,41 +106,37 @@ function CampoCta({
   )
 }
 
+/**
+ * La imagen de una sección se elige y se sube desde acá. El identificador
+ * viaja dentro del JSON del borrador sin pasar por los ojos del dueño.
+ */
 function CampoMedia({
   etiqueta,
   ruta,
   valor,
   onCambio,
+  mediosPorId,
 }: {
   etiqueta: string
   ruta: string
   valor: Valor
   onCambio: (v: Valor) => void
+  mediosPorId: Record<string, string>
 }) {
+  const mediaId = leer(valor, `${ruta}.mediaId`) || null
   return (
-    <fieldset className="m-0 flex flex-col gap-3 border border-linea p-3">
-      <legend className="px-1 text-xs font-semibold tracking-[0.05em] text-caramelo-texto uppercase">
-        {etiqueta}
-      </legend>
-      <CampoTextoCtl
-        etiqueta="Id de la imagen"
-        ruta={`${ruta}.mediaId`}
-        valor={valor}
-        onCambio={onCambio}
-        ayuda="Copialo desde Medios. Vacío deja el hueco marcado como pendiente."
-      />
-      <CampoTextoCtl
-        etiqueta="Texto alternativo"
-        ruta={`${ruta}.alt`}
-        valor={valor}
-        onCambio={onCambio}
-        ayuda="Describí la escena. No nombres un plato que no esté validado."
-      />
-    </fieldset>
+    <SubidorImagenContenido
+      etiqueta={etiqueta}
+      mediaId={mediaId}
+      alt={leer(valor, `${ruta}.alt`)}
+      urlExistente={mediaId ? (mediosPorId[mediaId] ?? null) : null}
+      onImagen={(id) => onCambio(escribir(valor, `${ruta}.mediaId`, id))}
+      onAlt={(texto) => onCambio(escribir(valor, `${ruta}.alt`, texto))}
+    />
   )
 }
 
-export function CamposSeccion({ clave, valor, onCambio }: Props) {
+export function CamposSeccion({ clave, valor, onCambio, mediosPorId }: Props) {
   const t = (etiqueta: string, ruta: string, largo = false, ayuda?: string) => (
     <CampoTextoCtl
       key={ruta}
@@ -159,7 +158,7 @@ export function CamposSeccion({ clave, valor, onCambio }: Props) {
           {t('Bajada', 'bajada', true)}
           <CampoCta etiqueta="CTA principal" ruta="ctaPrimario" valor={valor} onCambio={onCambio} />
           <CampoCta etiqueta="CTA secundario" ruta="ctaSecundario" valor={valor} onCambio={onCambio} />
-          <CampoMedia etiqueta="Imagen del arco" ruta="media" valor={valor} onCambio={onCambio} />
+          <CampoMedia etiqueta="Imagen del arco" ruta="media" valor={valor} onCambio={onCambio} mediosPorId={mediosPorId} />
           <Casilla
             etiqueta="Marcar el video como pendiente"
             checked={valor.videoPendiente !== false}
@@ -190,7 +189,7 @@ export function CamposSeccion({ clave, valor, onCambio }: Props) {
           {t('Frase 1', 'frases.0')}
           {t('Frase 2', 'frases.1')}
           {t('Frase 3', 'frases.2')}
-          <CampoMedia etiqueta="Poster del video" ruta="media" valor={valor} onCambio={onCambio} />
+          <CampoMedia etiqueta="Poster del video" ruta="media" valor={valor} onCambio={onCambio} mediosPorId={mediosPorId} />
           <Casilla
             etiqueta="Marcar el video como pendiente"
             checked={valor.videoPendiente !== false}
@@ -206,7 +205,7 @@ export function CamposSeccion({ clave, valor, onCambio }: Props) {
           {t('Kicker', 'kicker')}
           {t('Título', 'titulo')}
           {t('Bajada', 'bajada', true)}
-          <CampoMedia etiqueta="Imagen" ruta="media" valor={valor} onCambio={onCambio} />
+          <CampoMedia etiqueta="Imagen" ruta="media" valor={valor} onCambio={onCambio} mediosPorId={mediosPorId} />
         </div>
       )
 
@@ -251,7 +250,7 @@ export function CamposSeccion({ clave, valor, onCambio }: Props) {
           <CampoCta etiqueta="CTA principal" ruta="ctaPrimario" valor={valor} onCambio={onCambio} />
           <CampoCta etiqueta="CTA secundario" ruta="ctaSecundario" valor={valor} onCambio={onCambio} />
           {t('Nota', 'nota', false, 'Por ejemplo: "Ubicación exacta pendiente de validación".')}
-          <CampoMedia etiqueta="Imagen" ruta="media" valor={valor} onCambio={onCambio} />
+          <CampoMedia etiqueta="Imagen" ruta="media" valor={valor} onCambio={onCambio} mediosPorId={mediosPorId} />
         </div>
       )
 

@@ -82,12 +82,3 @@ export async function listarMedios() {
   return data
 }
 
-/** Dónde se usa un archivo. El panel lo consulta antes de ofrecer el borrado. */
-export async function usoDeMedio(mediaId: string) {
-  const supabase = await clienteServidor()
-  if (!supabase) return null
-
-  const { data, error } = await supabase.rpc('media_asset_usage', { p_media_id: mediaId })
-  if (error) throw error
-  return data
-}

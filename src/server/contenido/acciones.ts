@@ -6,7 +6,6 @@ import { exigirAdmin, exigirOwner } from '@/server/autorizacion'
 import { rechazoDemo } from '@/server/demo/guardia'
 import { confirmarEscritura } from '@/server/resultados'
 import type { Resultado } from '@/server/resultados'
-import { Uuid } from '@/server/validacion'
 import { esClaveSeccion, mediosDeSeccion, validarSeccion } from './esquemas'
 
 const NO_ALCANZO =
@@ -48,18 +47,26 @@ export async function guardarBorradorSeccion(
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
+  const mediaIds = mediosDeSeccion(validacion.datos)
   const resultado = await confirmarEscritura(
     supabase
       .from('site_sections')
       .update({
         draft: validacion.datos as Record<string, unknown>,
-        media_ids: mediosDeSeccion(validacion.datos),
+        media_ids: mediaIds,
       })
       .eq('key', clave)
       .select('key'),
     NO_ALCANZO,
   )
   if (!resultado.ok) return resultado
+
+  // Las imágenes subidas desde el editor nacen marcadas como temporales;
+  // guardar el borrador que las referencia las confirma. Mejor esfuerzo: si
+  // esta escritura falla, sólo queda una marca conservadora de más.
+  if (mediaIds.length > 0) {
+    await supabase.from('media_assets').update({ is_temporary: false }).in('id', mediaIds)
+  }
 
   revalidatePath('/admin/contenido')
   return resultado
@@ -133,67 +140,6 @@ export async function alternarSeccion(clave: string, habilitada: boolean): Promi
   if (!resultado.ok) return resultado
   revalidatePath('/')
   revalidatePath('/admin/contenido')
-  return resultado
-}
-
-/**
- * Borra un archivo de medios.
- *
- * Antes comprueba que no esté en uso: si un producto o una sección lo
- * referencia, se rechaza con el detalle de quién lo usa.
- */
-export async function borrarMedio(mediaId: string): Promise<Resultado> {
-  await exigirAdmin()
-  const id = Uuid.safeParse(mediaId)
-  if (!id.success) return { error: 'Archivo inválido.' }
-
-  const demo = rechazoDemo()
-  if (demo) return demo
-
-  const supabase = await clienteServidor()
-  if (!supabase) return { error: 'El backend no está configurado.' }
-
-  const { data: usos, error: errorUsos } = await supabase.rpc('media_asset_usage', {
-    p_media_id: id.data,
-  })
-  // Si no se puede comprobar el uso, no se borra: el riesgo es dejar un hueco
-  // roto en el sitio.
-  if (errorUsos) return { error: 'No se pudo comprobar si el archivo está en uso.' }
-  if (usos && usos.length > 0) {
-    const donde = usos.map((u) => u.usage_label).slice(0, 5).join(', ')
-    return { error: `No se puede borrar: lo usa ${donde}.` }
-  }
-
-  const { data: medio } = await supabase
-    .from('media_assets')
-    .select('bucket, path')
-    .eq('id', id.data)
-    .maybeSingle()
-
-  // Primero la fila, después el objeto. Al revés —como estaba— un borrado que
-  // RLS bloqueaba en silencio ya había destruido el archivo: quedaba la fila
-  // apuntando a un objeto inexistente y la acción decía que todo salió bien.
-  const resultado = await confirmarEscritura(
-    supabase.from('media_assets').delete().eq('id', id.data).select('id'),
-    'No se borró: el archivo no existe o no tenés permiso para eliminarlo.',
-  )
-  if (!resultado.ok) return resultado
-
-  if (medio) {
-    const { error: errorStorage } = await supabase.storage
-      .from(medio.bucket)
-      .remove([medio.path])
-    if (errorStorage) {
-      // La fila ya no está; el objeto sí. Se dice, porque queda ocupando
-      // espacio y hay que limpiarlo a mano.
-      return {
-        ok: true,
-        error: `Se quitó del listado, pero el archivo sigue en Storage (${medio.bucket}/${medio.path}). Borralo desde Supabase.`,
-      }
-    }
-  }
-
-  revalidatePath('/admin/medios')
   return resultado
 }
 

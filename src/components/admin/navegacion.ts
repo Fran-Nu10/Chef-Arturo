@@ -11,7 +11,6 @@ export const NAVEGACION: ItemNav[] = [
   { href: '/admin/productos', etiqueta: 'Productos' },
   { href: '/admin/categorias', etiqueta: 'Categorías' },
   { href: '/admin/contenido', etiqueta: 'Contenido' },
-  { href: '/admin/medios', etiqueta: 'Medios' },
   { href: '/admin/clientes', etiqueta: 'Clientes' },
   { href: '/admin/reportes', etiqueta: 'Reportes' },
   { href: '/admin/ajustes', etiqueta: 'Ajustes', soloOwner: true },
