@@ -6,9 +6,9 @@ import { entornoPublico, hayBackend } from '@/lib/supabase/env'
  * Renovación de sesión.
  *
  * Los tokens de Supabase caducan; sin este paso, un Server Component podría
- * leer una sesión vencida. `getUser()` fuerza la validación contra el servidor
- * de auth y, si hace falta, refresca las cookies antes de que la petición
- * llegue a la página.
+ * leer una sesión vencida. `getClaims()` verifica el JWT con la clave pública cacheada y, si hace falta,
+ * refresca las cookies antes de que la petición llegue a la página. Evita una
+ * llamada remota de Auth en cada transición con una sesión vigente.
  *
  * No decide permisos: de eso se encarga el layout de `/admin`, del lado
  * servidor. Acá sólo se mantiene la sesión al día.
@@ -43,8 +43,8 @@ export async function middleware(request: NextRequest) {
     },
   )
 
-  // No quitar: es la llamada que dispara el refresco.
-  await supabase.auth.getUser()
+  // No quitar: verifica la identidad y dispara el refresco cuando corresponde.
+  await supabase.auth.getClaims()
 
   return respuesta
 }
