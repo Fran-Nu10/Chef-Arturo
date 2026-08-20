@@ -13,8 +13,10 @@ export const NEGOCIO = {
   autoras: 'by Julia y Montserrat',
   ciudad: 'Florida, Uruguay',
   entrega: 'retiro y entrega',
-  /** wa.me definitivo pendiente: el enlace no se afirma todavía. */
-  whatsapp: '#whatsapp-pendiente',
+  // Número confirmado por la casa (docs/CATALOGO_REAL_V1.md). El secundario,
+  // 099 079 177, no tiene un CTA propio en la interfaz: no se agrega un
+  // segundo botón de WhatsApp que el diseño aprobado no contempla.
+  whatsapp: 'https://wa.me/59899786781',
   ubicacion: 'Ubicación exacta: pendiente de validación.',
 } as const
 

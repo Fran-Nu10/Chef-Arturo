@@ -132,11 +132,14 @@ de esas variables vía las clases de Tailwind (`bg-verde`, `text-titulo`, `borde
 
 ### Contenido
 
-`src/content/` modela productos, categorías, campañas, galería y FAQ como colecciones.
-**Nada de eso afirma un hecho del negocio**: los precios dicen "Precio pendiente", las
-respuestas del FAQ dicen "Contenido pendiente de validación" y el enlace de WhatsApp es
-un placeholder (`#whatsapp-pendiente`). Reemplazar esos valores es un cambio de datos,
-no de diseño.
+`src/content/` modela las campañas, la galería y las preguntas frecuentes de la home
+como colecciones de fixtures. **Nada de eso afirma un hecho del negocio no validado**:
+las respuestas del FAQ dicen "Contenido pendiente de validación". El catálogo real
+—categorías y productos— ya no vive acá: se carga en Supabase desde
+`supabase/migrations/` y el storefront lo lee en vivo (`docs/CATALOGO_REAL_V1.md`).
+
+El WhatsApp del negocio (`NEGOCIO.whatsapp`) es el número confirmado por la casa, no un
+placeholder.
 
 ## Movimiento
 
