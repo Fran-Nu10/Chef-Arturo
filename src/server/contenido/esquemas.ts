@@ -62,6 +62,14 @@ export const SeccionCategorias = z.object({
   ordenSlugs: z.array(z.enum(['pasteleria', 'merienda', 'lunch'])).max(3),
 })
 
+/**
+ * OBSOLETA — se conserva sólo por compatibilidad con la fila ya sembrada en
+ * `site_sections`. La home dejó de tener "Del mostrador de hoy": el catálogo
+ * se muestra completo, agrupado por categoría, directo desde los productos.
+ * Esta sección no se renderiza, no controla qué productos aparecen y el
+ * editor del panel la oculta (`SECCIONES_OBSOLETAS`). No se borra la fila
+ * remota para no hacer una migración destructiva.
+ */
 export const SeccionMostrador = z.object({
   numero: Texto(4).default('03'),
   kicker: Texto(60).default(''),
