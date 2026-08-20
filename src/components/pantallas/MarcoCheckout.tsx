@@ -1,10 +1,30 @@
 'use client'
 
 import type { ReactNode } from 'react'
-import { productoPorSlug } from '@/content/datos'
 import { usePedido } from '@/lib/estado-pedido'
+import { useProductoPorSlug } from '@/lib/productos'
 import { Actual, BarraContexto } from '@/components/pantallas/BarraContexto'
 import { PasosCheckout } from '@/components/pantallas/PasosCheckout'
+
+/** Un ítem del resumen lateral: nombre, cantidad y precio de una línea. */
+function ItemResumen({
+  linea,
+}: {
+  linea: { productoSlug: string; cantidad: number }
+}) {
+  const producto = useProductoPorSlug(linea.productoSlug)
+  if (!producto) return null
+
+  return (
+    <li className="flex justify-between gap-3 border-b border-linea pb-2 text-[12.5px]">
+      <span>
+        {producto.nombre}
+        <span className="tnum text-tinta-suave"> ×{linea.cantidad}</span>
+      </span>
+      <span className="text-tinta-suave">{producto.precio}</span>
+    </li>
+  )
+}
 
 /**
  * Marco de los pasos 11–14 del checkout.
@@ -43,22 +63,9 @@ export function MarcoCheckout({
         <div className="sticky top-24 mt-14 flex flex-col gap-3 border border-linea bg-papel-alt p-5">
           <h2 className="m-0 font-display text-xl font-normal">Tu pedido</h2>
           <ul className="m-0 flex list-none flex-col gap-2 p-0">
-            {lineas.map((linea) => {
-              const producto = productoPorSlug(linea.productoSlug)
-              if (!producto) return null
-              return (
-                <li
-                  key={linea.productoSlug}
-                  className="flex justify-between gap-3 border-b border-linea pb-2 text-[12.5px]"
-                >
-                  <span>
-                    {producto.nombre}
-                    <span className="tnum text-tinta-suave"> ×{linea.cantidad}</span>
-                  </span>
-                  <span className="text-tinta-suave">{producto.precio}</span>
-                </li>
-              )
-            })}
+            {lineas.map((linea) => (
+              <ItemResumen key={linea.productoSlug} linea={linea} />
+            ))}
           </ul>
           <dl className="m-0 flex flex-col gap-1 text-[12.5px]">
             <div className="flex justify-between gap-3">

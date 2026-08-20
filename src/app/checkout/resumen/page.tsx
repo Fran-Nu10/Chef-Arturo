@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { productoPorSlug } from '@/content/datos'
 import { usePedido } from '@/lib/estado-pedido'
+import { useProductos } from '@/lib/productos'
 import { Boton } from '@/components/ui/Boton'
 import { Aviso, Resumen } from '@/components/pantallas/Campos'
 import { Pantalla } from '@/components/pantallas/Estructura'
@@ -16,9 +16,10 @@ const EDITAR =
 export default function PasoResumen() {
   const { lineas, cantidad, entrega, fecha, franja } = usePedido()
   const router = useRouter()
+  const productos = useProductos()
 
   const porModalidad = lineas.reduce<Record<string, number>>((acc, linea) => {
-    const producto = productoPorSlug(linea.productoSlug)
+    const producto = productos.find((p) => p.slug === linea.productoSlug)
     if (!producto) return acc
     acc[producto.modalidad] = (acc[producto.modalidad] ?? 0) + 1
     return acc

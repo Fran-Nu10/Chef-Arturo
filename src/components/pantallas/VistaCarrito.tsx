@@ -1,13 +1,86 @@
 'use client'
 
-import { NEGOCIO, productoPorSlug } from '@/content/datos'
+import { NEGOCIO } from '@/content/datos'
 import { usePedido } from '@/lib/estado-pedido'
+import { useProductoPorSlug } from '@/lib/productos'
 import { BotonEnlace } from '@/components/ui/Boton'
 import { IconoCarrito } from '@/components/ui/Iconos'
 import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { nombreModalidad } from '@/components/ui/TagModalidad'
 import { Actual, BarraContexto } from '@/components/pantallas/BarraContexto'
 import { EstadoCentrado } from '@/components/pantallas/Estructura'
+
+/** Una línea del carrito, con su propia data y sus propios controles. */
+function LineaVistaCarrito({
+  linea,
+}: {
+  linea: { productoSlug: string; cantidad: number; fecha?: string }
+}) {
+  const { cambiarCantidad, quitar } = usePedido()
+  const producto = useProductoPorSlug(linea.productoSlug)
+  if (!producto) return null
+
+  const porEncargo = producto.modalidad === 'encargo'
+
+  return (
+    <div className="grid grid-cols-[84px_1fr_auto] items-center gap-3.5 border-b border-linea py-3.5">
+      <MediaPendiente
+        etiqueta={producto.imagenPendiente}
+        slot={`producto-${producto.slug}`}
+        sizes="84px"
+        ratio="1/1"
+        className="w-full text-[9px]"
+      />
+      <div className="flex flex-col gap-1">
+        <span className="font-display text-[17px] leading-tight">{producto.nombre}</span>
+        <span
+          className={`text-[10px] font-semibold tracking-[0.06em] uppercase ${
+            porEncargo ? 'text-caramelo-texto' : 'text-verde'
+          }`}
+        >
+          {nombreModalidad(producto.modalidad)}
+        </span>
+        {porEncargo ? (
+          <span className="w-fit border border-dashed border-caramelo px-2 py-[5px] text-[11px] font-medium text-caramelo-texto">
+            {linea.fecha ?? 'Fecha a elegir'} — anticipación por confirmar
+          </span>
+        ) : (
+          <div className="flex w-fit items-center border border-linea-fuerte">
+            <button
+              type="button"
+              onClick={() => cambiarCantidad(linea.productoSlug, linea.cantidad - 1)}
+              aria-label={`Quitar una unidad de ${producto.nombre}`}
+              className="h-11 w-11 text-base font-semibold"
+            >
+              −
+            </button>
+            <span className="tnum w-7 text-center text-[13px] font-semibold">
+              {linea.cantidad}
+            </span>
+            <button
+              type="button"
+              onClick={() => cambiarCantidad(linea.productoSlug, linea.cantidad + 1)}
+              aria-label={`Agregar una unidad de ${producto.nombre}`}
+              className="h-11 w-11 text-base font-semibold"
+            >
+              +
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="flex flex-col items-end gap-2">
+        <span className="text-xs font-semibold text-tinta-suave">{producto.precio}</span>
+        <button
+          type="button"
+          onClick={() => quitar(linea.productoSlug)}
+          className="min-h-[44px] text-[11.5px] font-medium text-alerta underline underline-offset-2"
+        >
+          Quitar
+        </button>
+      </div>
+    </div>
+  )
+}
 
 /**
  * Pantallas 9 y 10 · Carrito.
@@ -16,7 +89,7 @@ import { EstadoCentrado } from '@/components/pantallas/Estructura'
  * validación y la entrega se define en el paso siguiente.
  */
 export function VistaCarrito() {
-  const { lineas, cantidad, cambiarCantidad, quitar } = usePedido()
+  const { lineas, cantidad } = usePedido()
 
   if (lineas.length === 0) {
     return (
@@ -46,80 +119,9 @@ export function VistaCarrito() {
       </BarraContexto>
 
       <div className="flex flex-col px-4 pb-6">
-        {lineas.map((linea) => {
-          const producto = productoPorSlug(linea.productoSlug)
-          if (!producto) return null
-          const porEncargo = producto.modalidad === 'encargo'
-          return (
-            <div
-              key={linea.productoSlug}
-              className="grid grid-cols-[84px_1fr_auto] items-center gap-3.5 border-b border-linea py-3.5"
-            >
-              <MediaPendiente
-                etiqueta={producto.imagenPendiente}
-                slot={`producto-${producto.slug}`}
-                sizes="84px"
-                ratio="1/1"
-                className="w-full text-[9px]"
-              />
-              <div className="flex flex-col gap-1">
-                <span className="font-display text-[17px] leading-tight">
-                  {producto.nombre}
-                </span>
-                <span
-                  className={`text-[10px] font-semibold tracking-[0.06em] uppercase ${
-                    porEncargo ? 'text-caramelo-texto' : 'text-verde'
-                  }`}
-                >
-                  {nombreModalidad(producto.modalidad)}
-                </span>
-                {porEncargo ? (
-                  <span className="w-fit border border-dashed border-caramelo px-2 py-[5px] text-[11px] font-medium text-caramelo-texto">
-                    {linea.fecha ?? 'Fecha a elegir'} — anticipación por confirmar
-                  </span>
-                ) : (
-                  <div className="flex w-fit items-center border border-linea-fuerte">
-                    <button
-                      type="button"
-                      onClick={() =>
-                        cambiarCantidad(linea.productoSlug, linea.cantidad - 1)
-                      }
-                      aria-label={`Quitar una unidad de ${producto.nombre}`}
-                      className="h-11 w-11 text-base font-semibold"
-                    >
-                      −
-                    </button>
-                    <span className="tnum w-7 text-center text-[13px] font-semibold">
-                      {linea.cantidad}
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        cambiarCantidad(linea.productoSlug, linea.cantidad + 1)
-                      }
-                      aria-label={`Agregar una unidad de ${producto.nombre}`}
-                      className="h-11 w-11 text-base font-semibold"
-                    >
-                      +
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="flex flex-col items-end gap-2">
-                <span className="text-xs font-semibold text-tinta-suave">
-                  {producto.precio}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => quitar(linea.productoSlug)}
-                  className="min-h-[44px] text-[11.5px] font-medium text-alerta underline underline-offset-2"
-                >
-                  Quitar
-                </button>
-              </div>
-            </div>
-          )
-        })}
+        {lineas.map((linea) => (
+          <LineaVistaCarrito key={linea.productoSlug} linea={linea} />
+        ))}
 
         <div className="flex flex-col gap-2 border-b border-linea py-4">
           <div className="flex justify-between text-[13px] text-tinta-suave">

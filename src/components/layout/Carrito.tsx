@@ -2,8 +2,8 @@
 
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
-import { productoPorSlug } from '@/content/datos'
 import { usePedido } from '@/lib/estado-pedido'
+import { useProductoPorSlug } from '@/lib/productos'
 import { Boton, BotonEnlace } from '@/components/ui/Boton'
 import { IconoCerrar } from '@/components/ui/Iconos'
 import { nombreModalidad } from '@/components/ui/TagModalidad'
@@ -26,6 +26,36 @@ export function BarraCarrito() {
       >
         <span className="border-b border-caramelo-claro pb-0.5">Ver carrito</span>
       </Link>
+    </div>
+  )
+}
+
+/** Una línea del carrito. Aparte, porque necesita su propio hook de datos. */
+function LineaDelCarrito({
+  linea,
+}: {
+  linea: { productoSlug: string; cantidad: number; fecha?: string }
+}) {
+  const producto = useProductoPorSlug(linea.productoSlug)
+  if (!producto) return null
+
+  return (
+    <div className="grid grid-cols-[70px_1fr_auto] items-center gap-3 border-t border-linea py-3">
+      <div className="h-[70px] rounded-borde border border-linea bg-crema" />
+      <div className="flex flex-col gap-[3px]">
+        <span className="font-display text-base leading-tight">{producto.nombre}</span>
+        <span className="text-[9.5px] font-semibold tracking-[0.06em] uppercase">
+          <span
+            className={producto.modalidad === 'directa' ? 'text-verde' : 'text-caramelo-texto'}
+          >
+            {nombreModalidad(producto.modalidad)}
+          </span>
+          <span className="tnum text-tinta-suave">
+            {linea.fecha ? ` · ${linea.fecha}` : ` · ×${linea.cantidad}`}
+          </span>
+        </span>
+      </div>
+      <span className="text-[11.5px] font-semibold text-tinta-suave">{producto.precio}</span>
     </div>
   )
 }
@@ -84,40 +114,10 @@ export function DrawerCarrito() {
                   Todavía no agregaste productos.
                 </p>
               )}
-              {lineas.map((linea) => {
-                const producto = productoPorSlug(linea.productoSlug)
-                if (!producto) return null
-                return (
-                  <div
-                    key={linea.productoSlug}
-                    className="grid grid-cols-[70px_1fr_auto] items-center gap-3 border-t border-linea py-3"
-                  >
-                    <div className="h-[70px] rounded-borde border border-linea bg-crema" />
-                    <div className="flex flex-col gap-[3px]">
-                      <span className="font-display text-base leading-tight">
-                        {producto.nombre}
-                      </span>
-                      <span className="text-[9.5px] font-semibold tracking-[0.06em] uppercase">
-                        <span
-                          className={
-                            producto.modalidad === 'directa'
-                              ? 'text-verde'
-                              : 'text-caramelo-texto'
-                          }
-                        >
-                          {nombreModalidad(producto.modalidad)}
-                        </span>
-                        <span className="tnum text-tinta-suave">
-                          {linea.fecha ? ` · ${linea.fecha}` : ` · ×${linea.cantidad}`}
-                        </span>
-                      </span>
-                    </div>
-                    <span className="text-[11.5px] font-semibold text-tinta-suave">
-                      {producto.precio}
-                    </span>
-                  </div>
-                )
-              })}
+              {lineas.map((linea) => (
+                <LineaDelCarrito key={linea.productoSlug} linea={linea} />
+              ))}
+
             </div>
 
             <div className="flex flex-col gap-2.5 border-t border-linea pt-3.5">
