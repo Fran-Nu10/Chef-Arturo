@@ -1,13 +1,12 @@
 import { notFound } from 'next/navigation'
 import type { Metadata } from 'next'
-import { PRODUCTOS, categoriaPorSlug, productoPorSlug } from '@/content/datos'
+import { catalogoPublico, productoPublico } from '@/server/storefront/consultas'
 import { Actual, BarraContexto } from '@/components/pantallas/BarraContexto'
 import { Pantalla } from '@/components/pantallas/Estructura'
 import { FichaProducto } from '@/components/pantallas/FichaProducto'
 
-export function generateStaticParams() {
-  return PRODUCTOS.map((p) => ({ slug: p.slug }))
-}
+// Sin `generateStaticParams`: los productos salen de la base y se publican
+// desde el panel, así que la ficha se resuelve en cada visita.
 
 export async function generateMetadata({
   params,
@@ -15,7 +14,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  return { title: productoPorSlug(slug)?.nombre ?? 'Producto' }
+  return { title: (await productoPublico(slug))?.nombre ?? 'Producto' }
 }
 
 /** Pantallas 4–7 · Ficha directa, por encargo, con fecha requerida y no disponible. */
@@ -25,10 +24,11 @@ export default async function PaginaProducto({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const producto = productoPorSlug(slug)
+  const producto = await productoPublico(slug)
   if (!producto) notFound()
 
-  const categoria = categoriaPorSlug(producto.categoria)
+  const { categorias } = await catalogoPublico()
+  const categoria = categorias.find((c) => c.slug === producto.categoria)
 
   return (
     <Pantalla>

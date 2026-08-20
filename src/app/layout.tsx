@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from 'next'
 import { Archivo, Instrument_Serif } from 'next/font/google'
 import { ProveedorPedido } from '@/lib/estado-pedido'
+import { ProveedorCategorias } from '@/lib/categorias'
+import { catalogoPublico } from '@/server/storefront/consultas'
 import { DrawerCarrito } from '@/components/layout/Carrito'
 import './globals.css'
 
@@ -35,14 +37,20 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // Se leen acá, en el único punto de servidor por el que pasan todas las
+  // pantallas, y bajan por contexto hasta el header.
+  const { categorias } = await catalogoPublico()
+
   return (
     <html lang="es-UY" className={`${archivo.variable} ${instrumentSerif.variable}`}>
       <body>
-        <ProveedorPedido>
-          {children}
-          <DrawerCarrito />
-        </ProveedorPedido>
+        <ProveedorCategorias categorias={categorias}>
+          <ProveedorPedido>
+            {children}
+            <DrawerCarrito />
+          </ProveedorPedido>
+        </ProveedorCategorias>
       </body>
     </html>
   )

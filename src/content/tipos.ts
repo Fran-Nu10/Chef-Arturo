@@ -16,7 +16,14 @@ export type Disponibilidad =
   | 'no-disponible' // fuera de la vitrina
   | 'requiere-fecha' // sólo se sirve contra una fecha elegida
 
-export type CategoriaSlug = 'pasteleria' | 'merienda' | 'lunch'
+/**
+ * El slug de una categoría.
+ *
+ * Era una unión cerrada —`'pasteleria' | 'merienda' | 'lunch'`— cuando las tres
+ * categorías vivían en un archivo. Ahora salen de la base y el administrador
+ * puede crear las que quiera, así que la unión dejó de poder enumerarlas.
+ */
+export type CategoriaSlug = string
 
 export interface Categoria {
   slug: CategoriaSlug

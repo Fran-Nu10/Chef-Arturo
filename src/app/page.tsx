@@ -10,6 +10,7 @@ import { DeLaCocinaATuMesa } from '@/components/home/DeLaCocinaATuMesa'
 import { LaMesaDeChefArturo } from '@/components/home/LaMesaDeChefArturo'
 import { InformacionParaPedir } from '@/components/home/InformacionParaPedir'
 import { CierreEditorial } from '@/components/home/CierreEditorial'
+import { seleccionDeLaCasa } from '@/server/storefront/consultas'
 
 /**
  * Home — una narrativa visual continua, no una colección de secciones sueltas.
@@ -18,14 +19,18 @@ import { CierreEditorial } from '@/components/home/CierreEditorial'
  * ellos, movimiento breve y comercial: transiciones de categoría, crossfades,
  * reveals de encabezado, carruseles nativos y rieles con deriva leve.
  */
-export default function Home() {
+export default async function Home() {
+  // Los productos salen de la base. Si todavía no hay ninguno cargado, la
+  // sección lo dice: no se completa con ejemplos.
+  const seleccion = await seleccionDeLaCasa()
+
   return (
     <>
       <Header />
       <main className="pb-[52px] lg:pb-0">
         <VitrinaViva />
         <ElegiTuOcasion />
-        <SeleccionDeLaCasa />
+        <SeleccionDeLaCasa seleccion={seleccion} />
         <ElDetalleFinal />
         <ArmaTuOcasion />
         <FechasQueImportan />

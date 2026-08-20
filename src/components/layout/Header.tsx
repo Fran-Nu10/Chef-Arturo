@@ -3,7 +3,8 @@
 import Link from 'next/link'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { CATEGORIAS, NEGOCIO } from '@/content/datos'
+import { NEGOCIO } from '@/content/datos'
+import { useCategorias } from '@/lib/categorias'
 import { usePedido } from '@/lib/estado-pedido'
 import { IconoCarrito, IconoCerrar, IconoMenu } from '@/components/ui/Iconos'
 
@@ -30,6 +31,7 @@ export function Marca({ tamano = 24 }: { tamano?: number }) {
  * El carrito siempre está accesible, también en mobile.
  */
 export function Header() {
+  const categorias = useCategorias()
   const [compacto, setCompacto] = useState(false)
   const [menuAbierto, setMenuAbierto] = useState(false)
   const { cantidad, abrirCarrito } = usePedido()
@@ -85,7 +87,7 @@ export function Header() {
         </div>
 
         <nav className="hidden gap-[34px] text-sm font-medium lg:flex">
-          {CATEGORIAS.map((c) => (
+          {categorias.map((c) => (
             <Link
               key={c.slug}
               href={`/catalogo/${c.slug}`}
@@ -153,7 +155,7 @@ export function Header() {
                   <IconoCerrar size={16} />
                 </button>
               </div>
-              {CATEGORIAS.map((c) => (
+              {categorias.map((c) => (
                 <Link
                   key={c.slug}
                   href={`/catalogo/${c.slug}`}

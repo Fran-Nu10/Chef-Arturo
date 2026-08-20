@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
-import { CATEGORIAS } from '@/content/datos'
+import { useCategorias } from '@/lib/categorias'
 import type { CategoriaSlug } from '@/content/tipos'
 import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { EncabezadoSeccion } from '@/components/ui/Reveal'
@@ -15,8 +15,9 @@ import { EncabezadoSeccion } from '@/components/ui/Reveal'
  * Mobile: carrusel horizontal con scroll-snap nativo, una tarjeta dominante,
  * parte de la siguiente visible, e indicadores de posición.
  */
-export function ElegiTuOcasion({ inicial = 'pasteleria' }: { inicial?: CategoriaSlug }) {
-  const [activa, setActiva] = useState<CategoriaSlug>(inicial)
+export function ElegiTuOcasion({ inicial }: { inicial?: CategoriaSlug }) {
+  const CATEGORIAS = useCategorias()
+  const [activa, setActiva] = useState<CategoriaSlug>(inicial ?? CATEGORIAS[0]?.slug ?? '')
   const [indice, setIndice] = useState(0)
   const riel = useRef<HTMLDivElement>(null)
 
@@ -35,7 +36,9 @@ export function ElegiTuOcasion({ inicial = 'pasteleria' }: { inicial?: Categoria
     }
     el.addEventListener('scroll', alScrollear, { passive: true })
     return () => el.removeEventListener('scroll', alScrollear)
-  }, [])
+    // La cantidad de categorías era una constante de módulo y ahora viene de
+    // la base: si cambia, el cálculo del índice tiene que rehacerse.
+  }, [CATEGORIAS.length])
 
   return (
     <section
