@@ -164,7 +164,10 @@ export default async function PaginaProductos({
               clave: 'nombre',
               etiqueta: 'Producto',
               render: (p) => (
-                <Link href={`/admin/productos/${p.id}`} className="font-medium text-verde">
+                <Link
+                  href={`/admin/productos/${p.id}`}
+                  className="inline-flex min-h-[44px] items-center py-1 font-medium text-verde"
+                >
                   {p.name}
                 </Link>
               ),
