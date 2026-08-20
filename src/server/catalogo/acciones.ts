@@ -6,7 +6,11 @@ import { clienteServidor } from '@/lib/supabase/servidor'
 import { exigirAdmin } from '@/server/autorizacion'
 import { CategoriaEntrada, ProductoEntrada, Uuid, slugificar } from '@/server/validacion'
 import { rechazoDemo } from '@/server/demo/guardia'
-import { aplicarImagenDeProducto, leerImagenDelFormulario } from '@/server/medios/imagenes'
+import {
+  aplicarImagenDeCategoria,
+  aplicarImagenDeProducto,
+  leerImagenDelFormulario,
+} from '@/server/medios/imagenes'
 import { confirmarEscritura, erroresDeZod, mensajeDeBase } from '@/server/resultados'
 export type { Resultado } from '@/server/resultados'
 import type { Resultado } from '@/server/resultados'
@@ -89,29 +93,31 @@ function faltaCategoria(datos: FormData): Resultado | null {
 }
 
 /**
- * Inserta un producto resolviendo colisiones de slug con un sufijo.
+ * Inserta una fila resolviendo colisiones de slug con un sufijo.
  *
  * El dueño ya no ve el slug: si «Alfajores» ya existe, el nuevo queda como
- * `alfajores-2` sin preguntar nada. El único índice único de `products` es el
- * del slug, así que un 23505 acá siempre es una colisión de slug.
+ * `alfajores-2` sin preguntar nada. El único índice único de `products` y de
+ * `categories` es el del slug, así que un 23505 acá siempre es una colisión
+ * de slug.
  */
 async function insertarConSlugUnico(
   supabase: Cliente,
-  fila: Partial<ReturnType<typeof aFila>> & { position: number },
+  tabla: 'products' | 'categories',
+  fila: Record<string, unknown>,
   base: string,
 ): Promise<{ id: string; slug: string } | { error: string }> {
   for (let intento = 0; intento < 8; intento++) {
     const slug = intento === 0 ? base : `${base}-${intento + 1}`
     const { data, error } = await supabase
-      .from('products')
+      .from(tabla)
       .insert({ ...fila, slug })
       .select('id')
       .single()
 
-    if (!error) return { id: data.id, slug }
+    if (!error) return { id: data.id as string, slug }
     if (error.code !== '23505') return { error: mensajeDeBase(error) }
   }
-  return { error: 'Hay demasiados productos con un nombre casi igual. Cambiá el nombre.' }
+  return { error: 'Hay demasiados registros con un nombre casi igual. Cambiá el nombre.' }
 }
 
 export async function crearProducto(_previo: Resultado, datos: FormData): Promise<Resultado> {
@@ -148,6 +154,7 @@ export async function crearProducto(_previo: Resultado, datos: FormData): Promis
 
   const creado = await insertarConSlugUnico(
     supabase,
+    'products',
     { ...aFila(analisis.data), position: (ultimo?.position ?? -1) + 1 },
     base,
   )
@@ -270,6 +277,7 @@ export async function duplicarProducto(id: string): Promise<Resultado> {
 
   const creado = await insertarConSlugUnico(
     supabase,
+    'products',
     {
       name: nombre,
       category_id: original.category_id,
@@ -471,22 +479,26 @@ export async function reordenarProductos(
 
 // ── Categorías ──────────────────────────────────────────────────────────────
 
-export async function guardarCategoria(
-  _previo: Resultado,
-  datos: FormData,
-): Promise<Resultado> {
+/** Lo que el formulario de categoría envía. El slug no viene del formulario. */
+const camposCategoria = (datos: FormData, slug: string) => ({
+  slug,
+  name: datos.get('name'),
+  description: datos.get('description') ?? '',
+  position: 0,
+  isActive: datos.get('visible') === 'on',
+  seoTitle: datos.get('seoTitle') || undefined,
+  seoDescription: datos.get('seoDescription') || undefined,
+})
+
+export async function crearCategoria(_previo: Resultado, datos: FormData): Promise<Resultado> {
   await exigirAdmin()
-  const analisis = CategoriaEntrada.safeParse({
-    slug: datos.get('slug'),
-    name: datos.get('name'),
-    description: datos.get('description') ?? '',
-    position: datos.get('position') ?? 0,
-    isActive: datos.get('isActive') === 'on',
-    imageId: datos.get('imageId') || null,
-    seoTitle: datos.get('seoTitle') || undefined,
-    seoDescription: datos.get('seoDescription') || undefined,
-  })
+
+  const base = slugificar(String(datos.get('name') ?? ''), 'categoria')
+  const analisis = CategoriaEntrada.safeParse(camposCategoria(datos, base))
   if (!analisis.success) return { errores: erroresDeZod(analisis.error) }
+
+  const imagen = leerImagenDelFormulario(datos, 'categorias')
+  if ('error' in imagen) return { error: imagen.error }
 
   const demo = rechazoDemo()
   if (demo) return demo
@@ -494,35 +506,129 @@ export async function guardarCategoria(
   const supabase = await clienteServidor()
   if (!supabase) return { error: 'El backend no está configurado.' }
 
-  const fila = {
-    slug: analisis.data.slug,
-    name: analisis.data.name,
-    description: analisis.data.description,
-    position: analisis.data.position,
-    is_active: analisis.data.isActive,
-    image_id: analisis.data.imageId ?? null,
-    seo_title: analisis.data.seoTitle ?? null,
-    seo_description: analisis.data.seoDescription ?? null,
+  const { data: ultima } = await supabase
+    .from('categories')
+    .select('position')
+    .order('position', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  const creada = await insertarConSlugUnico(
+    supabase,
+    'categories',
+    {
+      name: analisis.data.name,
+      description: analisis.data.description,
+      position: (ultima?.position ?? -1) + 1,
+      is_active: analisis.data.isActive,
+      seo_title: analisis.data.seoTitle ?? null,
+      seo_description: analisis.data.seoDescription ?? null,
+    },
+    base,
+  )
+  if ('error' in creada) return { error: creada.error }
+
+  // Recién creada no tiene productos: si la foto falla, se deshace entera y
+  // el formulario conserva lo escrito.
+  const resultadoImagen = await aplicarImagenDeCategoria(
+    supabase,
+    creada.id,
+    analisis.data.name,
+    imagen,
+  )
+  if (!resultadoImagen.ok) {
+    await supabase.from('categories').delete().eq('id', creada.id)
+    return { error: resultadoImagen.error ?? 'No se guardaron los cambios.' }
   }
 
-  const idCrudo = datos.get('id')
-  let resultado: Resultado
-  if (idCrudo) {
-    const id = Uuid.safeParse(idCrudo)
-    if (!id.success) return { error: 'Categoría inválida.' }
-    resultado = await confirmarEscritura(
-      supabase.from('categories').update(fila).eq('id', id.data).select('id'),
-      NO_ALCANZO,
-    )
-  } else {
-    resultado = await confirmarEscritura(
-      supabase.from('categories').insert(fila).select('id'),
-      'No se pudo crear la categoría.',
-    )
-  }
+  revalidarCatalogo()
+  return { ok: true, id: creada.id }
+}
+
+export async function actualizarCategoria(
+  _previo: Resultado,
+  datos: FormData,
+): Promise<Resultado> {
+  await exigirAdmin()
+  const id = Uuid.safeParse(datos.get('id'))
+  if (!id.success) return { error: 'Categoría inválida.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
+
+  const supabase = await clienteServidor()
+  if (!supabase) return { error: 'El backend no está configurado.' }
+
+  // El slug se conserva al editar: cambiarle el nombre a una categoría no
+  // rompe /catalogo/<slug> ya compartido.
+  const { data: actual, error: errorActual } = await supabase
+    .from('categories')
+    .select('slug')
+    .eq('id', id.data)
+    .maybeSingle()
+  if (errorActual) return { error: mensajeDeBase(errorActual) }
+  if (!actual) return { error: NO_ALCANZO }
+
+  const analisis = CategoriaEntrada.safeParse(camposCategoria(datos, actual.slug))
+  if (!analisis.success) return { errores: erroresDeZod(analisis.error) }
+
+  const imagen = leerImagenDelFormulario(datos, 'categorias')
+  if ('error' in imagen) return { error: imagen.error }
+
+  // Ni la posición ni la imagen viajan acá: la posición se maneja en la
+  // lista y la imagen la aplica su propio flujo, que limpia huérfanos.
+  const resultado = await confirmarEscritura(
+    supabase
+      .from('categories')
+      .update({
+        name: analisis.data.name,
+        description: analisis.data.description,
+        is_active: analisis.data.isActive,
+        seo_title: analisis.data.seoTitle ?? null,
+        seo_description: analisis.data.seoDescription ?? null,
+      })
+      .eq('id', id.data)
+      .select('id'),
+    NO_ALCANZO,
+  )
   if (!resultado.ok) return resultado
 
-  revalidatePath('/admin/categorias')
-  revalidatePath('/catalogo')
-  return resultado
+  const resultadoImagen = await aplicarImagenDeCategoria(
+    supabase,
+    id.data,
+    analisis.data.name,
+    imagen,
+  )
+  if (!resultadoImagen.ok) {
+    return { error: 'Los datos se guardaron, pero la foto no. Probá subirla nuevamente.' }
+  }
+
+  revalidarCatalogo()
+  return { ok: true, id: id.data }
+}
+
+/** Guarda el orden de las categorías armado en la lista. */
+export async function reordenarCategorias(
+  ordenes: { id: string; position: number }[],
+): Promise<Resultado> {
+  await exigirAdmin()
+  const analisis = OrdenEntrada.safeParse(ordenes)
+  if (!analisis.success) return { error: 'El orden recibido no es válido.' }
+
+  const demo = rechazoDemo()
+  if (demo) return demo
+
+  const supabase = await clienteServidor()
+  if (!supabase) return { error: 'El backend no está configurado.' }
+
+  for (const { id, position } of analisis.data) {
+    const resultado = await confirmarEscritura(
+      supabase.from('categories').update({ position }).eq('id', id).select('id'),
+      'No se pudo guardar el nuevo orden.',
+    )
+    if (!resultado.ok) return resultado
+  }
+
+  revalidarCatalogo()
+  return { ok: 'El nuevo orden se guardó.' }
 }

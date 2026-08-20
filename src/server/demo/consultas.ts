@@ -108,6 +108,25 @@ export function listarCategoriasAdminDemo() {
   return [...CATEGORIAS_DEMO].sort((a, b) => a.position - b.position)
 }
 
+export function listarCategoriasConDetalleDemo() {
+  return [...CATEGORIAS_DEMO]
+    .sort((a, b) => a.position - b.position)
+    .map((c) => ({
+      ...c,
+      imagen: MEDIOS_DEMO.find((m) => m.id === c.image_id)?.path ?? null,
+      cantidadProductos: PRODUCTOS_DEMO.filter(
+        (p) => p.category_id === c.id && p.status !== 'archived',
+      ).length,
+    }))
+}
+
+export function categoriaPorIdDemo(id: string) {
+  const c = CATEGORIAS_DEMO.find((x) => x.id === id)
+  if (!c) return null
+  const medio = MEDIOS_DEMO.find((m) => m.id === c.image_id)
+  return { ...c, media_assets: medio ? { path: medio.path } : null }
+}
+
 export function productoPorIdDemo(id: string) {
   const p = PRODUCTOS_DEMO.find((x) => x.id === id)
   if (!p) return null

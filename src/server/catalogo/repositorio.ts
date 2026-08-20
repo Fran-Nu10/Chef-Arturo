@@ -2,7 +2,9 @@ import 'server-only'
 
 import { modoDemo } from '@/lib/supabase/env'
 import {
+  categoriaPorIdDemo,
   listarCategoriasAdminDemo,
+  listarCategoriasConDetalleDemo,
   listarProductosAdminDemo,
   listarProductosParaOrdenarDemo,
   productoPorIdDemo,
@@ -266,6 +268,57 @@ export async function productosConStockBajo() {
 
   if (error) throw error
   return (data ?? []).filter((p) => p.stock_quantity <= p.low_stock_threshold)
+}
+
+/** Categoría de la lista del panel: con miniatura y cantidad de productos. */
+export interface CategoriaConDetalle extends FilaCategoria {
+  imagen: string | null
+  cantidadProductos: number
+}
+
+export async function listarCategoriasConDetalle(): Promise<CategoriaConDetalle[] | null> {
+  if (modoDemo()) return listarCategoriasConDetalleDemo()
+
+  const supabase = await clienteServidor()
+  if (!supabase) return null
+
+  // Los archivados no cuentan: el número que ve el dueño es el de productos
+  // que existen de verdad en su catálogo.
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*, media_assets(path), products(count)')
+    .neq('products.status', 'archived')
+    .order('position', { ascending: true })
+
+  if (error) throw error
+
+  return (data ?? []).map((fila) => {
+    const { media_assets, products, ...categoria } = fila as unknown as FilaCategoria & {
+      media_assets: { path: string } | null
+      products: { count: number }[]
+    }
+    return {
+      ...categoria,
+      imagen: media_assets?.path ?? null,
+      cantidadProductos: products?.[0]?.count ?? 0,
+    }
+  })
+}
+
+export async function categoriaPorId(id: string) {
+  if (modoDemo()) return categoriaPorIdDemo(id)
+
+  const supabase = await clienteServidor()
+  if (!supabase) return null
+
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*, media_assets(path)')
+    .eq('id', id)
+    .maybeSingle()
+
+  if (error) throw error
+  return data as (FilaCategoria & { media_assets: { path: string } | null }) | null
 }
 
 export async function listarCategoriasAdmin() {
