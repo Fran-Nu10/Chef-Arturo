@@ -181,19 +181,6 @@ export function CamposSeccion({ clave, valor, onCambio }: Props) {
         </div>
       )
 
-    case 'mostrador':
-      return (
-        <div className="flex flex-col gap-4">
-          {t('Número', 'numero')}
-          {t('Kicker', 'kicker')}
-          {t('Título', 'titulo')}
-          <p className="m-0 text-[12.5px] text-tinta-suave">
-            Los productos de la selección se marcan como <strong>destacados</strong> desde
-            la ficha de cada producto.
-          </p>
-        </div>
-      )
-
     case 'detalle-final':
       return (
         <div className="flex flex-col gap-4">

@@ -25,12 +25,24 @@ const NOMBRES: Record<ClaveSeccion, string> = {
   footer: 'Footer',
 }
 
+/**
+ * Secciones que existen en la base pero ya no tienen efecto en el sitio.
+ *
+ * `mostrador` ("Del mostrador de hoy") quedó obsoleta: la home ahora muestra
+ * el catálogo completo agrupado por categoría, directamente desde los
+ * productos — sin selección manual. La fila se conserva en `site_sections`
+ * para no hacer una migración destructiva, pero editarla no cambiaría nada,
+ * así que no se ofrece.
+ */
+const SECCIONES_OBSOLETAS: string[] = ['mostrador']
+
 export function EditorSecciones({ secciones }: { secciones: FilaSeccion[] }) {
-  const [abierta, setAbierta] = useState<string | null>(secciones[0]?.key ?? null)
+  const visibles = secciones.filter((s) => !SECCIONES_OBSOLETAS.includes(s.key))
+  const [abierta, setAbierta] = useState<string | null>(visibles[0]?.key ?? null)
 
   return (
     <div className="flex flex-col gap-3">
-      {secciones
+      {visibles
         .slice()
         .sort(
           (a, b) =>

@@ -103,30 +103,6 @@ export const catalogoPublico = cache(async (): Promise<CatalogoPublico> => {
   }
 })
 
-/**
- * Los productos marcados como destacados, para "Del mostrador de hoy".
- *
- * Si no hay ninguno destacado se devuelven los primeros del catálogo: la
- * sección existe en el diseño y quedarse sin nada que mostrar sería peor que
- * mostrar el principio de la vitrina. No se inventa ningún producto.
- */
-export const seleccionDeLaCasa = cache(async (): Promise<ProductoStorefront[]> => {
-  const { productos } = await catalogoPublico()
-
-  try {
-    const destacados = await listarProductosPublicos({ soloDestacados: true, limite: 6 })
-    if (destacados && destacados.length > 0) {
-      const slugs = new Set(destacados.map((d) => d.slug))
-      return productos.filter((p) => slugs.has(p.slug))
-    }
-  } catch (error) {
-    // Igual que en `catalogoPublico`: la home no se cae por el proveedor.
-    console.error('[storefront] no se pudieron leer los destacados:', error)
-  }
-
-  return productos.slice(0, 6)
-})
-
 export async function productoPublico(slug: string): Promise<ProductoStorefront | null> {
   let fila
   try {
