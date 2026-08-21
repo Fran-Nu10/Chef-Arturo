@@ -47,6 +47,9 @@ export interface Producto {
   /** Nota de estado bajo el nombre (anticipación, agotado, para eventos…). */
   nota?: string
   imagenPendiente: string
+  /** Foto real ya resuelta (Supabase Storage). Sin ella, se usa el placeholder. */
+  imagenUrl?: string | null
+  imagenAlt?: string
 }
 
 export type EstadoCampana = 'activa' | 'programada' | 'finalizada'

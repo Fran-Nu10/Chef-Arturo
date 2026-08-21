@@ -89,6 +89,8 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="relative w-full max-w-[340px] self-center">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            fotoUrl={producto.imagenUrl}
+            fotoAlt={producto.imagenAlt || producto.nombre}
             slot={`producto-${producto.slug}`}
             ratio="4/5"
             apagado
@@ -124,6 +126,8 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="grid grid-cols-[130px_1fr] items-start gap-4">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            fotoUrl={producto.imagenUrl}
+            fotoAlt={producto.imagenAlt || producto.nombre}
             slot={`producto-${producto.slug}`}
             ratio="4/5"
             sizes="130px"
@@ -211,6 +215,8 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <div className="grid grid-cols-[130px_1fr] items-start gap-4">
           <MediaPendiente
             etiqueta={producto.imagenPendiente}
+            fotoUrl={producto.imagenUrl}
+            fotoAlt={producto.imagenAlt || producto.nombre}
             slot={`producto-${producto.slug}`}
             ratio="4/5"
             sizes="130px"
@@ -261,6 +267,8 @@ export function FichaProducto({ producto }: { producto: Producto }) {
     <div className="flex flex-col gap-4 px-4 pt-5 pb-7">
       <MediaPendiente
         etiqueta={producto.imagenPendiente}
+        fotoUrl={producto.imagenUrl}
+        fotoAlt={producto.imagenAlt || producto.nombre}
         slot={`producto-${producto.slug}`}
         ratio="4/5"
         sizes="(max-width: 1023px) 100vw, 600px"

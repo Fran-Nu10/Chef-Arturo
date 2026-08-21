@@ -26,6 +26,8 @@ function LineaVistaCarrito({
     <div className="grid grid-cols-[84px_1fr_auto] items-center gap-3.5 border-b border-linea py-3.5">
       <MediaPendiente
         etiqueta={producto.imagenPendiente}
+        fotoUrl={producto.imagenUrl}
+        fotoAlt={producto.imagenAlt || producto.nombre}
         slot={`producto-${producto.slug}`}
         sizes="84px"
         ratio="1/1"

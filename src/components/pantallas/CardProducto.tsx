@@ -44,6 +44,8 @@ export function CardProducto({
           <div className="overflow-hidden">
             <MediaPendiente
               etiqueta={producto.imagenPendiente}
+              fotoUrl={producto.imagenUrl}
+              fotoAlt={producto.imagenAlt || producto.nombre}
               slot={`producto-${producto.slug}`}
               apagado={noDisponible}
               conBorde={false}
