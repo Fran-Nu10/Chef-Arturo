@@ -28,6 +28,13 @@ export interface MediaPendienteProps {
   apagado?: boolean
   /** Identificador del hueco dentro del contrato de imágenes. */
   slot?: string
+  /**
+   * Foto real ya resuelta (por ejemplo, de Supabase Storage). Tiene
+   * prioridad sobre el manifiesto estático de `slot`: un producto con
+   * fotografía propia la muestra, aunque el slot no esté declarado.
+   */
+  fotoUrl?: string | null
+  fotoAlt?: string
   /** Sólo el hero carga con prioridad; todo lo demás es lazy. */
   prioridad?: boolean
   /** `sizes` responsive de `next/image`. */
@@ -55,13 +62,15 @@ export function MediaPendiente({
   marca,
   apagado = false,
   slot,
+  fotoUrl,
+  fotoAlt,
   prioridad = false,
   sizes,
   conBorde = true,
   children,
 }: MediaPendienteProps) {
   const foto = slot ? fotoDeSlot(slot) : undefined
-  const ajuste = foto?.objectFit ?? 'cover'
+  const ajuste = fotoUrl ? 'cover' : (foto?.objectFit ?? 'cover')
   const proporcion = ratio ?? foto?.ratio
 
   // Radio: el arco de vitrina, o el rectángulo editorial de 0–4px del sistema.
@@ -72,10 +81,20 @@ export function MediaPendiente({
       style={proporcion ? { aspectRatio: proporcion } : undefined}
       className={`relative flex items-center justify-center overflow-hidden ${forma} ${
         // `contain` necesita un fondo detrás; `cover` lo tapa entero.
-        ajuste === 'contain' || !foto ? 'bg-crema' : ''
+        ajuste === 'contain' || (!foto && !fotoUrl) ? 'bg-crema' : ''
       } ${conBorde ? 'border border-linea' : ''} ${apagado ? 'saturate-50' : ''} ${className}`}
     >
-      {foto ? (
+      {fotoUrl ? (
+        <Image
+          src={fotoUrl}
+          alt={fotoAlt || (typeof etiqueta === 'string' ? etiqueta : '')}
+          fill
+          sizes={sizes ?? SIZES_POR_DEFECTO}
+          priority={prioridad}
+          loading={prioridad ? undefined : 'lazy'}
+          style={{ objectFit: 'cover', objectPosition: 'center' }}
+        />
+      ) : foto ? (
         <Image
           src={`/${foto.archivo.replace(/^\/+/, '')}`}
           alt={foto.alt}
