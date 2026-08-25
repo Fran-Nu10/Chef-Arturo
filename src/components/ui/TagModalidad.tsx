@@ -22,9 +22,10 @@ const ETIQUETA: Record<Modalidad, { texto: string; corto: string; clase: string 
   },
 }
 
-const AGOTADO = { texto: 'Agotado hoy', clase: 'text-alerta border-alerta' }
+const AGOTADO = { texto: 'Agotado hoy', corto: 'Agotado', clase: 'text-alerta border-alerta' }
 const REQUIERE_FECHA = {
   texto: 'Requiere fecha',
+  corto: 'Con fecha',
   clase: 'text-caramelo-texto border-caramelo-texto',
 }
 
@@ -39,15 +40,15 @@ export function TagModalidad({
   corto?: boolean
   className?: string
 }) {
-  const base =
+  // `corto` vale para los tres casos, no sólo para la modalidad: en la card
+  // del catálogo la etiqueta larga no entra y empujaba la página a lo ancho.
+  const origen =
     disponibilidad === 'agotado'
       ? AGOTADO
       : disponibilidad === 'requiere-fecha'
         ? REQUIERE_FECHA
-        : {
-            texto: corto ? ETIQUETA[modalidad].corto : ETIQUETA[modalidad].texto,
-            clase: ETIQUETA[modalidad].clase,
-          }
+        : ETIQUETA[modalidad]
+  const base = { texto: corto ? origen.corto : origen.texto, clase: origen.clase }
 
   return (
     <span

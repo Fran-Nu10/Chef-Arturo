@@ -54,7 +54,9 @@ export function CardProducto({
             />
           </div>
           <div className="flex items-start justify-between gap-2.5">
-            <div>
+            {/* `min-w-0`: deja que el nombre se encoja en vez de empujar la
+                etiqueta fuera de la card en pantallas angostas. */}
+            <div className="min-w-0">
               <div className="font-display text-[17px] leading-tight text-tinta group-hover:underline group-hover:decoration-caramelo group-hover:underline-offset-4">
                 {producto.nombre}
               </div>
