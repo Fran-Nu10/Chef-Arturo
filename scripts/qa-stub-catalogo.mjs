@@ -1,16 +1,16 @@
 // Stub local de PostgREST + Storage para QA visual del storefront cuando no
 // hay red hacia Supabase.
 //
-// Sirve el catálogo real (37 productos, 4 categorías) con las 16 relaciones
-// de imagen de pastelería que dejaría la importación real, y sirve las
-// fotos desde el sistema de archivos en la misma ruta pública que usaría
-// Supabase Storage (`/storage/v1/object/public/media/<path>`). No es un
+// Sirve el catálogo real (37 productos, 4 categorías) con las 37 relaciones
+// de imagen que dejaría la importación real, y sirve las fotos desde el
+// sistema de archivos en la misma ruta pública que usaría Supabase Storage
+// (`/storage/v1/object/public/media/<path>`). No es un
 // PostgREST completo: sólo entiende `select` con embeds, `eq`/`in`, `order`
 // y `limit` — lo que de verdad usan los repositorios del storefront.
 //
 // Uso:
 //   node scripts/qa-stub-datos.mjs categorias.json productos.json datos.json
-//   node scripts/qa-stub-pasteleria.mjs datos.json
+//   node scripts/qa-stub-catalogo.mjs datos.json
 //   NEXT_PUBLIC_SUPABASE_URL=http://localhost:54999 \
 //     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=stub \
 //     npm run dev
@@ -65,7 +65,8 @@ function parseSelect(select) {
       continue
     }
     let nombre = ''
-    while (i < select.length && select[i] !== ',' && select[i] !== '(') nombre += select[i++]
+    while (i < select.length && select[i] !== ',' && select[i] !== '(')
+      nombre += select[i++]
     if (select[i] === '(') {
       let profundidad = 1
       let interior = ''
@@ -123,9 +124,20 @@ const servidor = createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PUERTO}`)
 
   // Storage público: /storage/v1/object/public/media/<path>
+  //
+  // La ruta dentro del bucket no siempre coincide con la del repositorio —dos
+  // fotos de lunch se sirven desde `public/fotos/`—, así que el origen sale
+  // del mapa que arma `qa-stub-datos.mjs` a partir del propio importador.
   if (url.pathname.startsWith('/storage/v1/object/public/media/')) {
-    const ruta = decodeURIComponent(url.pathname.replace('/storage/v1/object/public/media/', ''))
-    const archivo = path.join(RAIZ, 'public', 'assets', ruta)
+    const ruta = decodeURIComponent(
+      url.pathname.replace('/storage/v1/object/public/media/', ''),
+    )
+    const origen = datos.archivos?.[ruta]
+    if (!origen) {
+      res.writeHead(404).end('not found')
+      return
+    }
+    const archivo = path.join(RAIZ, 'public', origen)
     if (!archivo.startsWith(path.join(RAIZ, 'public')) || !existsSync(archivo)) {
       res.writeHead(404).end('not found')
       return
@@ -183,6 +195,6 @@ const servidor = createServer(async (req, res) => {
 servidor.listen(PUERTO, () => {
   console.log(`Stub de PostgREST + Storage escuchando en http://localhost:${PUERTO}`)
   console.log(
-    `${DB.products.length} productos · ${DB.categories.length} categorías · ${DB.media_assets.length} imágenes de pastelería`,
+    `${DB.products.length} productos · ${DB.categories.length} categorías · ${DB.media_assets.length} imágenes · ${DB.product_images.length} relaciones`,
   )
 })

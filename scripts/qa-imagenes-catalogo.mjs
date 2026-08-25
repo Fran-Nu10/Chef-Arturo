@@ -1,13 +1,26 @@
-// QA visual de las fotos reales de pastelería contra el stub local (sin red
-// hacia Supabase). Recorre home, /catalogo, /catalogo/pasteleria, la ficha
-// de un producto, la vista rápida y el carrito en 390×844 y 1440×900.
+// QA visual de la fotografía del catálogo completo contra el stub local (sin
+// red hacia Supabase). Recorre la home, /catalogo, las cuatro categorías, una
+// ficha de producto por categoría, la vista rápida y el carrito, en 1440×900
+// y 390×844.
 //
-// Uso: ver docs/MEDIA_MAPPING_PASTELERIA_V1.md.
+// Uso: ver docs/MEDIA_MAPPING_CATALOGO_IMAGENES_V1.md.
 import { chromium } from 'playwright-core'
 
 const EXE =
   process.env.QA_CHROMIUM ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome'
-const BASE = process.env.QA_BASE ?? 'http://localhost:3001'
+const BASE = process.env.QA_BASE ?? 'http://localhost:3000'
+
+/** Cuántos productos activos tiene cada categoría, y una ficha de muestra. */
+const CATEGORIAS = [
+  {
+    slug: 'pasteleria',
+    productos: 17,
+    ficha: 'mousse-pistacho-chocolate-blanco-individual',
+  },
+  { slug: 'merienda', productos: 7, ficha: 'cookie-levain-cacao-100' },
+  { slug: 'salados', productos: 10, ficha: 'pascualina' },
+  { slug: 'lunch-para-eventos', productos: 3, ficha: 'lunch-de-amigos-10-personas' },
+]
 
 const VPS = [
   { w: 1440, h: 900, tag: '1440x900' },
@@ -22,7 +35,7 @@ const mal = (msg) => {
 }
 
 async function shot(page, nombre, tag, fullPage = true) {
-  await page.screenshot({ path: `docs/qa/pasteleria-${nombre}-${tag}.png`, fullPage })
+  await page.screenshot({ path: `docs/qa/catalogo-${nombre}-${tag}.png`, fullPage })
 }
 
 async function ir(page, url) {
@@ -52,7 +65,10 @@ async function cargarPerezosas(page) {
     .waitForFunction(
       () =>
         [...document.querySelectorAll('img')]
-          .filter((img) => (img.currentSrc || img.src).includes('pasteleria'))
+          .filter((img) => {
+            const src = img.currentSrc || img.src
+            return src.includes('%2Fproductos%2F') || src.includes('/productos/')
+          })
           .every((img) => img.complete && img.naturalWidth > 0),
       { timeout: 8000 },
     )
@@ -82,38 +98,54 @@ async function revisarImagenes(page, donde, { minEsperado = 0 } = {}) {
       objectFit: getComputedStyle(img).objectFit,
       loading: img.loading,
       alt: img.alt,
+      // `currentSrc` sólo se llena cuando el navegador eligió un candidato y
+      // fue a buscarlo. Hace falta para distinguir "todavía no cargó" de
+      // "está rota": el atributo `src` de next/image apunta siempre al
+      // candidato más grande del srcset (w=3840), así que una imagen lazy
+      // fuera del viewport tiene naturalWidth 0 sin que le pase nada malo.
+      intentada: Boolean(img.currentSrc),
+      completa: img.complete,
     }))
   })
-  const pasteleria = datos.filter((d) => d.src.includes('pasteleria'))
-  const rotas = pasteleria.filter((d) => d.naturalWidth === 0)
-  const sinCover = pasteleria.filter(
-    (d) => d.displayW > 0 && d.displayH > 0 && d.objectFit !== 'cover',
+  const fotos = datos.filter(
+    (d) => d.src.includes('%2Fproductos%2F') || d.src.includes('/productos/'),
   )
-  const sinAlt = pasteleria.filter((d) => !d.alt || d.alt.trim() === '')
+  // Rota = el navegador la pidió de verdad y no pudo decodificarla. Las que
+  // nunca entraron al viewport no cuentan: no cargarlas es lo correcto.
+  const rotas = fotos.filter((d) => d.intentada && d.completa && d.naturalWidth === 0)
+  const sinCargar = fotos.filter((d) => !d.intentada).length
+  const sinCover = fotos.filter(
+    (d) => d.intentada && d.displayW > 0 && d.displayH > 0 && d.objectFit !== 'cover',
+  )
+  const sinAlt = fotos.filter((d) => !d.alt || d.alt.trim() === '')
 
-  if (pasteleria.length < minEsperado) {
+  if (fotos.length < minEsperado) {
     mal(
-      `${donde}: se esperaban al menos ${minEsperado} fotos de pastelería, hay ${pasteleria.length}`,
+      `${donde}: se esperaban al menos ${minEsperado} fotos de producto, hay ${fotos.length}`,
     )
   } else {
-    ok(`${donde}: ${pasteleria.length} fotos de pastelería en pantalla`)
+    ok(`${donde}: ${fotos.length} fotos de producto en pantalla`)
   }
   if (rotas.length > 0)
     mal(
       `${donde}: ${rotas.length} imagen(es) rota(s): ${rotas.map((r) => r.src).join(', ')}`,
     )
-  else if (pasteleria.length > 0) ok(`${donde}: ninguna imagen rota`)
+  else if (fotos.length > 0)
+    ok(
+      `${donde}: ninguna imagen rota` +
+        (sinCargar > 0 ? ` (${sinCargar} aún sin cargar, lazy)` : ''),
+    )
 
   if (sinCover.length > 0) {
     mal(`${donde}: ${sinCover.length} imagen(es) sin object-fit:cover`)
-  } else if (pasteleria.length > 0) {
+  } else if (fotos.length > 0) {
     ok(`${donde}: todas con object-fit:cover`)
   }
 
   if (sinAlt.length > 0) mal(`${donde}: ${sinAlt.length} imagen(es) sin alt`)
-  else if (pasteleria.length > 0) ok(`${donde}: todas con alt`)
+  else if (fotos.length > 0) ok(`${donde}: todas con alt`)
 
-  return pasteleria
+  return fotos
 }
 
 const erroresConsola = []
@@ -164,62 +196,96 @@ for (const vp of VPS) {
       )
     }
 
-    // ── /catalogo/pasteleria ───────────────────────────────────────────────
-    await ir(page, `${BASE}/catalogo/pasteleria`)
-    await cargarPerezosas(page)
-    await sinOverflow(page, `catalogo/pasteleria ${vp.tag}`)
-    const conFoto = await revisarImagenes(page, `catalogo/pasteleria ${vp.tag}`, {
-      minEsperado: 16,
-    })
-    await shot(page, 'catalogo-pasteleria', vp.tag)
+    // ── Cada categoría, con todos sus productos ────────────────────────────
+    for (const cat of CATEGORIAS) {
+      await ir(page, `${BASE}/catalogo/${cat.slug}`)
+      await cargarPerezosas(page)
+      await sinOverflow(page, `catalogo/${cat.slug} ${vp.tag}`)
+      const conFoto = await revisarImagenes(page, `catalogo/${cat.slug} ${vp.tag}`, {
+        minEsperado: cat.productos,
+      })
+      await shot(page, `catalogo-${cat.slug}`, vp.tag)
+
+      // Ninguna card puede quedar con el placeholder de "falta la foto".
+      const placeholders = await page.evaluate(
+        () =>
+          document.body.innerText.split('\n').filter((l) => /Falta la foto de/i.test(l))
+            .length,
+      )
+      if (placeholders > 0) {
+        mal(`catalogo/${cat.slug} ${vp.tag}: ${placeholders} producto(s) sin foto`)
+      } else {
+        ok(`catalogo/${cat.slug} ${vp.tag}: ningún producto sin foto`)
+      }
+
+      // Cada producto de la categoría tiene que llevar una foto distinta,
+      // salvo los pares que comparten a propósito.
+      const unicas = new Set(conFoto.map((i) => i.src.replace(/&w=\d+/, '')))
+      ok(
+        `catalogo/${cat.slug} ${vp.tag}: ${unicas.size} fotos distintas para ${cat.productos} productos`,
+      )
+
+      // ── Ficha de un producto de esta categoría ───────────────────────────
+      await ir(page, `${BASE}/producto/${cat.ficha}`)
+      await cargarPerezosas(page)
+      await sinOverflow(page, `ficha ${cat.ficha} ${vp.tag}`)
+      const enFicha = await revisarImagenes(page, `ficha ${cat.ficha} ${vp.tag}`, {
+        minEsperado: 1,
+      })
+      if (enFicha.length > 0) {
+        ok(`ficha ${cat.ficha} ${vp.tag}: muestra su fotografía`)
+      } else {
+        mal(`ficha ${cat.ficha} ${vp.tag}: no se encontró ninguna foto`)
+      }
+      await shot(page, `ficha-${cat.slug}`, vp.tag)
+    }
 
     // Producto correcto en la card correcta: crumble individual no debe
     // llevar la foto de crumble entero ni viceversa.
-    const individual = conFoto.find((i) => i.src.includes('crumble-manzana-individual'))
-    const entero = conFoto.find((i) => i.src.includes('crumble-manzana-entero-kg'))
+    await ir(page, `${BASE}/catalogo/pasteleria`)
+    await cargarPerezosas(page)
+    const enPasteleria = await revisarImagenes(page, `pares pastelería ${vp.tag}`, {
+      minEsperado: 17,
+    })
+    const individual = enPasteleria.find((i) =>
+      i.src.includes('crumble-manzana-individual'),
+    )
+    const entero = enPasteleria.find((i) => i.src.includes('crumble-manzana-entero-kg'))
     if (individual && entero && individual.src !== entero.src) {
-      ok(
-        `catalogo/pasteleria ${vp.tag}: crumble individual y entero usan fotos distintas`,
-      )
+      ok(`pastelería ${vp.tag}: crumble individual y entero usan fotos distintas`)
     } else {
-      mal(`catalogo/pasteleria ${vp.tag}: crumble individual/entero no se distinguen`)
+      mal(`pastelería ${vp.tag}: crumble individual/entero no se distinguen`)
     }
     // Cheesecake clásica: individual y entero comparten literalmente el mismo
     // archivo — es lo esperado (imagen compartida).
-    const clasicaImgs = conFoto.filter((i) => i.src.includes('cheesecake-clasica'))
+    const clasicaImgs = enPasteleria.filter((i) => i.src.includes('cheesecake-clasica'))
     if (
       clasicaImgs.length >= 2 &&
       clasicaImgs.every((i) => i.src === clasicaImgs[0].src)
     ) {
       ok(
-        `catalogo/pasteleria ${vp.tag}: cheesecake clásica comparte la misma foto entre presentaciones`,
+        `pastelería ${vp.tag}: cheesecake clásica comparte la misma foto entre presentaciones`,
       )
     } else if (clasicaImgs.length >= 2) {
-      mal(`catalogo/pasteleria ${vp.tag}: cheesecake clásica no comparte la misma foto`)
+      mal(`pastelería ${vp.tag}: cheesecake clásica no comparte la misma foto`)
     }
 
-    // ── /catalogo general ──────────────────────────────────────────────────
+    // ── /catalogo general: los 37 juntos ───────────────────────────────────
     await ir(page, `${BASE}/catalogo`)
     await cargarPerezosas(page)
     await sinOverflow(page, `catalogo ${vp.tag}`)
-    await revisarImagenes(page, `catalogo ${vp.tag}`, { minEsperado: 16 })
-    await shot(page, 'catalogo-general', vp.tag)
-
-    // ── Ficha de producto ──────────────────────────────────────────────────
-    await ir(page, `${BASE}/producto/mousse-pistacho-chocolate-blanco-individual`)
-    await cargarPerezosas(page)
-    await sinOverflow(page, `ficha producto ${vp.tag}`)
-    const enFicha = await revisarImagenes(page, `ficha producto ${vp.tag}`, {
-      minEsperado: 1,
-    })
-    if (
-      enFicha.some((i) => i.src.includes('mousse-pistacho-chocolate-blanco-individual'))
-    ) {
-      ok(`ficha producto ${vp.tag}: muestra la foto del producto correcto`)
+    await revisarImagenes(page, `catalogo ${vp.tag}`, { minEsperado: 37 })
+    const sinFoto = await page.evaluate(
+      () =>
+        document.body.innerText.split('\n').filter((l) => /Falta la foto de/i.test(l))
+          .length,
+    )
+    if (sinFoto > 0) {
+      mal(`catalogo ${vp.tag}: ${sinFoto} producto(s) sin foto en el catálogo completo`)
     } else {
-      mal(`ficha producto ${vp.tag}: no se encontró la foto esperada`)
+      ok(`catalogo ${vp.tag}: los 37 productos tienen foto`)
     }
-    await shot(page, 'ficha-producto', vp.tag)
+    await shot(page, 'catalogo-general', vp.tag)
 
     // ── Vista rápida (desde el catálogo) ───────────────────────────────────
     await ir(page, `${BASE}/catalogo/pasteleria`)
@@ -281,4 +347,4 @@ if (problemas.length || erroresConsola.length) {
   )
   process.exit(1)
 }
-console.log('QA VISUAL DE PASTELERÍA OK')
+console.log('QA VISUAL DEL CATÁLOGO OK')

@@ -115,7 +115,11 @@ export function Catalogo({
 
         {buscador}
 
-        <nav className="flex gap-2 overflow-x-auto lg:flex-col lg:gap-0 lg:overflow-visible">
+        {/* `min-w-0`: sin esto, un hijo flex no se encoge por debajo de su
+            ancho de contenido, así que la fila de categorías empujaba la
+            página unos píxeles a lo ancho en mobile en lugar de desplazarse
+            dentro de su propia caja. */}
+        <nav className="flex min-w-0 gap-2 overflow-x-auto lg:flex-col lg:gap-0 lg:overflow-visible">
           <FiltroCategoria href="/catalogo" activa={!categoria}>
             Todo
           </FiltroCategoria>
