@@ -1,0 +1,78 @@
+name: Importar imágenes del catálogo a Supabase
+
+# Sólo a mano, desde la pestaña Actions. No se dispara por push, por PR ni por
+# schedule: escribe en el Storage y en la base del proyecto de producción, así
+# que la decisión de correrlo es siempre de una persona.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+# Dos importaciones a la vez se pisarían al reemplazar la imagen principal de
+# un producto. `cancel-in-progress: false` a propósito: una corrida en curso se
+# deja terminar y la nueva espera, en lugar de cortarse por la mitad.
+concurrency:
+  group: importar-imagenes-catalogo
+  cancel-in-progress: false
+
+jobs:
+  importar:
+    name: Subir las fotos y vincularlas a los productos
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Traer el repositorio
+        uses: actions/checkout@v5
+
+      # 22 es la versión con la que se desarrolla el proyecto y está dentro del
+      # rango que soporta Next 15. El importador sólo usa APIs estables de Node.
+      - name: Preparar Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: npm
+
+      # `npm ci` y no `npm install`: respeta el lockfile al pie de la letra.
+      # Sin `--omit=dev`, porque `image-size` —que el importador necesita para
+      # leer las dimensiones de cada foto— es una dependencia de desarrollo.
+      - name: Instalar dependencias
+        run: npm ci
+
+      # El dry-run no toca la red ni necesita credenciales. Valida el
+      # manifiesto entero: que los 34 archivos existan, que sean JPEG de
+      # verdad, que no haya fotos sin mapear en las carpetas de producto y que
+      # los destinos de Storage sean coherentes. Si algo de eso falla, el paso
+      # sale con código distinto de cero y el job se corta acá — sin que la
+      # clave de servicio haya entrado en ningún entorno todavía.
+      - name: Ensayo sin conexión (dry-run)
+        run: |
+          set -euo pipefail
+          node scripts/importar-imagenes-catalogo-v1.mjs --dry-run
+
+      # La clave vive únicamente en el entorno de este paso. Por eso la
+      # comprobación de que existe se hace acá dentro y no en un paso aparte:
+      # un paso de validación propio obligaría a exponer el secreto una
+      # segunda vez, que es justo lo que se quiere evitar.
+      #
+      # La comprobación mira si la variable está vacía; nunca imprime su
+      # contenido, ni su longitud, ni un prefijo. El importador tampoco la
+      # registra en su salida.
+      - name: Importar las imágenes
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: https://lvthdjqciuipfmogniwr.supabase.co
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+        run: |
+          set -euo pipefail
+
+          if [ -z "${SUPABASE_SECRET_KEY:-}" ]; then
+            echo "::error::Falta el repository secret SUPABASE_SECRET_KEY. Cargalo en Settings → Secrets and variables → Actions y volvé a lanzar la Action."
+            exit 1
+          fi
+
+          node scripts/importar-imagenes-catalogo-v1.mjs
