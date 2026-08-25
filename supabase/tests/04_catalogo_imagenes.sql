@@ -1,8 +1,8 @@
 -- ============================================================================
--- Verificación del importador de imágenes de pastelería
+-- Verificación del importador de imágenes del catálogo
 --
 -- Este entorno no tiene salida de red hacia Supabase, así que
--- `scripts/importar-imagenes-pasteleria-v1.mjs` no se pudo correr contra el
+-- `scripts/importar-imagenes-catalogo-v1.mjs` no se pudo correr contra el
 -- proyecto real. Este archivo reproduce en SQL puro la misma secuencia de
 -- escrituras que hace el script para cada caso: alta simple, imagen
 -- compartida entre dos presentaciones, reemplazo seguro de una principal
@@ -16,7 +16,7 @@
 -- `20260821090000_catalogo_real_chef_arturo_v1.sql` sí siembra los 16 slugs:
 -- ver el informe de esta rama.)
 --
---   psql -d chef_arturo_test -f supabase/tests/04_pasteleria_imagenes.sql
+--   psql -d chef_arturo_test -f supabase/tests/04_catalogo_imagenes.sql
 -- ============================================================================
 
 \set ON_ERROR_STOP on
@@ -51,9 +51,9 @@ $$;
 begin;
 select pg_temp.como_usuario('00000000-0000-0000-0000-0000000000a1');
 
--- Categoría y los 16 productos del manifiesto, sembrados acá mismo: idénticos
--- en slug a los que carga el catálogo real, para que la prueba valga sin
--- importar qué haya dejado 01_rls.sql en la tabla.
+-- Los 37 productos del manifiesto, sembrados acá mismo: idénticos en slug a
+-- los que carga el catálogo real, para que la prueba valga sin importar qué
+-- haya dejado 01_rls.sql en la tabla.
 insert into public.categories (id, slug, name, is_active)
 values ('00000000-0000-4000-8000-0000000000c9', 'pasteleria-04', 'Pastelería (prueba)', true)
 on conflict (id) do nothing;
@@ -76,17 +76,38 @@ from (values
   ('cheesecake-clasica-individual', 'Cheesecake clásica — individual'),
   ('cheesecake-clasica-entero-kg', 'Cheesecake clásica — entero por kg'),
   ('cheesecake-maracuya-individual', 'Cheesecake de maracuyá — individual'),
-  ('cheesecake-maracuya-entero-kg', 'Cheesecake de maracuyá — entero por kg')
+  ('cheesecake-maracuya-entero-kg', 'Cheesecake de maracuyá — entero por kg'),
+  ('box-coleccion-dulce-9-postres', 'Box Colección Dulce — 9 postres variados'),
+  ('cookie-levain-clasica-chips', 'Cookie Levain clásica con chips'),
+  ('cookie-levain-pistacho-chocolate-blanco', 'Cookie Levain de pistacho y chocolate blanco'),
+  ('cookie-levain-red-velvet-chocolate-blanco', 'Cookie Levain red velvet con chocolate blanco'),
+  ('cookie-levain-cacao-100', 'Cookie Levain cacao al 100%'),
+  ('cookie-levain-especiada', 'Cookie Levain especiada'),
+  ('box-cookies-levain-6-unidades', 'Box Cookies Levain — 6 unidades'),
+  ('box-brownies-arturo-selection-6-unidades', 'Box Brownies Arturo Selection — 6 unidades'),
+  ('empanada-carne-premium', 'Empanada de carne premium'),
+  ('empanada-cerdo-braseado', 'Empanada de cerdo braseado'),
+  ('empanada-pollo-crema', 'Empanada de pollo a la crema'),
+  ('empanada-espinaca-quesos', 'Empanada de espinaca y quesos'),
+  ('tarta-calabaza-especiada', 'Tarta de calabaza especiada'),
+  ('tarta-pollo-verduras', 'Tarta de pollo y verduras'),
+  ('tarta-jamon-quesos', 'Tarta de jamón y quesos'),
+  ('pizza-rellena', 'Pizza rellena'),
+  ('pascualina', 'Pascualina'),
+  ('pack-matero-6-empanadas', 'Pack Matero — 6 empanadas variadas'),
+  ('lunch-petit-especial-4-personas', 'Lunch Petit Especial — 4 personas'),
+  ('lunch-celebracion-10-personas', 'Lunch Celebración — 10 personas'),
+  ('lunch-de-amigos-10-personas', 'Lunch de Amigos — 10 personas')
 ) as manifiesto(slug, name)
 on conflict (slug) do nothing;
 
 select pg_temp.esperar(
-  'los 16 slugs de pastelería del manifiesto quedaron sembrados',
+  'los 37 slugs del catálogo completo quedaron sembrados',
   (
     select count(*)::int from public.products
     where category_id = '00000000-0000-4000-8000-0000000000c9'
   ),
-  16
+  37
 );
 
 -- 1 · Alta simple: crumble-manzana-individual no tenía imagen.
@@ -150,6 +171,47 @@ select pg_temp.esperar(
       and pi.is_primary
   ),
   1
+);
+
+-- 2b · Imagen compartida entre productos de distinta naturaleza: la foto de
+--      cookies sirve tanto a la cookie suelta como al box de 6.
+insert into storage.objects (bucket_id, name)
+values ('media', 'productos/merienda/cookie-levain-clasica-chips.jpg');
+
+insert into public.media_assets (id, bucket, path, alt, mime_type, source, credit, is_temporary)
+values (
+  '00000000-0000-4000-8000-0000000000f5',
+  'media', 'productos/merienda/cookie-levain-clasica-chips.jpg',
+  'Cookies Levain con chips de chocolate', 'image/jpeg', 'own', 'Chef Arturo', false
+)
+on conflict (bucket, path) do nothing;
+
+insert into public.product_images (product_id, media_id, alt, position, is_primary)
+select id, '00000000-0000-4000-8000-0000000000f5', 'Cookie Levain clásica con chips', 0, true
+from public.products where slug = 'cookie-levain-clasica-chips'
+on conflict (product_id, media_id) do update set is_primary = true;
+
+insert into public.product_images (product_id, media_id, alt, position, is_primary)
+select id, '00000000-0000-4000-8000-0000000000f5', 'Box Cookies Levain — 6 unidades', 0, true
+from public.products where slug = 'box-cookies-levain-6-unidades'
+on conflict (product_id, media_id) do update set is_primary = true;
+
+select pg_temp.esperar(
+  'la cookie clásica y el box de cookies comparten el mismo media_id',
+  (
+    select count(distinct pi.media_id)::int
+    from public.product_images pi
+    join public.products p on p.id = pi.product_id
+    where p.slug in ('cookie-levain-clasica-chips', 'box-cookies-levain-6-unidades')
+      and pi.is_primary
+  ),
+  1
+);
+
+select pg_temp.esperar(
+  'media_asset_usage reporta los dos usos de la foto de cookies',
+  (select count(*)::int from public.media_asset_usage('00000000-0000-4000-8000-0000000000f5')),
+  2
 );
 
 -- 3 · Reemplazo seguro: lemon-pie-individual ya tenía otra imagen (simula un
@@ -270,6 +332,6 @@ rollback;
 
 \echo ''
 \echo '════════════════════════════════════════════════════════'
-\echo ' VERIFICACIÓN DEL IMPORTADOR DE PASTELERÍA (SQL) OK'
+\echo ' VERIFICACIÓN DEL IMPORTADOR DEL CATÁLOGO (SQL) OK'
 \echo ' Pendiente: correrlo de verdad contra Supabase (sin red desde acá)'
 \echo '════════════════════════════════════════════════════════'
