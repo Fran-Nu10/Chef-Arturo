@@ -173,6 +173,13 @@ por campaña y el logo en SVG.
 Cuando lleguen, `MediaPendiente` es el único punto a tocar: pasa a envolver
 `next/image` o `<video>` conservando el recorte y la caja.
 
+Las fotos de producto ya están: los 37 productos del catálogo tienen la suya en
+`public/assets/productos/`. Para subirlas a Supabase Storage y vincularlas,
+**Actions → «Importar imágenes del catálogo a Supabase» → Run workflow**. Sale
+bien cuando el log termina en `Archivos subidos y registrados: 34/34` y
+`Productos vinculados: 37/37`. El mapeo archivo → producto y el detalle de la
+Action están en [`docs/MEDIA_MAPPING_CATALOGO_IMAGENES_V1.md`](docs/MEDIA_MAPPING_CATALOGO_IMAGENES_V1.md).
+
 ## Verificado
 
 - `npm run build` genera las 29 rutas de forma estática.

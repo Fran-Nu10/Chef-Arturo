@@ -109,6 +109,73 @@ el sitio ya las usa en la home a través de `src/content/imagenes.ts`
 secciones. El importador las lee desde ahí y las sube con el nombre del
 producto, así que en Storage quedan igual de ordenadas que el resto.
 
+## Cómo se ejecuta la importación
+
+### Desde GitHub Actions (la forma prevista)
+
+**Actions → «Importar imágenes del catálogo a Supabase» → Run workflow → rama
+`main` → Run workflow.** Es todo: no pide parámetros y tarda un par de minutos.
+
+El workflow es
+[`.github/workflows/importar-imagenes-catalogo.yml`](../.github/workflows/importar-imagenes-catalogo.yml).
+Corre a mano y nada más —no se dispara por push ni por merge— porque escribe en
+el Storage y en la base de producción. La clave sale del repository secret
+`SUPABASE_SECRET_KEY` y sólo existe dentro del paso que ejecuta el importador.
+
+Se puede volver a lanzar las veces que haga falta: el importador es idempotente.
+Si dos personas lo lanzan a la vez, la segunda corrida espera a que termine la
+primera en lugar de pisarla.
+
+**Resultado correcto.** Al final del log del paso «Importar las imágenes»:
+
+```
+── Resumen ──
+Archivos subidos y registrados: 34/34
+Productos vinculados: 37/37
+```
+
+Los tres contadores de la línea siguiente reparten esos 37 según lo que pasó
+—`nuevas`, `ya estaban`, `reemplazadas`— y suman 37. En la primera corrida
+serán 37 nuevas; en las siguientes, 37 «ya estaban», que es la señal de que no
+hay nada que hacer.
+
+**Resultado incorrecto.** Cualquier número por debajo de `34/34` o de `37/37`.
+El job queda en rojo y el log lista al final qué archivo falló y por qué:
+
+```
+Errores (2):
+  · assets/productos/salados/pizza-rellena.jpg: subida a Storage: …
+```
+
+Los archivos que sí pasaron quedan aplicados —el importador no revierte lo
+hecho—, así que corregir la causa y volver a lanzar la Action retoma desde
+donde quedó sin duplicar nada.
+
+Si falta el secreto, el job corta antes de tocar la red con
+`Falta el repository secret SUPABASE_SECRET_KEY`. Se carga en **Settings →
+Secrets and variables → Actions**. Tiene que ser la clave `service_role`: la
+publicable y la `anon` no pueden escribir en Storage.
+
+### Desde una máquina con internet
+
+Equivalente, para cuando convenga verlo correr en local:
+
+```bash
+npm ci
+NEXT_PUBLIC_SUPABASE_URL=https://lvthdjqciuipfmogniwr.supabase.co \
+SUPABASE_SECRET_KEY=<clave de servicio, nunca la publicable> \
+node scripts/importar-imagenes-catalogo-v1.mjs
+```
+
+Tiene que correr desde la raíz del repositorio: lee las fotos de `public/`.
+`npm ci` sin `--omit=dev`, porque `image-size` es dependencia de desarrollo.
+
+Para ver el plan sin tocar nada ni necesitar credenciales:
+
+```bash
+node scripts/importar-imagenes-catalogo-v1.mjs --dry-run
+```
+
 ## Verificación
 
 Este entorno no tiene salida de red hacia `*.supabase.co`, así que el
@@ -133,15 +200,9 @@ desde acá:
       `unique(bucket, path)` a nivel de esquema; falta confirmarlo con datos reales.
 - [ ] Los 37 productos tienen su imagen principal en la base real — pendiente.
 
-**Comando para completar la importación real:**
-
-```bash
-NEXT_PUBLIC_SUPABASE_URL=https://lvthdjqciuipfmogniwr.supabase.co \
-SUPABASE_SECRET_KEY=<clave de servicio, nunca la publicable> \
-node scripts/importar-imagenes-catalogo-v1.mjs
-```
-
-Después de correrlo, completar los `media_id` reales con:
+Los tres pendientes se cierran ejecutando la importación (ver «Cómo se ejecuta
+la importación», más arriba). Después de correrla, los `media_id` reales salen
+de:
 
 ```sql
 select id, path from media_assets where path like 'productos/%' order by path;
