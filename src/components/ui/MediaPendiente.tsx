@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import type { ReactNode } from 'react'
 import { fotoDeSlot } from '@/content/imagenes'
+import { VideoVitrina } from '@/components/ui/VideoVitrina'
 
 export interface MediaPendienteProps {
   /**
@@ -51,8 +52,9 @@ const SIZES_POR_DEFECTO = '(max-width: 1023px) 100vw, 33vw'
  *
  * Con una fotografía asignada renderiza `next/image` con el `object-fit` y el
  * `object-position` que declara el manifiesto para esa foto en particular; sin
- * ella conserva el placeholder con la leyenda de qué falta. En ambos casos la
- * caja mide lo mismo, así que colocar una foto no mueve el layout.
+ * ella conserva el placeholder con la leyenda de qué falta. Si el slot declara
+ * `video`, reproduce ese video y la fotografía queda de póster. En los tres
+ * casos la caja mide lo mismo, así que colocar el asset no mueve el layout.
  */
 export function MediaPendiente({
   etiqueta,
@@ -84,7 +86,15 @@ export function MediaPendiente({
         ajuste === 'contain' || (!foto && !fotoUrl) ? 'bg-crema' : ''
       } ${conBorde ? 'border border-linea' : ''} ${apagado ? 'saturate-50' : ''} ${className}`}
     >
-      {fotoUrl ? (
+      {foto?.video ? (
+        <VideoVitrina
+          fuentes={foto.video.map((v) => `/${v.replace(/^\/+/, '')}`)}
+          poster={`/${foto.archivo.replace(/^\/+/, '')}`}
+          alt={foto.alt}
+          objectPosition={foto.objectPosition ?? 'center'}
+          sizes={sizes ?? SIZES_POR_DEFECTO}
+        />
+      ) : fotoUrl ? (
         <Image
           src={fotoUrl}
           alt={fotoAlt || (typeof etiqueta === 'string' ? etiqueta : '')}
