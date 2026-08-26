@@ -51,7 +51,9 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Todo menos estáticos e imágenes.
-    '/((?!_next/static|_next/image|favicon.ico|fotos|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|mp4)$).*)',
+    // Todo menos estáticos, imágenes y video. Sin excluirlos, cada pedido de
+    // un archivo del hero —que pesa megabytes y se pide en cada visita—
+    // dispararía una verificación de sesión contra Supabase.
+    '/((?!_next/static|_next/image|favicon.ico|fotos|videos|.*\\.(?:svg|png|jpg|jpeg|gif|webp|avif|mp4|webm)$).*)',
   ],
 }

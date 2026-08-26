@@ -70,6 +70,17 @@ export interface Fotografia {
   alt: string
   /** Uso del contrato en el que se colocó. */
   uso: string
+  /**
+   * Video que reemplaza a la fotografía en este hueco. Cuando está presente,
+   * `archivo` deja de ser la imagen final y pasa a ser el póster: tiene que
+   * ser el primer frame del video, o al arrancar se ve un salto.
+   *
+   * El contrato de grupos sigue rigiendo sobre el póster, que por eso vive en
+   * `public/fotos/` con el prefijo de su grupo como cualquier otra foto.
+   *
+   * Son varias rutas porque el navegador elige la primera que sabe decodificar.
+   */
+  video?: readonly string[]
 }
 
 /**
@@ -83,15 +94,21 @@ export interface Fotografia {
  */
 export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
   // ─── 01 · La Vitrina Viva — arco 1 de 2 ──────────────────────────────────
-  // Sujeto centrado, aire arriba y un fondo beige que es casi el papel del
-  // sistema. La única con esa coincidencia cromática y resolución para escalar.
+  // El único hueco de la casa con video. La toma es la terminación de una
+  // torta: cámara fija, sujeto centrado y un fondo verde salvia que cae muy
+  // cerca del verde del sistema.
+  //
+  // El encuadre se corta distinto en cada dispositivo cuando el arco se abre a
+  // pantalla completa, así que el foco se sube al centro de la torta en vez de
+  // quedar en el medio geométrico del cuadro, que cae en el pie del plato.
   'home-hero': {
-    archivo: 'fotos/merienda1.jpg',
-    grupo: 'merienda',
-    ancho: 1200,
-    alto: 1600,
-    objectPosition: '50% 55%',
-    alt: 'Una mano sostiene tres piezas dulces partidas al medio, sobre fondo claro',
+    archivo: 'fotos/pasteleria-hero-vitrina-viva.jpg',
+    video: ['videos/hero-vitrina-viva.webm', 'videos/hero-vitrina-viva.mp4'],
+    grupo: 'pasteleria',
+    ancho: 720,
+    alto: 1280,
+    objectPosition: '50% 42%',
+    alt: 'Las manos de un pastelero decoran con manga una torta de dos capas sobre un plato de piedra',
     uso: 'hero',
   },
 

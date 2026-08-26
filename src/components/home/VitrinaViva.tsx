@@ -11,7 +11,7 @@ import { useRef } from 'react'
 import { NEGOCIO } from '@/content/datos'
 import { BotonEnlace } from '@/components/ui/Boton'
 import { IconoFlechaAbajo } from '@/components/ui/Iconos'
-import { MarcaVideo, MediaPendiente } from '@/components/ui/MediaPendiente'
+import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { tramo, useMedidas } from '@/lib/movimiento'
 
 const TITULAR = (
@@ -22,9 +22,6 @@ const TITULAR = (
 
 const BAJADA =
   'Comprá del día con Mercado Pago, encargá para una fecha o consultá por tu evento. Retiro en Florida o entrega a tu puerta.'
-
-/** Contrato del asset, mientras no llegue el video real. */
-const POSTER_PENDIENTE = 'Poster pendiente — video 9:16 / 16:10'
 
 function CopyHero() {
   return (
@@ -47,44 +44,20 @@ function CopyHero() {
 /**
  * La ventana arqueada del hero. El radio del recorte interior acompaña al del
  * marco: al escalar, el arco se abre hasta el rectángulo pleno del viewport.
+ * Dentro va el video de vitrina, que el manifiesto asigna al slot `home-hero`.
  */
-function ArcoHero({
-  radio,
-  contraescala,
-}: {
-  radio?: MotionValue<string>
-  /** Deshace la escala del arco para que las leyendas no se agiganten. */
-  contraescala?: MotionValue<number>
-}) {
-  const leyenda = contraescala ? (
-    <motion.span style={{ scale: contraescala }} className="inline-block">
-      {POSTER_PENDIENTE}
-    </motion.span>
-  ) : (
-    POSTER_PENDIENTE
-  )
-
+function ArcoHero({ radio }: { radio?: MotionValue<string> }) {
   return (
     <motion.div
       style={radio ? { borderRadius: radio } : undefined}
       className={`h-full w-full overflow-hidden ${radio ? '' : 'rounded-t-[999px] rounded-b-[3px]'}`}
     >
       <MediaPendiente
-        etiqueta={leyenda}
+        etiqueta="Video de vitrina"
         slot="home-hero"
         prioridad
         sizes="(max-width: 1023px) 78vw, 340px"
         className="h-full w-full rounded-none border-0"
-        marca={
-          <MarcaVideo posicion="abajo">
-            <motion.span
-              style={contraescala ? { scale: contraescala } : undefined}
-              className="inline-block"
-            >
-              VIDEO PENDIENTE
-            </motion.span>
-          </MarcaVideo>
-        }
       />
     </motion.div>
   )
@@ -146,12 +119,6 @@ export function VitrinaViva() {
   // 0.20–0.55 · el contenido gastronómico dentro del arco se acerca.
   const medioEscala = useTransform(scrollYProgress, (p) => 1 + 0.16 * tramo(p, 0.2, 0.55))
 
-  // Las leyendas de asset pendiente no deben crecer con el arco.
-  const contraescala = useTransform(
-    [arcoEscala, medioEscala],
-    ([a, m]: number[]) => 1 / (a * m),
-  )
-
   // Versión estática completa: toda la información visible, sin track de scroll.
   if (reducido) {
     return (
@@ -208,7 +175,7 @@ export function VitrinaViva() {
                 className="box-border h-full w-full border bg-crema p-2 outline outline-linea will-change-transform"
               >
                 <motion.div style={{ scale: medioEscala }} className="h-full w-full">
-                  <ArcoHero radio={clipRadio} contraescala={contraescala} />
+                  <ArcoHero radio={clipRadio} />
                 </motion.div>
               </motion.div>
             </div>
