@@ -142,3 +142,27 @@
   0% { transform: translateX(-100%); }
   100% { transform: translateX(300%); }
 }
+
+/*
+ * El triángulo de "dale play" de los videos de vitrina.
+ *
+ * Estos videos son decoración, no un reproductor: no tienen `controls`, no se
+ * pueden tocar y describen la escena con `aria-label`. Aun así WebKit dibuja
+ * su propio botón de arranque encima en cuanto el video queda pausado —modo de
+ * bajo consumo del iPhone, volver a la app después de cambiar de pestaña, una
+ * conexión que no llegó a tiempo—. Como el elemento además tiene
+ * `pointer-events: none`, ese botón ni siquiera hace nada al tocarlo: parece
+ * una tienda rota.
+ *
+ * Ocultarlo deja el póster a la vista, que es una fotografía de la casa y se
+ * lee como una imagen, no como un video que no arrancó.
+ */
+.video-vitrina::-webkit-media-controls,
+.video-vitrina::-webkit-media-controls-start-playback-button,
+.video-vitrina::-webkit-media-controls-overlay-play-button,
+.video-vitrina::-webkit-media-controls-panel {
+  display: none !important;
+  -webkit-appearance: none;
+  appearance: none;
+  opacity: 0;
+}
