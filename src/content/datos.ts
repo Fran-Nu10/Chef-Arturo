@@ -10,7 +10,7 @@ import type {
 /** Datos del negocio que ya están validados por el brief. */
 export const NEGOCIO = {
   nombre: 'Chef Arturo',
-  autoras: 'by Julia y Montserrat',
+  autoras: 'by Julia Montserrat',
   ciudad: 'Florida, Uruguay',
   entrega: 'retiro y entrega',
   // Número confirmado por la casa (docs/CATALOGO_REAL_V1.md). El secundario,
