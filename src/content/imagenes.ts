@@ -60,8 +60,16 @@ export function grupoDeArchivo(nombre: string): GrupoFoto | null {
  * "principalmente" —no exclusivamente— a su sección; hoy no se usa ninguna ahí.
  */
 export const USO_PERMITIDO: Record<GrupoFoto, readonly string[]> = {
-  pasteleria: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero', 'detalle'],
-  merienda: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero'],
+  pasteleria: [
+    'categoria',
+    'seleccion',
+    'catalogo',
+    'ficha',
+    'hero',
+    'detalle',
+    'campana',
+  ],
+  merienda: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero', 'campana'],
   salados: ['categoria', 'seleccion', 'catalogo', 'ficha'],
   luncheventos: [
     'categoria',
@@ -70,6 +78,7 @@ export const USO_PERMITIDO: Record<GrupoFoto, readonly string[]> = {
     'ficha',
     'hero',
     'arma-tu-ocasion',
+    'campana',
   ],
   lamesa: ['la-mesa', 'cierre'],
 }
@@ -201,6 +210,38 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     objectPosition: '50% 50%',
     alt: 'Bandeja con empanadas partidas al medio, de varios rellenos',
     uso: 'categoria',
+  },
+
+  // ─── 06 · Fechas que importan — una foto por forma de comprar ────────────
+  // Se eligieron mirando cada archivo, no por el nombre: lo que tiene que
+  // comunicar cada tarjeta es la forma de comprar, no el producto puntual.
+  // Las tres se reutilizan de la fotografía de producto, que es lo que hay.
+  'campana-compra-del-dia': {
+    archivo: 'assets/productos/merienda/box-brownies-arturo-selection-6-unidades.jpg',
+    grupo: 'merienda',
+    ancho: 750,
+    alto: 919,
+    objectPosition: '50% 45%',
+    alt: 'Caja abierta con brownies variados, cada fila con una cobertura distinta',
+    uso: 'campana',
+  },
+  'campana-encargo-con-fecha': {
+    archivo: 'assets/productos/pasteleria/cheesecake-maracuya.jpg',
+    grupo: 'pasteleria',
+    ancho: 1199,
+    alto: 1083,
+    objectPosition: '50% 42%',
+    alt: 'Cheesecake entera de maracuyá con una porción cortada, sobre un plato',
+    uso: 'campana',
+  },
+  'campana-lunch-para-eventos': {
+    archivo: 'assets/productos/lunch-para-eventos/lunch-de-amigos-10-personas.jpg',
+    grupo: 'luncheventos',
+    ancho: 736,
+    alto: 1265,
+    objectPosition: '50% 38%',
+    alt: 'Mesa larga servida con sándwiches, tablas de fiambres y quesos, y bowls de dips',
+    uso: 'campana',
   },
 
   // ─── 05 · Armá tu ocasión ────────────────────────────────────────────────
