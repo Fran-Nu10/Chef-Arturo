@@ -1,14 +1,8 @@
 'use client'
 
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-  type MotionValue,
-} from 'framer-motion'
-import { useRef, type ReactNode } from 'react'
-import { MarcaVideo, MediaPendiente } from '@/components/ui/MediaPendiente'
+import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { useRef } from 'react'
+import { MediaPendiente } from '@/components/ui/MediaPendiente'
 import { tramo, useMedidas } from '@/lib/movimiento'
 
 const TITULO = 'El detalle también forma parte del pedido'
@@ -38,26 +32,14 @@ function claseFrase(tono: 'verde' | 'caramelo') {
     : 'bg-caramelo/90 text-xs font-semibold tracking-[0.08em] text-papel'
 }
 
-function VentanaVideo({ contraescala }: { contraescala?: MotionValue<number> }) {
-  const compensar = (nodo: ReactNode) =>
-    contraescala ? (
-      <motion.span style={{ scale: contraescala }} className="inline-block">
-        {nodo}
-      </motion.span>
-    ) : (
-      nodo
-    )
-
+function VentanaVideo() {
   return (
     <div className="relative h-full w-full overflow-hidden">
       <MediaPendiente
-        etiqueta={compensar('Poster temporal — video de terminación o armado')}
+        etiqueta="Video de la mesa dulce"
+        slot="home-detalle-final"
+        sizes="(max-width: 1023px) 86vw, 640px"
         className="h-full w-full rounded-none border-0"
-        marca={
-          <MarcaVideo posicion="izquierda">
-            {compensar('VIDEO DE TERMINACIÓN O ARMADO · PENDIENTE')}
-          </MarcaVideo>
-        }
       />
     </div>
   )
@@ -89,8 +71,6 @@ export function ElDetalleFinal() {
     : 1
   const avance = useTransform(scrollYProgress, (p) => tramo(p, 0.1, 0.52))
   const escala = useTransform(avance, (e) => 1 + e * (escalaMax - 1))
-  // Las leyendas de asset pendiente no deben crecer con la ventana.
-  const contraescala = useTransform(escala, (s) => 1 / s)
   const borde = useTransform(avance, (e) => `rgba(30,75,64,${0.5 * (1 - e)})`)
 
   // 0.12–0.27 · el título sale cuando la ventana empieza a ocupar la pantalla.
@@ -165,7 +145,7 @@ export function ElDetalleFinal() {
             style={{ scale: escala, borderColor: borde }}
             className="relative box-border h-full w-full border bg-crema p-2 will-change-transform"
           >
-            <VentanaVideo contraescala={contraescala} />
+            <VentanaVideo />
           </motion.div>
         </div>
       </div>

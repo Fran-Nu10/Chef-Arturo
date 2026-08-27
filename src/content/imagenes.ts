@@ -20,6 +20,7 @@ const PREFIJOS: Record<GrupoFoto, string> = {
   lamesa: 'lamesadechefarturo',
 }
 
+
 /**
  * Deduce el grupo a partir del nombre de archivo. Cualquier archivo futuro que
  * empiece con uno de los prefijos entra en su grupo sin tocar este código.
@@ -37,7 +38,7 @@ export function grupoDeArchivo(nombre: string): GrupoFoto | null {
  * "principalmente" —no exclusivamente— a su sección; hoy no se usa ninguna ahí.
  */
 export const USO_PERMITIDO: Record<GrupoFoto, readonly string[]> = {
-  pasteleria: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero'],
+  pasteleria: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero', 'detalle'],
   merienda: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero'],
   luncheventos: [
     'categoria',
@@ -110,6 +111,22 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     objectPosition: '50% 42%',
     alt: 'Las manos de un pastelero decoran con manga una torta de dos capas sobre un plato de piedra',
     uso: 'hero',
+  },
+
+  // ─── 04 · El detalle final — ventana rectangular, no arco ────────────────
+  // Segundo y último video de la casa. Torre de mini cheesecakes en una cocina
+  // de obrador, con un acercamiento lentísimo de cámara. La ventana de esta
+  // sección es 16:9 y crece hasta casi todo el viewport, así que el 16:9 del
+  // original entra casi entero: en desktop se recorta apenas el 10% del ancho.
+  'home-detalle-final': {
+    archivo: 'fotos/pasteleria-detalle-final.jpg',
+    video: ['videos/detalle-final.webm', 'videos/detalle-final.mp4'],
+    grupo: 'pasteleria',
+    ancho: 1280,
+    alto: 720,
+    objectPosition: '50% 50%',
+    alt: 'Una torre de tres pisos con mini cheesecakes variados sobre una mesada de madera',
+    uso: 'detalle',
   },
 
   // ─── 02 · Elegí tu ocasión — marcos rectangulares ────────────────────────
