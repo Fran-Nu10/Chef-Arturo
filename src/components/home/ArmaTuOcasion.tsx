@@ -185,8 +185,9 @@ function Paso({ animado, children }: { animado: boolean; children: ReactNode }) 
 /**
  * 05 · ARMÁ TU OCASIÓN — configurador visual, no un formulario administrativo.
  *
- * Una sola composición: la fotografía y el configurador comparten marco, con la
- * foto a fondo completo sobre el verde de la sección y el configurador en papel.
+ * Una sola composición: la fotografía y el configurador comparten marco sobre un
+ * fondo de papel manteca. La fotografía aporta el contraste —es lo único oscuro
+ * de la sección— y el verde queda de acento: títulos, opción elegida y CTA.
  *
  * Una pregunta por pantalla. No es una calculadora ni recomienda cantidades:
  * reúne las respuestas, arma un resumen legible y lo lleva a WhatsApp, que es
@@ -440,24 +441,43 @@ export function ArmaTuOcasion() {
   return (
     <section
       aria-label="Armá tu ocasión"
-      className="relative z-2 bg-verde px-[clamp(16px,3.4vw,48px)] py-[clamp(48px,6vw,88px)] text-papel"
+      className="relative z-2 overflow-hidden border-y border-linea/70 bg-papel-calido px-5 py-[clamp(44px,5.5vw,80px)] text-tinta sm:px-[clamp(20px,3.4vw,48px)]"
     >
-      <div className="mx-auto flex max-w-[1280px] flex-col gap-7">
+      {/*
+        El fondo no es plano, pero tampoco tiene una mancha encima: dos halos
+        radiales de opacidad muy baja y un rayado de 3px que hace de grano de
+        papel. Es una sola capa pintada, sin animación ni filtros, así que no
+        cuesta nada de render.
+      */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={{
+          backgroundImage: [
+            'radial-gradient(60rem 40rem at 88% 6%, color-mix(in srgb, var(--color-caramelo) 7%, transparent), transparent 70%)',
+            'radial-gradient(50rem 34rem at 4% 92%, color-mix(in srgb, var(--color-papel-alt) 85%, transparent), transparent 72%)',
+            'repeating-linear-gradient(92deg, color-mix(in srgb, var(--color-linea) 13%, transparent) 0 1px, transparent 1px 4px)',
+            'repeating-linear-gradient(2deg, color-mix(in srgb, var(--color-linea) 9%, transparent) 0 1px, transparent 1px 5px)',
+          ].join(', '),
+        }}
+      />
+
+      <div className="relative mx-auto flex max-w-[1280px] flex-col gap-7">
         <Reveal className="flex max-w-[620px] flex-col gap-3">
-          <div className="text-[11px] font-semibold tracking-[0.16em] text-caramelo-claro">
+          <div className="text-[11px] font-semibold tracking-[0.16em] text-caramelo-texto">
             05 — PARA REUNIONES Y EVENTOS
           </div>
-          <h2 className="m-0 font-display text-titulo font-normal">
+          <h2 className="m-0 font-display text-titulo font-normal text-verde">
             Armá una ocasión a tu medida
           </h2>
-          <p className="m-0 text-[14.5px] leading-relaxed text-crema">
+          <p className="m-0 text-[14.5px] leading-relaxed text-tinta-suave">
             Contanos qué estás organizando y te ayudamos a encontrar una propuesta para
             compartir.
           </p>
         </Reveal>
 
         {/* Una sola pieza: la foto y el configurador comparten marco y altura. */}
-        <div className="grid overflow-hidden border border-papel/25 lg:grid-cols-[2fr_3fr]">
+        <div className="grid overflow-hidden border border-verde/20 lg:grid-cols-[2fr_3fr]">
           {/* Fotografía — banner en mobile, columna completa en desktop. */}
           <div className="relative h-[180px] overflow-hidden lg:h-auto lg:min-h-[440px]">
             <motion.div
@@ -477,7 +497,7 @@ export function ArmaTuOcasion() {
             </motion.div>
             <div
               aria-hidden="true"
-              className="absolute inset-0 bg-gradient-to-t from-verde-profundo/85 via-verde-profundo/25 to-transparent"
+              className="absolute inset-0 bg-gradient-to-t from-chocolate/85 via-chocolate/25 to-transparent"
             />
             <p className="absolute inset-x-0 bottom-0 m-0 px-5 pb-5 font-display text-[clamp(17px,1.6vw,21px)] leading-snug text-papel">
               Vos elegís la ocasión.
@@ -488,7 +508,7 @@ export function ArmaTuOcasion() {
 
           {/* Configurador — papel, para contrastar con el verde de la sección. */}
           <form
-            className="flex flex-col gap-5 bg-papel p-[clamp(20px,2.6vw,36px)] text-tinta"
+            className="flex flex-col gap-5 bg-papel-alt p-[clamp(20px,2.6vw,36px)] text-tinta"
             onSubmit={(e) => e.preventDefault()}
           >
             {/* Progreso. Cada paso alcanzado es un atajo para volver a editarlo. */}

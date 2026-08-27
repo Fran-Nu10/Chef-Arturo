@@ -11,6 +11,7 @@
   --color-verde-profundo: #142e28; /* bandas de cierre y "modos" */
   --color-papel: #f7f3ea; /* fondo base */
   --color-papel-alt: #fbf8f1; /* superficie de card sobre papel */
+  --color-papel-calido: #f3eddf; /* papel manteca: fondo de sección sobre papel */
   --color-crema: #ede4d2; /* placeholders, matte de arcos */
   --color-crema-apagado: #f1ebdd; /* campañas finalizadas */
   --color-caramelo: #c1762f; /* acento controlado: badges, subrayados, foco */
@@ -25,6 +26,7 @@
   --color-linea-marco: #c4beaf;
   --color-alerta: #b04a28; /* agotado, errores recuperables */
   --color-alerta-fondo: #f7ede6;
+  --color-chocolate: #3b2922; /* velo cálido sobre fotografía; nunca texto de UI */
 
   /* Tipografía */
   --font-display: var(--fuente-serif), 'Instrument Serif', Georgia, serif;
