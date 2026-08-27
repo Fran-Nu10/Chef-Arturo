@@ -102,6 +102,18 @@ export function BarraLateral({ sesion }: { sesion: SesionAdmin }) {
         })}
       </ul>
 
+      {/*
+        Salida a la tienda. Va en la lista, no en un menú aparte: es la acción
+        que más se busca desde el panel y antes no existía en ninguna parte.
+        En mobile viaja en la misma cinta horizontal que las secciones.
+      */}
+      <Link
+        href="/"
+        className="flex min-h-[44px] flex-none items-center gap-2 px-4 text-[13.5px] font-medium text-verde no-underline lg:mx-0 lg:border-t lg:border-linea lg:py-3"
+      >
+        ← Ver tienda
+      </Link>
+
       <div className="hidden border-t border-linea px-4 py-4 lg:block">
         <p className="m-0 truncate text-[12px] font-medium text-tinta">
           {sesion.nombre ?? sesion.email}

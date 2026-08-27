@@ -1,10 +1,4 @@
 import type { Metadata } from 'next'
-import { headers } from 'next/headers'
-import { BannerDemo } from '@/components/admin/Chasis'
-import { BarraLateral } from '@/components/admin/BarraLateral'
-import { panelOperativo } from '@/lib/supabase/env'
-import { sesionAdmin } from '@/server/autorizacion'
-import { redirect } from 'next/navigation'
 
 export const metadata: Metadata = {
   title: { default: 'Panel', template: '%s · Panel Chef Arturo' },
@@ -12,45 +6,21 @@ export const metadata: Metadata = {
 }
 
 /**
- * Layout protegido de todo `/admin`.
+ * Envoltorio de todo `/admin`: metadatos y nada más.
  *
- * La comprobación es server-side y ocurre antes de renderizar: sin sesión
- * administrativa, el HTML de las páginas internas no llega a generarse.
- * `/admin/login` queda fuera porque tiene su propio layout de página completa.
+ * Antes este layout era el guard: leía `x-pathname`, y si la ruta no empezaba
+ * por `/admin/login` exigía sesión y redirigía al login. El problema no era la
+ * cabecera sino la forma del árbol —`/admin/login` colgaba del mismo layout
+ * que redirigía hacia él—. En una navegación de cliente el router pedía
+ * `/admin`, recibía el redirect, y al pedir `/admin/login` seguía por debajo
+ * de ese layout: el segmento nunca terminaba de resolverse y el navegador
+ * quedaba en bucle pidiendo la misma carga, con la pantalla en blanco.
+ *
+ * Ahora el guard vive en `(panel)/layout.tsx` y sólo envuelve las rutas
+ * protegidas. `login` y `recuperar` son hermanas, no hijas: el destino del
+ * redirect ya no está dentro de quien redirige. Además el guard dejó de
+ * depender de una cabecera para saber dónde está — la estructura lo dice.
  */
-export default async function LayoutAdmin({ children }: { children: React.ReactNode }) {
-  const cabeceras = await headers()
-  // Sólo `x-pathname`, que el middleware sobrescribe en cada petición. El
-  // fallback anterior leía `x-invoke-path`, que nadie escribe de nuestro lado
-  // y por lo tanto podía llegar desde el cliente: bastaba mandarlo apuntando
-  // al login para saltarse este chasis. No era explotable —cada página exige
-  // sesión por su cuenta— pero un guard no debe depender de algo que el
-  // visitante puede escribir.
-  const ruta = cabeceras.get('x-pathname') ?? ''
-
-  // El login y la recuperación se sirven sin chasis ni sesión.
-  if (ruta.startsWith('/admin/login') || ruta.startsWith('/admin/recuperar')) {
-    return children
-  }
-
-  if (!panelOperativo()) {
-    // Sin backend no hay sesión posible: se muestra el aviso desde la propia
-    // página, que sabe qué falta. No se simula un panel operativo.
-    return <div className="min-h-screen bg-papel">{children}</div>
-  }
-
-  const sesion = await sesionAdmin()
-  if (!sesion) redirect('/admin/login')
-
-  // El banner envuelve todo el panel, no cada página: así ninguna ruta puede
-  // quedarse sin él por olvido.
-  return (
-    <div className="min-h-screen bg-papel">
-      {sesion.esDemo && <BannerDemo />}
-      <div className="lg:flex">
-        <BarraLateral sesion={sesion} />
-        <div className="min-w-0 flex-1 lg:h-screen lg:overflow-y-auto">{children}</div>
-      </div>
-    </div>
-  )
+export default function LayoutAdmin({ children }: { children: React.ReactNode }) {
+  return children
 }

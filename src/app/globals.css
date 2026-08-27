@@ -136,3 +136,9 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Indicador de "Comprobando acceso…": una barra que recorre su carril. */
+@keyframes deslizar {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
