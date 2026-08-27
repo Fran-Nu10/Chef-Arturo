@@ -14,9 +14,13 @@ interface Aspecto {
 }
 
 /**
- * Ciclo de "Agregar al carrito": reposo → agregando (700ms) → agregado ✓
- * (1.6s) → reposo, con el badge del carrito sumando en el paso intermedio.
- * Es feedback funcional, así que también existe con reduced motion.
+ * Ciclo de "Agregar al carrito": reposo → agregando → agregado ✓ (1.6s) →
+ * reposo. Es feedback funcional, así que también existe con reduced motion.
+ *
+ * El producto entra al carrito **en el mismo toque**, no al terminar la
+ * animación. Antes se esperaban 700ms antes de llamar a `agregar()`: durante
+ * ese rato el badge no se movía y el toque parecía ignorado. Ahora el estado
+ * cambia primero y la etiqueta "Agregando…" acompaña, no bloquea.
  */
 export function useAgregar(producto: Producto | undefined) {
   const { agregar } = usePedido()
@@ -40,14 +44,10 @@ export function useAgregar(producto: Producto | undefined) {
 
   const activar = useCallback(() => {
     if (agotado || estado !== 'reposo' || !producto) return
-    setEstado('agregando')
-    temporizadores.current.push(
-      setTimeout(() => {
-        agregar(producto.slug)
-        setEstado('agregado')
-        temporizadores.current.push(setTimeout(() => setEstado('reposo'), 1600))
-      }, 700),
-    )
+    // Primero el carrito, después el gesto.
+    agregar(producto.slug)
+    setEstado('agregado')
+    temporizadores.current.push(setTimeout(() => setEstado('reposo'), 1600))
   }, [agotado, estado, producto, agregar])
 
   const aspecto: Aspecto = agotado

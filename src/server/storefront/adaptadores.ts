@@ -69,6 +69,7 @@ export function aProductoStorefront(
     // `formatearImporte` ya devuelve "Precio pendiente" cuando no hay número,
     // que es exactamente lo que corresponde para un producto a cotizar.
     precio: formatearImporte(fila.price_cents),
+    precioCentesimos: fila.price_cents,
     nota: notaDe(fila),
     imagenPendiente: `Falta la foto de ${fila.name}`,
     imagenUrl: fila.imagen ? urlPublica(fila.imagen.path) : null,

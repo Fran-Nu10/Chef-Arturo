@@ -13,11 +13,14 @@ import { useEffect, useState } from 'react'
  * El estado de sesión se lee después de montar, desde una cookie pública que
  * sólo vale `1` y no autoriza nada —la de sesión es `HttpOnly` y no se toca—.
  * Resolverlo en el servidor obligaría al pie a leer cookies y volvería
- * dinámico todo el storefront, que hoy se prerenderiza entero.
+ * dinámico todo el storefront.
  *
- * Mientras tanto se muestra "Acceso de gestión", que es el estado correcto
- * para casi todas las visitas y funciona igual sin JavaScript: `/admin`
- * redirige al login cuando no hay sesión.
+ * Es un `<Link>` a secas. Se probó envolver la navegación en `useTransition`
+ * para poder mostrar "Abriendo…" en el mismo toque, y fue peor: `/admin`
+ * responde con un redirect del servidor, y empujarlo desde una transición
+ * dejaba la navegación colgada treinta segundos. La espera se resolvió donde
+ * estaba el problema —el layout raíz ya no bloquea las rutas del panel con la
+ * consulta del catálogo— en vez de disfrazarla.
  */
 export function AccesoGestion({ oscuro }: { oscuro: boolean }) {
   const [conSesion, setConSesion] = useState(false)

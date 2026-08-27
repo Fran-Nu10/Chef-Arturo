@@ -45,6 +45,12 @@ export interface Producto {
   disponibilidad: Disponibilidad
   /** Ya formateado. Un producto a cotizar dice "Precio pendiente". */
   precio: string
+  /**
+   * El mismo precio en centésimos, o `null` si el producto se cotiza. Lo
+   * necesita el carrito para sumar: el texto formateado no se puede sumar, y
+   * volver a parsearlo sería inventarse un número.
+   */
+  precioCentesimos?: number | null
   /** Nota de estado bajo el nombre (anticipación, agotado, para eventos…). */
   nota?: string
   /**

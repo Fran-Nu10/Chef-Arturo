@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { redirect } from 'next/navigation'
 import { FormularioLogin } from '@/components/admin/FormularioLogin'
+import Link from 'next/link'
 import { Marca } from '@/components/layout/Header'
 import { faltantesDeBackend, modoDemo, panelOperativo } from '@/lib/supabase/env'
 import { sesionAdmin } from '@/server/autorizacion'
@@ -30,6 +31,13 @@ export default async function PaginaLogin({
           <p className="m-0 text-[11px] font-semibold tracking-[0.16em] text-caramelo-texto uppercase">
             Panel de administración
           </p>
+          {/* Quien llegó acá sin querer tiene que poder salir sin escribir la URL. */}
+          <Link
+            href="/"
+            className="inline-flex min-h-[44px] items-center text-[13px] font-medium text-tinta-suave no-underline underline underline-offset-[3px]"
+          >
+            ← Volver a la tienda
+          </Link>
         </div>
 
         {modoDemo() && (

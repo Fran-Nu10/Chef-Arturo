@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { NEGOCIO } from '@/content/datos'
 import type { Producto } from '@/content/tipos'
@@ -82,7 +84,22 @@ export function VistaRapida({
   const modalidad =
     modalidadElegida ?? (producto?.modalidad === 'encargo' ? 'encargo' : 'directa')
 
-  return (
+    // Escape cierra, como en cualquier diálogo. Sin esto la vista rápida se
+  // quedaba abierta tapando el catálogo: el overlay seguía capturando los
+  // clics y el siguiente toque parecía ignorado.
+  useEffect(() => {
+    if (!abierta) return
+    const alTeclado = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        onCerrar()
+      }
+    }
+    document.addEventListener('keydown', alTeclado)
+    return () => document.removeEventListener('keydown', alTeclado)
+  }, [abierta, onCerrar])
+
+return (
     <AnimatePresence>
       {abierta && producto && (
         <>
