@@ -102,3 +102,51 @@ export const IconoCerrar = (p: IconoProps) => (
     <path d="M6 6l12 12M18 6L6 18" />
   </Svg>
 )
+
+/*
+ * Iconos de ocasión — «Armá tu ocasión».
+ *
+ * Son secundarios a propósito: ayudan a reconocer la opción de un vistazo, no
+ * a decorarla. Mismo trazo y mismo peso que el resto, para que las cinco
+ * tarjetas se lean como una familia y no como cinco ilustraciones distintas.
+ */
+
+export const IconoCumpleanos = (p: IconoProps) => (
+  <Svg strokeWidth={1.6} {...p}>
+    <path d="M4 20h16v-6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v6z" />
+    <path d="M12 8v4" />
+    <path d="M12 4.5c.9.8 1.4 1.5 1.4 2.1a1.4 1.4 0 0 1-2.8 0c0-.6.5-1.3 1.4-2.1z" />
+  </Svg>
+)
+
+export const IconoFamilia = (p: IconoProps) => (
+  <Svg strokeWidth={1.6} {...p}>
+    <circle cx="9" cy="8" r="3" />
+    <circle cx="17" cy="9.5" r="2.2" />
+    <path d="M3 19c0-3 2.7-5 6-5s6 2 6 5" />
+    <path d="M17 14.5c2.2 0 4 1.5 4 3.5" />
+  </Svg>
+)
+
+export const IconoTrabajo = (p: IconoProps) => (
+  <Svg strokeWidth={1.6} {...p}>
+    <rect x="3" y="7.5" width="18" height="12" rx="1.5" />
+    <path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5" />
+    <path d="M3 12.5h18" />
+  </Svg>
+)
+
+export const IconoMerienda = (p: IconoProps) => (
+  <Svg strokeWidth={1.6} {...p}>
+    <path d="M4 9h12v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V9z" />
+    <path d="M16 10.5h1.8a2.7 2.7 0 0 1 0 5.4H16" />
+    <path d="M8 3.5v2M12 3.5v2" />
+  </Svg>
+)
+
+export const IconoOtraOcasion = (p: IconoProps) => (
+  <Svg strokeWidth={1.6} {...p}>
+    <path d="M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6L12 4z" />
+    <path d="M18.5 16v3.5M16.75 17.75h3.5" />
+  </Svg>
+)
