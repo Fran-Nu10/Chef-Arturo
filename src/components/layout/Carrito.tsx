@@ -62,7 +62,7 @@ function LineaDelCarrito({
 
 /**
  * Drawer del carrito — panel lateral de 430px en desktop, panel completo en
- * mobile. Total y precios siempre pendientes de validación.
+ * mobile. El total nunca se calcula acá: lo dice el servidor.
  */
 export function DrawerCarrito() {
   const { lineas, cantidad, carritoAbierto, cerrarCarrito } = usePedido()

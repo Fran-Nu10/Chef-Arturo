@@ -27,7 +27,7 @@ function primerDiaDeLaSemana(anio: number, mes: number) {
  * Calendario del paso 2 del checkout.
  *
  * Ningún día se afirma como disponible o no disponible: la disponibilidad real
- * es contenido pendiente de validación y se resuelve al confirmar el pedido.
+ * La disponibilidad fina de cada día se resuelve al confirmar el pedido.
  * El mes se calcula recién al montar, así el HTML servido no depende del reloj.
  */
 export function Calendario({
@@ -129,7 +129,7 @@ export function Calendario({
       </div>
 
       <p className="m-0 text-[11px] text-caramelo-texto">
-        Días y disponibilidad: pendientes de validación.
+        Atendemos de lunes a sábado. Confirmamos la fecha por WhatsApp.
       </p>
     </div>
   )

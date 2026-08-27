@@ -28,8 +28,8 @@ export default function ConfirmacionEvento() {
           ]}
         />
         <p className="m-0 text-xs leading-relaxed text-tinta-suave">
-          Te contactamos por WhatsApp con la propuesta y la disponibilidad. Los tiempos de
-          respuesta están pendientes de validación.
+          Te contactamos por WhatsApp con la propuesta y la disponibilidad. Si te
+          urge, escribinos vos y lo vemos en el momento.
         </p>
         <BotonEnlace href={NEGOCIO.whatsapp} compacto>
           Abrir WhatsApp

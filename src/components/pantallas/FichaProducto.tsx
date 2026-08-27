@@ -2,7 +2,7 @@
 
 import { useState } from 'react'
 import { NEGOCIO, categoriaPorSlug } from '@/content/datos'
-import type { Producto } from '@/content/tipos'
+import type { Modalidad, Producto } from '@/content/tipos'
 import { Boton, BotonEnlace } from '@/components/ui/Boton'
 import { IconoAlerta, IconoCalendario } from '@/components/ui/Iconos'
 import { MediaPendiente } from '@/components/ui/MediaPendiente'
@@ -42,10 +42,38 @@ function Cantidad({
   )
 }
 
-function Detalles() {
+/**
+ * Cómo se compra este producto, según su modalidad. Sale de lo que la casa
+ * confirmó (`docs/CATALOGO_REAL_V1.md`): 24 horas de anticipación para los
+ * enteros, stock del día para la compra directa, cotización para el resto.
+ */
+const COMO_SE_PIDE: Record<Modalidad, string> = {
+  directa:
+    'Se compra del día, con el stock disponible. El pago va por Mercado Pago desde la web.',
+  encargo:
+    'Se encarga con 24 horas de anticipación y elegís la fecha de retiro o entrega.',
+  consultar:
+    'Se cotiza según cantidad y fecha. Escribinos por WhatsApp y te pasamos el precio.',
+}
+
+/**
+ * Sólo hay dos secciones y las dos dicen algo cierto. No hay una de
+ * conservación porque la casa no informó cómo conservar cada producto, y eso
+ * no se completa a ojo.
+ */
+function Detalles({ modalidad }: { modalidad: Modalidad }) {
+  const SECCIONES = [
+    {
+      titulo: 'Retiro y entrega',
+      texto:
+        'Retiro en Florida o entrega a domicilio. Atendemos de lunes a sábado; los salados, de 9:00 a 19:00. El punto exacto lo coordinamos por WhatsApp al confirmar el pedido.',
+    },
+    { titulo: 'Cómo se pide', texto: COMO_SE_PIDE[modalidad] },
+  ]
+
   return (
     <div className="border-t border-linea">
-      {['Retiro y entrega', 'Conservación'].map((titulo, i) => (
+      {SECCIONES.map(({ titulo, texto }, i) => (
         <details
           key={titulo}
           className={`acordeon ${i > 0 ? 'border-t border-linea' : ''}`}
@@ -60,7 +88,7 @@ function Detalles() {
             </span>
           </summary>
           <p className="mt-0 mb-4 text-[13px] leading-relaxed text-tinta-suave">
-            Contenido pendiente de validación.
+            {texto}
           </p>
         </details>
       ))}
@@ -257,7 +285,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         <BotonEnlace href={NEGOCIO.whatsapp} variante="secundario" compacto>
           Consultar por WhatsApp
         </BotonEnlace>
-        <Detalles />
+        <Detalles modalidad={producto.modalidad} />
       </div>
     )
   }
@@ -287,9 +315,11 @@ export function FichaProducto({ producto }: { producto: Producto }) {
           className="text-[10px]"
         />
       </div>
-      <p className="m-0 text-[13px] leading-relaxed text-tinta-suave">
-        Contenido pendiente de validación.
-      </p>
+      {producto.descripcionCorta && (
+        <p className="m-0 text-[13px] leading-relaxed text-tinta-suave">
+          {producto.descripcionCorta}
+        </p>
+      )}
 
       <div className="flex items-center gap-3.5">
         <Cantidad valor={cantidad} onCambiar={setCantidad} />
@@ -311,7 +341,7 @@ export function FichaProducto({ producto }: { producto: Producto }) {
         Consultar por WhatsApp
       </BotonEnlace>
 
-      <Detalles />
+      <Detalles modalidad={producto.modalidad} />
       {categoria && (
         <p className="m-0 text-[11.5px] text-tinta-tenue">
           Categoría: {categoria.nombre}

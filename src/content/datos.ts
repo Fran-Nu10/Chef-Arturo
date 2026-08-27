@@ -17,7 +17,7 @@ export const NEGOCIO = {
   // 099 079 177, no tiene un CTA propio en la interfaz: no se agrega un
   // segundo botón de WhatsApp que el diseño aprobado no contempla.
   whatsapp: 'https://wa.me/59899786781',
-  ubicacion: 'Ubicación exacta: pendiente de validación.',
+  ubicacion: 'Florida, Uruguay · Lunes a sábado',
 } as const
 
 export const CATEGORIAS: Categoria[] = [
@@ -125,7 +125,7 @@ export const PRODUCTOS: Producto[] = [
     modalidad: 'directa',
     disponibilidad: 'no-disponible',
     precio: 'Precio pendiente',
-    nota: 'Vuelve a la vitrina próximamente. Disponibilidad pendiente de validación.',
+    nota: 'Vuelve a la vitrina próximamente.',
     imagenPendiente: 'Imagen temporal',
   },
 ]
@@ -140,37 +140,49 @@ export const SELECCION_HOME = [
 ]
 
 /**
- * Los nombres son estructura de ejemplo, no campañas vigentes: la sección es
- * administrable y admite imagen o video, rango de fechas, CTA y tres estados.
+ * Las tres formas de comprar de la casa, que es lo único cierto que hay para
+ * poner acá hoy.
+ *
+ * Antes había tres campañas de ejemplo con fechas inventadas. No se
+ * reemplazaron por campañas reales porque no hay ninguna: la sección es
+ * administrable y Julia puede cargarlas cuando existan. Mientras tanto dice
+ * algo verdadero en vez de "pendiente de validación".
+ *
+ * Las tres van en `activa` a propósito. `programada` y `finalizada` siguen
+ * existiendo en el tipo y en los estilos, para cuando haya campañas de verdad.
+ *
+ * Sin `cta`: el botón de la tarjeta todavía no lleva a ninguna parte, y tres
+ * botones muertos son peores que ninguno.
  */
 export const CAMPANAS: Campana[] = [
   {
-    id: 'campana-activa',
+    id: 'compra-del-dia',
     referencia: 'A·01',
     estado: 'activa',
-    titulo: 'Campaña estacional',
-    descripcion: 'Contenido pendiente de validación.',
-    rango: 'Rango de fechas: pendiente.',
-    cta: 'Ver propuesta',
+    titulo: 'Compra del día',
+    descripcion:
+      'Lo que está en la vitrina hoy, con pago online por Mercado Pago.',
+    rango: 'Lunes a sábado',
     imagenPendiente: 'Imagen o video temporal',
   },
   {
-    id: 'campana-programada',
+    id: 'encargo-con-fecha',
     referencia: 'A·02',
-    estado: 'programada',
-    titulo: 'Campaña próxima',
-    descripcion: 'Se anuncia al acercarse la fecha.',
-    rango: 'Rango de fechas: pendiente.',
-    cta: 'Avisame',
+    estado: 'activa',
+    titulo: 'Encargo con fecha',
+    descripcion:
+      'Las tortas enteras por kilo y el Box Colección Dulce se preparan para el día que elijas.',
+    rango: 'Con 24 horas de anticipación',
     imagenPendiente: 'Imagen temporal',
   },
   {
-    id: 'campana-finalizada',
+    id: 'lunch-para-eventos',
     referencia: 'A·03',
-    estado: 'finalizada',
-    titulo: 'Campaña anterior',
-    descripcion: 'Queda en el archivo de la casa.',
-    rango: 'Rango de fechas: finalizado.',
+    estado: 'activa',
+    titulo: 'Lunch para eventos',
+    descripcion:
+      'Cumpleaños, reuniones y eventos de trabajo. Se cotiza por ocasión, cantidad de personas y fecha.',
+    rango: 'A coordinar por WhatsApp',
     imagenPendiente: 'Imagen temporal',
   },
 ]
@@ -184,7 +196,7 @@ export const PASOS_PEDIDO: PasoPedido[] = [
   {
     numero: '02',
     titulo: 'Encargá para una fecha',
-    detalle: 'Anticipación por confirmar; puede requerir seña.',
+    detalle: 'Los enteros se encargan con 24 horas de anticipación.',
   },
   {
     numero: '03',
@@ -258,37 +270,50 @@ export const GALERIA_RIEL_2: ItemGaleria[] = [
   },
 ]
 
-/** Todo el contenido aparece como pendiente de validación, según el brief. */
+/**
+ * Preguntas frecuentes.
+ *
+ * Cada respuesta sale de lo que la casa confirmó —ubicación, días y horario,
+ * retiro y entrega, las 24 horas de anticipación de los enteros— o de lo que
+ * la propia aplicación hace, como el cobro por Mercado Pago. Lo que la casa no
+ * informó (la dirección exacta, la política de seña, las zonas de entrega) se
+ * deriva a WhatsApp en lugar de completarse con una respuesta inventada.
+ */
 export const PREGUNTAS: Pregunta[] = [
   {
     pregunta: '¿Con cuánta anticipación encargo?',
-    respuesta: 'Contenido pendiente de validación.',
+    respuesta:
+      'Las tortas enteras por kilo y el Box Colección Dulce se encargan con 24 horas de anticipación. Lo que está en compra directa sale del stock del día. Para un evento, escribinos y lo coordinamos.',
   },
   {
     pregunta: '¿Dónde retiro mi pedido?',
-    respuesta: 'Contenido pendiente de validación.',
+    respuesta:
+      'En Florida, Uruguay. Te pasamos el punto exacto por WhatsApp cuando confirmamos el pedido.',
   },
   {
     pregunta: '¿Hacen entregas?',
-    respuesta: 'Contenido pendiente de validación.',
+    respuesta:
+      'Sí, además del retiro entregamos a domicilio. Escribinos por WhatsApp con tu dirección y coordinamos día y horario.',
   },
   {
     pregunta: '¿Cómo pago?',
     respuesta:
-      'Mercado Pago online o coordinación por WhatsApp. Detalle pendiente de validación.',
+      'Con Mercado Pago desde la web, o coordinando por WhatsApp si preferís.',
   },
   {
     pregunta: '¿Cuándo se pide seña?',
-    respuesta: 'Contenido pendiente de validación.',
+    respuesta:
+      'Los pedidos que se pagan por Mercado Pago quedan confirmados al abonarse. Para encargos grandes y eventos lo conversamos por WhatsApp antes de cerrar la fecha.',
   },
   {
     pregunta: '¿Puedo cambiar mi pedido?',
-    respuesta: 'Contenido pendiente de validación.',
+    respuesta:
+      'Escribinos por WhatsApp con el número de tu pedido y lo vemos. Cuanto antes nos avises, más fácil es.',
   },
   {
     pregunta: '¿Cómo funcionan los pedidos para eventos?',
     respuesta:
-      'Se cotizan según ocasión, personas y fecha. Detalle pendiente de validación.',
+      'Se cotizan según la ocasión, la cantidad de personas y la fecha. Contanos por WhatsApp o dejanos los datos en «Armá tu ocasión» y te pasamos una propuesta.',
   },
 ]
 

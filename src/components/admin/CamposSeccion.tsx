@@ -249,7 +249,7 @@ export function CamposSeccion({ clave, valor, onCambio, mediosPorId }: Props) {
           {t('Título', 'titulo')}
           <CampoCta etiqueta="CTA principal" ruta="ctaPrimario" valor={valor} onCambio={onCambio} />
           <CampoCta etiqueta="CTA secundario" ruta="ctaSecundario" valor={valor} onCambio={onCambio} />
-          {t('Nota', 'nota', false, 'Por ejemplo: "Ubicación exacta pendiente de validación".')}
+          {t('Nota', 'nota', false, 'Por ejemplo: "Los enteros se encargan con 24 horas".')}
           <CampoMedia etiqueta="Imagen" ruta="media" valor={valor} onCambio={onCambio} mediosPorId={mediosPorId} />
         </div>
       )

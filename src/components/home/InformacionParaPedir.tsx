@@ -5,7 +5,8 @@ import { EncabezadoSeccion } from '@/components/ui/Reveal'
  * 09 · INFORMACIÓN PARA PEDIR.
  *
  * Acordeones nativos (`details`/`summary`): accesibles, sin JavaScript y sin
- * animaciones complejas. Todo el contenido figura como pendiente de validación.
+ * animaciones complejas. Las respuestas salen de lo que la casa confirmó; lo
+ * que no informó se deriva a WhatsApp.
  */
 export function InformacionParaPedir() {
   return (

@@ -18,8 +18,8 @@ const MODALIDADES: { valor: Modalidad; etiqueta: string }[] = [
 
 /**
  * Pantallas 1–3 · Catálogo general, catálogo filtrado por categoría y búsqueda
- * sin resultados. La cantidad de productos figura como pendiente: no se afirma
- * un número que todavía no está validado.
+ * sin resultados. La cuenta sale de los resultados en pantalla, así que
+ * acompaña a los filtros y a la búsqueda.
  */
 export function Catalogo({
   categoria,
@@ -105,8 +105,8 @@ export function Catalogo({
                 {activa.nombre}
               </h1>
             </div>
-            <span className="text-[11.5px] text-crema lg:text-tinta-suave">
-              Cantidad pendiente
+            <span className="tnum text-[11.5px] text-crema lg:text-tinta-suave">
+              {resultados.length} {resultados.length === 1 ? 'producto' : 'productos'}
             </span>
           </div>
         ) : (
@@ -170,8 +170,8 @@ export function Catalogo({
       <div className="flex flex-col gap-6 px-4 pt-3 pb-6 lg:px-12 lg:py-9">
         {!sinResultados && (
           <div className="hidden items-baseline justify-between lg:flex">
-            <span className="text-[13px] text-tinta-suave">
-              Cantidad de productos pendiente
+            <span className="tnum text-[13px] text-tinta-suave">
+              {resultados.length} {resultados.length === 1 ? 'producto' : 'productos'}
             </span>
             <span className="text-[13px] font-medium text-caramelo-texto underline underline-offset-[3px]">
               Ordenar: sugeridos

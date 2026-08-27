@@ -15,7 +15,7 @@ const FRASES = [
     tono: 'verde' as const,
   },
   {
-    texto: 'Contenido de proceso pendiente de validación.',
+    texto: 'Compra del día, encargos con fecha y cotizaciones para tu evento.',
     desde: 0.55,
     tono: 'verde' as const,
   },
