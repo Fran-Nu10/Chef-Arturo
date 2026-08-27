@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import { headers } from 'next/headers'
 import { Archivo, Instrument_Serif } from 'next/font/google'
 import { ProveedorPedido } from '@/lib/estado-pedido'
 import { ProveedorCategorias } from '@/lib/categorias'
@@ -39,9 +40,18 @@ export const viewport: Viewport = {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  // El panel no usa ni el header de la tienda ni el carrito, pero igual pasaba
+  // por acá: cada navegación administrativa esperaba una consulta del catálogo
+  // que no iba a mirar, y con Supabase lento o caído esa espera era el tiempo
+  // de carga completo del login. `x-pathname` lo pone el middleware.
+  const ruta = (await headers()).get('x-pathname') ?? ''
+  const esPanel = ruta.startsWith('/admin')
+
   // Se leen acá, en el único punto de servidor por el que pasan todas las
   // pantallas, y bajan por contexto hasta el header.
-  const { categorias, productos } = await catalogoPublico()
+  const { categorias, productos } = esPanel
+    ? { categorias: [], productos: [] }
+    : await catalogoPublico()
 
   return (
     <html lang="es-UY" className={`${archivo.variable} ${instrumentSerif.variable}`}>
