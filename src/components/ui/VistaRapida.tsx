@@ -140,9 +140,11 @@ export function VistaRapida({
                   {producto.nombre}
                 </div>
                 <div className="text-sm font-semibold text-verde">{producto.precio}</div>
-                <p className="m-0 text-xs leading-relaxed text-tinta-suave">
-                  Contenido pendiente de validación.
-                </p>
+                {producto.descripcionCorta && (
+                  <p className="m-0 text-xs leading-relaxed text-tinta-suave">
+                    {producto.descripcionCorta}
+                  </p>
+                )}
               </div>
             </div>
 

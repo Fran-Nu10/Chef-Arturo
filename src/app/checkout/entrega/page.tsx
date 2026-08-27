@@ -18,14 +18,14 @@ export default function PasoEntrega() {
         <OpcionCaja
           name="entrega"
           titulo="Retiro en Florida"
-          detalle="Dirección de retiro: pendiente de validación."
+          detalle="En Florida, Uruguay. Te pasamos el punto exacto por WhatsApp al confirmar."
           seleccionada={entrega === 'retiro'}
           onSelect={() => setEntrega('retiro')}
         />
         <OpcionCaja
           name="entrega"
           titulo="Entrega a domicilio"
-          detalle="Zonas y costo de entrega: pendientes de validación."
+          detalle="Coordinamos día, horario y costo por WhatsApp según tu dirección."
           seleccionada={entrega === 'domicilio'}
           onSelect={() => setEntrega('domicilio')}
         />

@@ -2,8 +2,9 @@
  * Modelo de contenido — Chef Arturo · La Vitrina.
  *
  * El contenido está separado del diseño: productos, campañas, FAQ y galería son
- * colecciones. Nada de esto afirma precios, tiempos, zonas ni políticas: los
- * valores por defecto son los placeholders del prototipo, pendientes de validación.
+ * colecciones. Lo que la casa confirmó se afirma; lo que no informó —dirección
+ * exacta, zonas de reparto, política de seña— se deriva a WhatsApp en lugar de
+ * completarse con un valor inventado.
  */
 
 /** Las tres modalidades de compra. No se fuerzan dentro de una ficha idéntica. */
@@ -42,10 +43,15 @@ export interface Producto {
   categoria: CategoriaSlug
   modalidad: Modalidad
   disponibilidad: Disponibilidad
-  /** Nunca un número: el precio está pendiente de validación. */
+  /** Ya formateado. Un producto a cotizar dice "Precio pendiente". */
   precio: string
   /** Nota de estado bajo el nombre (anticipación, agotado, para eventos…). */
   nota?: string
+  /**
+   * Descripción de la casa, tal como está cargada. Es la que se muestra en la
+   * ficha, la vista rápida y el carrito: nunca se completa con texto inventado.
+   */
+  descripcionCorta?: string
   imagenPendiente: string
   /** Foto real ya resuelta (Supabase Storage). Sin ella, se usa el placeholder. */
   imagenUrl?: string | null

@@ -66,7 +66,7 @@ export function FechasQueImportan() {
           numero="06"
           kicker="CAMPAÑAS"
           titulo="Fechas que importan"
-          bajada="Archivo editorial de campañas. Los nombres y fechas son estructura de ejemplo, pendientes de validación."
+          bajada="Las tres formas de comprar: del día, por encargo con fecha, o cotizado para tu evento."
         />
       </div>
 

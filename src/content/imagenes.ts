@@ -10,14 +10,26 @@
  * Los originales no se tocan: el recorte se resuelve con `object-position`.
  */
 
-export type GrupoFoto = 'pasteleria' | 'merienda' | 'luncheventos' | 'lamesa'
+export type GrupoFoto = 'pasteleria' | 'merienda' | 'salados' | 'luncheventos' | 'lamesa'
 
 /** Prefijos del contrato. La coincidencia no distingue mayúsculas. */
 const PREFIJOS: Record<GrupoFoto, string> = {
   pasteleria: 'pasteleria',
   merienda: 'merienda',
+  salados: 'salados',
   luncheventos: 'luncheventos',
   lamesa: 'lamesadechefarturo',
+}
+
+/**
+ * Las fotos de producto no siguen el contrato de prefijos: se llaman como el
+ * producto y se ordenan por carpeta de categoría. La carpeta es la que manda.
+ */
+const GRUPO_DE_CARPETA: Record<string, GrupoFoto> = {
+  pasteleria: 'pasteleria',
+  merienda: 'merienda',
+  salados: 'salados',
+  'lunch-para-eventos': 'luncheventos',
 }
 
 /**
@@ -25,8 +37,19 @@ const PREFIJOS: Record<GrupoFoto, string> = {
  * empiece con uno de los prefijos entra en su grupo sin tocar este código.
  */
 export function grupoDeArchivo(nombre: string): GrupoFoto | null {
-  const base = nombre.toLowerCase().replace(/^.*\//, '')
-  const orden: GrupoFoto[] = ['lamesa', 'luncheventos', 'pasteleria', 'merienda']
+  const ruta = nombre.toLowerCase()
+
+  const carpeta = ruta.match(/assets\/productos\/([^/]+)\//)?.[1]
+  if (carpeta) return GRUPO_DE_CARPETA[carpeta] ?? null
+
+  const base = ruta.replace(/^.*\//, '')
+  const orden: GrupoFoto[] = [
+    'lamesa',
+    'luncheventos',
+    'pasteleria',
+    'merienda',
+    'salados',
+  ]
   return orden.find((g) => base.startsWith(PREFIJOS[g])) ?? null
 }
 
@@ -37,8 +60,9 @@ export function grupoDeArchivo(nombre: string): GrupoFoto | null {
  * "principalmente" —no exclusivamente— a su sección; hoy no se usa ninguna ahí.
  */
 export const USO_PERMITIDO: Record<GrupoFoto, readonly string[]> = {
-  pasteleria: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero'],
+  pasteleria: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero', 'detalle'],
   merienda: ['categoria', 'seleccion', 'catalogo', 'ficha', 'hero'],
+  salados: ['categoria', 'seleccion', 'catalogo', 'ficha'],
   luncheventos: [
     'categoria',
     'seleccion',
@@ -112,6 +136,22 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     uso: 'hero',
   },
 
+  // ─── 04 · El detalle final — ventana rectangular, no arco ────────────────
+  // Segundo y último video de la casa. Torre de mini cheesecakes en una cocina
+  // de obrador, con un acercamiento lentísimo de cámara. La ventana de esta
+  // sección es 16:9 y crece hasta casi todo el viewport, así que el 16:9 del
+  // original entra casi entero: en desktop se recorta apenas el 10% del ancho.
+  'home-detalle-final': {
+    archivo: 'fotos/pasteleria-detalle-final.jpg',
+    video: ['videos/detalle-final.webm', 'videos/detalle-final.mp4'],
+    grupo: 'pasteleria',
+    ancho: 1280,
+    alto: 720,
+    objectPosition: '50% 50%',
+    alt: 'Una torre de tres pisos con mini cheesecakes variados sobre una mesada de madera',
+    uso: 'detalle',
+  },
+
   // ─── 02 · Elegí tu ocasión — marcos rectangulares ────────────────────────
   // Las tres van en 4:5. La tabla de ratios sugería 4:3 en desktop, pero las
   // tres fotos son verticales y un 4:3 deja sólo una banda del centro: parte
@@ -137,7 +177,7 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     uso: 'categoria',
   },
   // La bandeja de varios pisos se lee entera: cualquier recorte la decapita.
-  'home-categoria-lunch': {
+  'home-categoria-lunch-para-eventos': {
     archivo: 'fotos/luncheventos1.jpg',
     grupo: 'luncheventos',
     ancho: 736,
@@ -146,6 +186,20 @@ export const ASIGNACION: Readonly<Record<string, Fotografia>> = {
     objectFit: 'contain',
     objectPosition: '50% 50%',
     alt: 'Bandeja de varios pisos con porciones individuales de repostería',
+    uso: 'categoria',
+  },
+
+  // Se reutiliza la foto del Pack Matero: es la única de salados que muestra
+  // variedad —seis rellenos a la vista— y eso es justo lo que tiene que
+  // comunicar una tarjeta de categoría.
+  'home-categoria-salados': {
+    archivo: 'assets/productos/salados/pack-matero-6-empanadas.jpg',
+    grupo: 'salados',
+    ancho: 1200,
+    alto: 1200,
+    ratio: '4/5',
+    objectPosition: '50% 50%',
+    alt: 'Bandeja con empanadas partidas al medio, de varios rellenos',
     uso: 'categoria',
   },
 
