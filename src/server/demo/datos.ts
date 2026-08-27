@@ -79,7 +79,7 @@ export const CATEGORIAS_DEMO: FilaCategoria[] = [
   },
   {
     id: uuid('c0000000-', 3),
-    slug: 'lunch-eventos',
+    slug: 'lunch-para-eventos',
     name: 'Lunch para eventos',
     description: 'Bandejas y servicio para cumpleaños y reuniones.',
     position: 3,
