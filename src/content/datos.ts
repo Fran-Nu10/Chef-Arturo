@@ -324,7 +324,7 @@ export const OCASION_OPCIONES = {
     'Reunión familiar',
     'Evento de trabajo',
     'Merienda compartida',
-    'Otro',
+    'Otra ocasión',
   ],
   personas: ['Hasta 10', '10 a 25', '25 a 50', 'Más de 50'],
   preferencia: ['Dulce', 'Salado', 'Mixto'],
